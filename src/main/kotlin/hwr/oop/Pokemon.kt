@@ -2,7 +2,7 @@ package hwr.oop
 
 import java.io.File
 
-class Pokémon () {
+class Pokemon {
 //    var name:String = ""
 //    var attackType1: String = ""
 //    var attackType2: String = ""
@@ -12,8 +12,8 @@ class Pokémon () {
 //    var specialAttack: Int = 0
 //    var specialDefense: Int = 0
 //    var speed: Int = 0
-    fun set_pokémon_variables (pokename:String, typ1:String, typ2:String, inputKp: String, att:String, def:String, sAtt:String, sDef:String, inSpeed:String) {
-        val name=pokename
+    fun setPokemonVariables (pokemonName:String, typ1:String, typ2:String, inputKp: String, att:String, def:String, sAtt:String, sDef:String, inSpeed:String) {
+        val name=pokemonName
         val attackType1=typ1
         val attackType2=typ2
         val kp=Integer.valueOf(inputKp)
@@ -25,9 +25,9 @@ class Pokémon () {
     }
 }
 
-fun addNewPokémon (name: String): Pokémon{
-    val newPokémon=Pokémon()
+fun addNewPokemon (name: String): Pokemon{
+    val newPokemon=Pokemon()
     val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv")
-    getMonsterbyName(monsterDB,name, newPokémon)
-    return newPokémon
+    getMonsterbyName(monsterDB,name, newPokemon)
+    return newPokemon
 }

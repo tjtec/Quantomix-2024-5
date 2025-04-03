@@ -2,7 +2,7 @@ package hwr.oop
 
 import java.io.File
 
-fun getMonsterbyName(file: File, Name: String, monster: Pokémon) {
+fun getMonsterbyName(file: File, Name: String, monster: Pokemon) {
     val seperator = ",";
     try {
         file.forEachLine { line ->
@@ -15,7 +15,7 @@ fun getMonsterbyName(file: File, Name: String, monster: Pokémon) {
                     type2 = "none";
                 }
                 //ALL Values for Entity
-                monster.set_pokémon_variables(block[0],block[1],block[2],block[3],block[4],block[5],block[6], block[7], block[8]);
+                monster.setPokemonVariables(block[0],block[1],block[2],block[3],block[4],block[5],block[6], block[7], block[8]);
 //                println("name:" + block[0])
 //                println("attackType1:" + block[1]);
 //                println("attackType2:" + type2);
@@ -32,17 +32,17 @@ fun getMonsterbyName(file: File, Name: String, monster: Pokémon) {
     }
 }
 
-fun main(args: Array<String>) {
-    val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv");
-
-    if (monsterDB.exists()) {
-        if(args.size > 0) { //Suche über Commandline args möglich
-            getMonsterbyName(monsterDB, args[0]);
-        }
-        else{ //Usecase ohne Commandline
-            getMonsterbyName(monsterDB, "Glurak");
-        }
-    } else {
-        println("Die Datei '${monsterDB.name}' wurde nicht gefunden.")
-    }
-}
+//fun main(args: Array<String>) {
+//    val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv");
+//
+//    if (monsterDB.exists()) {
+//        if(args.size > 0) { //Suche über Commandline args möglich
+//            //getMonsterbyName(monsterDB, args[0]);
+//        }
+//        else{ //Usecase ohne Commandline
+//            //getMonsterbyName(monsterDB, "Glurak");
+//        }
+//    } else {
+//        println("Die Datei '${monsterDB.name}' wurde nicht gefunden.")
+//    }
+//}
