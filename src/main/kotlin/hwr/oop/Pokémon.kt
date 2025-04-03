@@ -1,7 +1,5 @@
 package hwr.oop
 
-import io.kotest.core.source.SourceRef
-
 class Pokémon (val name: String) {
     var attackType1: String = ""
     var attackType2: String = ""
