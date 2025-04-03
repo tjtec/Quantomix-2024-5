@@ -35,7 +35,7 @@ fun getMonsterbyName(MonsterDB: String, Name: String) {
     if (csvContentMitHeader != null) {
         csvContentMitHeader.forEachIndexed { rowIndex, row ->
             //println("Zeile ${rowIndex + 1}: $row")
-            val block = row.toString().replace("[", "").replace("]", "").split(";");
+            val block = row.toString().replace("[", "").replace("]", "").split(",");
             val mName = block[0];
             //println(mName);
             if(block[0] == Name){
