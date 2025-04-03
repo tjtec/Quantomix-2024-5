@@ -2,7 +2,7 @@ package hwr.oop
 
 import java.io.File
 
-fun getMonsterbyName(file: File, Name: String) {
+fun getMonsterbyName(file: File, Name: String, monster: Pokémon) {
     val seperator = ",";
     try {
         file.forEachLine { line ->
@@ -15,15 +15,16 @@ fun getMonsterbyName(file: File, Name: String) {
                     type2 = "none";
                 }
                 //ALL Values for Entity
-                println("name:" + block[0])
-                println("attackType1:" + block[1]);
-                println("attackType2:" + type2);
-                println("kp:" + block[3]);
-                println("attack:" + block[4]);
-                println("defense:" + block[5]);
-                println("specialAttack:" + block[6]);
-                println("specialDefense:" + block[7]);
-                println("speed:" + block[8]);
+                monster.set_pokémon_variables(block[0],block[1],block[2],block[3],block[4],block[5],block[6], block[7], block[8]);
+//                println("name:" + block[0])
+//                println("attackType1:" + block[1]);
+//                println("attackType2:" + type2);
+//                println("kp:" + block[3]);
+//                println("attack:" + block[4]);
+//                println("defense:" + block[5]);
+//                println("specialAttack:" + block[6]);
+//                println("specialDefense:" + block[7]);
+//                println("speed:" + block[8]);
             }
         }
     } catch (e: Exception) {
