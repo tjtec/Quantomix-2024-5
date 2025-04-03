@@ -1,6 +1,7 @@
 package hwr.oop
 
-class Pokémon (val name: String) {
+class Pokémon () {
+    var name:String = ""
     var attackType1: String = ""
     var attackType2: String = ""
     var kp: Int = 0
@@ -9,6 +10,13 @@ class Pokémon (val name: String) {
     var specialAttack: Int = 0
     var specialDefense: Int = 0
     var speed: Int = 0
+    fun pokémon (pokename:String):Pokémon {
+
+    }
+    fun set_Pokémon_variables(){
+
+
+    }
 }
 
 fun addNewPokémon (name: String) {
