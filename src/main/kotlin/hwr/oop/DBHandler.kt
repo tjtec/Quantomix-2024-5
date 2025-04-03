@@ -2,32 +2,37 @@ package hwr.oop
 
 import java.io.File
 
-fun getMonsterbyName(file: File, Name: String) {
-    val seperator = ",";
-    try {
-        file.forEachLine { line ->
-            val block = line.split(seperator);
-            val mName = block[0];
-            //println(mName);
-            if (block[0] == Name) {
-                var type2 = block[2].toString();
-                if (type2 == "") {
-                    type2 = "none";
+class DBHandler {
+    fun getMonsterbyName(file: File, Name: String): Boolean  {
+        val seperator = ",";
+        var searchSuccessful = false;
+        try {
+            file.forEachLine { line ->
+                val block = line.split(seperator);
+                val mName = block[0];
+                //println(mName);
+                if (block[0] == Name) {
+                    var type2 = block[2].toString();
+                    if (type2 == "") {
+                        type2 = "none";
+                    }
+                    //ALL Values for Entity
+                    println("name:" + block[0])
+                    println("attackType1:" + block[1]);
+                    println("attackType2:" + type2);
+                    println("kp:" + block[3]);
+                    println("attack:" + block[4]);
+                    println("defense:" + block[5]);
+                    println("specialAttack:" + block[6]);
+                    println("specialDefense:" + block[7]);
+                    println("speed:" + block[8]);
+                    searchSuccessful = true;
                 }
-                //ALL Values for Entity
-                println("name:" + block[0])
-                println("attackType1:" + block[1]);
-                println("attackType2:" + type2);
-                println("kp:" + block[3]);
-                println("attack:" + block[4]);
-                println("defense:" + block[5]);
-                println("specialAttack:" + block[6]);
-                println("specialDefense:" + block[7]);
-                println("speed:" + block[8]);
             }
+        } catch (e: Exception) {
+            println("Fehler beim Lesen der Datei: ${e.localizedMessage}")
         }
-    } catch (e: Exception) {
-        println("Fehler beim Lesen der Datei: ${e.localizedMessage}")
+        return searchSuccessful;
     }
 }
 
@@ -36,10 +41,10 @@ fun main(args: Array<String>) {
 
     if (monsterDB.exists()) {
         if(args.size > 0) { //Suche über Commandline args möglich
-            getMonsterbyName(monsterDB, args[0]);
+            DBHandler().getMonsterbyName(monsterDB, args[0]);
         }
         else{ //Usecase ohne Commandline
-            getMonsterbyName(monsterDB, "Glurak");
+            DBHandler().getMonsterbyName(monsterDB, "Glurak");
         }
     } else {
         println("Die Datei '${monsterDB.name}' wurde nicht gefunden.")
