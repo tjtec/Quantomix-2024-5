@@ -2,48 +2,18 @@ package hwr.oop
 
 import java.io.File
 
-fun readCsvData(filePath: String, delimiter: Char = ',', skipHeader: Boolean = false): List<List<String>>? {
-    val file = File(filePath)
-
-    if (!file.exists() || !file.canRead()) {
-        println("Fehler: Datei nicht gefunden oder keine Leseberechtigung für '$filePath'")
-        return null
-    }
-    val data = mutableListOf<List<String>>()
+fun getMonsterbyName(file: File, Name: String) {
+    val seperator = ",";
     try {
-        file.useLines { lines ->
-            lines.forEachIndexed { index, line ->
-                if (skipHeader && index == 0) {
-                    return@forEachIndexed
-                }
-                if (line.isBlank()) {
-                    return@forEachIndexed
-                }
-
-                val rowData = line.split(delimiter).map { it.trim() }
-                data.add(rowData)
-            }
-        }
-        return data
-    } catch (e: Exception) {
-        println("Fehler beim Lesen der Datei '$filePath': ${e.message}")
-        return null
-    }
-}
-fun getMonsterbyName(MonsterDB: String, Name: String) {
-    val csvContentMitHeader = readCsvData(MonsterDB, skipHeader = false)
-    if (csvContentMitHeader != null) {
-        csvContentMitHeader.forEachIndexed { rowIndex, row ->
-            //println("Zeile ${rowIndex + 1}: $row")
-            val block = row.toString().replace("[", "").replace("]", "").split(",");
+        file.forEachLine { line ->
+            val block = line.split(seperator);
             val mName = block[0];
             //println(mName);
-            if(block[0] == Name){
+            if (block[0] == Name) {
                 var type2 = block[2].toString();
-                if(type2 == ""){
+                if (type2 == "") {
                     type2 = "none";
                 }
-
                 //ALL Values for Entity
                 println("name:" + block[0])
                 println("attackType1:" + block[1]);
@@ -55,26 +25,23 @@ fun getMonsterbyName(MonsterDB: String, Name: String) {
                 println("specialDefense:" + block[7]);
                 println("speed:" + block[8]);
             }
-
         }
-    } else {
-        println("Konnte die CSV-Datei nicht lesen.")
-
+    } catch (e: Exception) {
+        println("Fehler beim Lesen der Datei: ${e.localizedMessage}")
     }
 }
 
 fun main(args: Array<String>) {
-    val monsterDBPath = "src/main/kotlin/hwr/oop/resources/test.csv";
+    val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv");
 
-
-    if(args.size > 0) { //Suche über Commandline args möglich
-        getMonsterbyName(monsterDBPath, args[0]);
+    if (monsterDB.exists()) {
+        if(args.size > 0) { //Suche über Commandline args möglich
+            getMonsterbyName(monsterDB, args[0]);
+        }
+        else{ //Usecase ohne Commandline
+            getMonsterbyName(monsterDB, "Glurak");
+        }
+    } else {
+        println("Die Datei '${monsterDB.name}' wurde nicht gefunden.")
     }
-    else{ //Usecase ohne Commandline
-        getMonsterbyName(monsterDBPath, "Glurak");
-    }
-
-
-
-
 }
