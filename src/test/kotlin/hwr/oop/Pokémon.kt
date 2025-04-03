@@ -14,5 +14,4 @@ class Pokémon (val name: String) {
 }
 
 fun addNewPokémon (name: String) {
-    // ToDo: add the list in
 }
