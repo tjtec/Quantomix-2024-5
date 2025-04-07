@@ -36,10 +36,10 @@ class DBHandler {
         return searchSuccessful;
     }
 
-    fun getMonsterbyNameList(file: File, Name: String): Array<String> {
+    fun getMonsterbyNameObject(file: File, Name: String): Quantomix {
         val seperator = ",";
         var searchSuccessful = false;
-        lateinit var returnArray: Array<String>;
+        var returnArray: Array<String>? = null;
         try {
             file.forEachLine { line ->
                 val block = line.split(seperator);
@@ -61,37 +61,34 @@ class DBHandler {
                         block[7],
                         block[8]
                     );
-//                    println("name:" + block[0])
-//                    println("attackType1:" + block[1]);
-//                    println("attackType2:" + type2);
-//                    println("kp:" + block[3]);
-//                    println("attack:" + block[4]);
-//                    println("defense:" + block[5]);
-//                    println("specialAttack:" + block[6]);
-//                    println("specialDefense:" + block[7]);
-//                    println("speed:" + block[8]);
                     searchSuccessful = true;
                 }
             }
         } catch (e: Exception) {
-            println("Fehler beim Lesen der Datei: ${e.localizedMessage}")
+            //println("Fehler beim Lesen der Datei: ${e.localizedMessage}")
+            error("Fehler beim Lesen der Datei: ${e.localizedMessage}")
         }
-        return returnArray;
+        if (returnArray != null) {
+            var returnQuantomix: Quantomix = Quantomix(
+                returnArray!![0],
+                returnArray!![1],
+                returnArray!![2],
+                parseInt(returnArray!![3]),
+                parseInt(returnArray!![4]),
+                parseInt(returnArray!![5]),
+                parseInt(returnArray!![6]),
+                parseInt(returnArray!![7]),
+                parseInt(returnArray!![8])
+            );
+            println(returnQuantomix.toString());
+            return returnQuantomix;
+        }
+        else {
+            error("No data found for file ${file.absolutePath}");
+        }
     }
-
-    fun getMonsterbyNameObject(file: File, Name: String): Quantomix {
-        val arrayOfAttributes: Array<String> = getMonsterbyNameList(file, Name);
-        var returnQuantomix: Quantomix = Quantomix(
-            arrayOfAttributes[0],
-            arrayOfAttributes[1],
-            arrayOfAttributes[2],
-            parseInt(arrayOfAttributes[3]),
-            parseInt(arrayOfAttributes[4]),
-            parseInt(arrayOfAttributes[5]),
-            parseInt(arrayOfAttributes[6]),
-            parseInt(arrayOfAttributes[7]),
-            parseInt(arrayOfAttributes[8])
-        );
-        return returnQuantomix;
-    }
+}
+fun main(){
+    val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv");
+    println(DBHandler().getMonsterbyNameObject(monsterDB, "Glurak").toString());
 }
