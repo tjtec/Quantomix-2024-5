@@ -4,6 +4,7 @@ import java.io.File
 import java.lang.Integer.parseInt
 
 class DBHandler {
+    // ToDo: Überlegen ob diese Funktion noch nötig ist
     fun getMonsterbyName(file: File, Name: String): Boolean {
         val seperator = ",";
         var searchSuccessful = false;
@@ -35,7 +36,7 @@ class DBHandler {
         }
         return searchSuccessful;
     }
-
+    //ToDo: Arrays eleminieren
     fun getMonsterbyNameObject(file: File, Name: String): Quantomix {
         val seperator = ",";
         var searchSuccessful = false;
