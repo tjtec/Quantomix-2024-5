@@ -1,3 +1,4 @@
+Column1,Column2,Column3,Column4,Column5,Column6,Column7,Column8,Column9
 Name,Attack Type 1,Attack Type 2,kp,attack,defense,specialAttack,specialDefense,speed
 Bisasam,Pflanze,Gift,45,49,49,65,65,45
 Bisaknosp,Pflanze,Gift,60,62,63,80,80,60
@@ -83,3 +84,7 @@ Ariados,Käfer,Gift,70,90,70,60,70,40
 Pichu,Elektro,,20,40,15,35,35,60
 Pikachu,Elektro,,35,55,40,50,50,90
 Raichu,Elektro,,60,90,55,90,80,110
+Grinsekatze,Psycho,Geist,80,60,130,140,100,100
+Winkekatze,Normal,Stahl,110,110,110,110,110,110
+Gnampf,Drache,Eis,155,140,40,140,35,50
+Schlatompfe,Wasser,Flug,25,160,5,160,5,160

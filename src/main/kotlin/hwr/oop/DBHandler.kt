@@ -5,7 +5,7 @@ import java.lang.Integer.parseInt
 
 class DBHandler {
 
-    fun getMonsterbyNameObject(file: File, Name: String): Quantomix {
+    fun createQuantomixObject(file: File, Name: String): Quantomix {
         val seperator = ",";
         var searchSuccessful = false;
         var returnArray: List<String>? = null;
@@ -35,7 +35,7 @@ class DBHandler {
             }
         } catch (e: Exception) {
             //println("Fehler beim Lesen der Datei: ${e.localizedMessage}")
-            error("Fehler beim Lesen der Datei: ${e.localizedMessage}")
+            error("Fehler beim Lesen der Datei")
         }
         if (returnArray != null) {
             var returnQuantomix: Quantomix = Quantomix(
@@ -49,15 +49,24 @@ class DBHandler {
                 parseInt(returnArray!![7]),
                 parseInt(returnArray!![8])
             );
-            println(returnQuantomix.toString());
+            //print(returnArray.toString());
             return returnQuantomix;
         }
         else {
-            error("No data found for file ${file.absolutePath}");
+            error("No data found for file");
         }
     }
 }
-fun main(){
-    val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv");
-    println(DBHandler().getMonsterbyNameObject(monsterDB, "Glurak").toString());
-}
+//fun main(){
+//    val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv");
+//    val temp_quantomix = DBHandler().createQuantomixObject(monsterDB, "Schlatompfe");
+//    println(temp_quantomix.quantomixName);
+//    println(temp_quantomix.typ1);
+//    println(temp_quantomix.typ2);
+//    println(temp_quantomix.inputKp);
+//    println(temp_quantomix.attack);
+//    println(temp_quantomix.defense);
+//    println(temp_quantomix.specialAttack);
+//    println(temp_quantomix.specialDefense);
+//    println(temp_quantomix.speed);
+//}
