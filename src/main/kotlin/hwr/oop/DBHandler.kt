@@ -1,9 +1,10 @@
 package hwr.oop
 
 import java.io.File
+import java.lang.Integer.parseInt
 
 class DBHandler {
-    fun getMonsterbyName(file: File, Name: String): Boolean  {
+    fun getMonsterbyName(file: File, Name: String): Boolean {
         val seperator = ",";
         var searchSuccessful = false;
         try {
@@ -34,19 +35,60 @@ class DBHandler {
         }
         return searchSuccessful;
     }
-}
 
-fun main(args: Array<String>) {
-    val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv");
-
-    if (monsterDB.exists()) {
-        if(args.size > 0) { //Suche über Commandline args möglich
-            DBHandler().getMonsterbyName(monsterDB, args[0]);
+    fun getMonsterbyNameObject(file: File, Name: String): Quantomix {
+        val seperator = ",";
+        var searchSuccessful = false;
+        var returnArray: Array<String>? = null;
+        try {
+            file.forEachLine { line ->
+                val block = line.split(seperator);
+                val mName = block[0];
+                if (block[0] == Name) {
+                    var type2 = block[2].toString();
+                    if (type2 == "") {
+                        type2 = "none";
+                    }
+                    //ALL Values for Entity
+                    returnArray = arrayOf<String>(
+                        block[0],
+                        block[1],
+                        type2,
+                        block[3],
+                        block[4],
+                        block[5],
+                        block[6],
+                        block[7],
+                        block[8]
+                    );
+                    searchSuccessful = true;
+                }
+            }
+        } catch (e: Exception) {
+            //println("Fehler beim Lesen der Datei: ${e.localizedMessage}")
+            error("Fehler beim Lesen der Datei: ${e.localizedMessage}")
         }
-        else{ //Usecase ohne Commandline
-            DBHandler().getMonsterbyName(monsterDB, "Glurak");
+        if (returnArray != null) {
+            var returnQuantomix: Quantomix = Quantomix(
+                returnArray!![0],
+                returnArray!![1],
+                returnArray!![2],
+                parseInt(returnArray!![3]),
+                parseInt(returnArray!![4]),
+                parseInt(returnArray!![5]),
+                parseInt(returnArray!![6]),
+                parseInt(returnArray!![7]),
+                parseInt(returnArray!![8])
+            );
+            println(returnQuantomix.toString());
+            return returnQuantomix;
         }
-    } else {
-        println("Die Datei '${monsterDB.name}' wurde nicht gefunden.")
+        else {
+            error("No data found for file ${file.absolutePath}");
+        }
     }
+}
+fun main(){
+    val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv");
+    println(DBHandler().getMonsterbyNameObject(monsterDB, "Glurak").toString());
 }
