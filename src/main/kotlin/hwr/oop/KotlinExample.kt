@@ -2,6 +2,10 @@ package hwr.oop
 
 class KotlinExample {
   fun sayHello(): String {
-    return "Hello Emily!"
+    println("Hello, Kotlin!");
+    return "Hello World!"
   }
+}
+fun main() {
+  KotlinExample().sayHello();
 }
