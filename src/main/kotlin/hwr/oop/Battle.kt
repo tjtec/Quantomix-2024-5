@@ -3,7 +3,7 @@ package hwr.oop
 class Battle(var quantomixA: Quantomix, var quantomixB: Quantomix) {
 
     fun nextAttacker(): Quantomix {
-        if (quantomixA.speed >= quantomixB.speed) {
+        if ((quantomixA.speed*5/quantomixA.speed) >= (quantomixB.speed*5/quantomixB.speed)) {
             return quantomixA;
         } else {
             return quantomixB;
@@ -27,26 +27,21 @@ class Battle(var quantomixA: Quantomix, var quantomixB: Quantomix) {
             attackPower = attack.damage * nextAttacker().attack / otherQuantomix.defense
         }
         return attackPower
-    fun attackPower (attack:Attack): Int {
-        //ToDo: überlege eine bessere Berechnung
-        //ToDo: Attacken ohne Schaden miteinbeziehen?
-        var attackPower: Int=0
-        if (nextAttacker()==quantomixA){
-            var otherQuantomix: Quantomix = quantomixA
+    }
+
+//    fun effectivity(attack: Attack): Int{
+//
+//    }
+
+    fun newKp(attack: Attack): Boolean{
+        // changes the kp value of a quantomix
+        val attackPower=attackPower(attack)
+        val otherQuantomix = if (nextAttacker() == quantomixA) {
+            quantomixA
+        } else {
+            quantomixB
         }
-        else {
-            var otherQuantomix: Quantomix = quantomixB
-        }
-        if (attack.type == nextAttacker().typ1){
-            val otherQuantomix
-            attackPower=attack.damage*nextAttacker().specialAttack/otherQuantomix.specialDefense
-        }
-        else if (attack.type == nextAttacker().typ2){
-            attackPower=attack.damage*nextAttacker().specialAttack/otherQuantomix.specialDefense
-        }
-        else {
-            attackPower=attack.damage*nextAttacker().attack/otherQuantomix.defense
-        }
-        return attackPower
+        otherQuantomix.inputKp -= attackPower
+        return otherQuantomix.inputKp == 0
     }
 }
