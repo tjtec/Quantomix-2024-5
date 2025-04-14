@@ -2,10 +2,10 @@ package hwr.oop
 
 class Coach (
     val coachName: String,
-    val quantomix1: String,
-    val quantomix2: String,
-    val quantomix3: String,
-    val quantomix4: String,
-    val quantomix5: String,
-    val quantomix6: String
+    val quantomix1: Quantomix,
+    val quantomix2: Quantomix,
+    val quantomix3: Quantomix,
+    val quantomix4: Quantomix,
+    val quantomix5: Quantomix,
+    val quantomix6: Quantomix
     )

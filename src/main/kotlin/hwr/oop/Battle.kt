@@ -3,14 +3,14 @@ package hwr.oop
 
 class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomix) {
 
-    private fun nextAttacker(): Quantomix {
+    fun nextAttacker(): Quantomix {
         return if (quantomixA.speed >= quantomixB.speed) {
             quantomixA
         } else {
             quantomixB
         }
     }
-    private fun otherAttacker(): Quantomix {
+    fun otherAttacker(): Quantomix {
         return if (nextAttacker() == quantomixA)  {
             quantomixB
         } else {
@@ -22,13 +22,13 @@ class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomi
         return attackDamage * attackValue / 100 - 15
     }
 
-    private fun attackPower(attack: Attack): Int {
+    private fun attackPower(attack: Attack, nextAttacker:Quantomix): Int {
         //ToDo: Attacken ohne Schaden miteinbeziehen?
         return if (attack.type == nextAttacker().typ1 || attack.type == nextAttacker().typ2) {
-            formulaAttackForce(attack.damage, nextAttacker().specialAttack)
+            formulaAttackForce(attack.damage, nextAttacker.specialAttack)
             //*effectivity(attack)
         } else {
-            formulaAttackForce(attack.damage, nextAttacker().attack)
+            formulaAttackForce(attack.damage, nextAttacker.attack)
             //*effectivity(attack)
         }
     }
@@ -49,9 +49,9 @@ class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomi
 //        }
 //    }
 
-    fun newKp(attack: Attack): Boolean{
+    fun newKp(attack: Attack,attacker:Quantomix): Boolean{
         // changes the kp value of a quantomix
-        val attackPower=attackPower(attack)
+        val attackPower=attackPower(attack, attacker)
         val otherQuantomix = otherAttacker()
         otherQuantomix.kp -= attackPower
         return otherQuantomix.kp == 0
