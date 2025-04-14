@@ -4,7 +4,7 @@ class Quantomix(
     val quantomixName: String,
     val typ1: String,
     val typ2: String,
-    var inputKp: Int,
+    var kp: Int,
     val attack: Int,
     val defense: Int,
     val specialAttack: Int,

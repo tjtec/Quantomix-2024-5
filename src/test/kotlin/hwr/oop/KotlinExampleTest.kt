@@ -1,7 +1,6 @@
 package hwr.oop
 
 import io.kotest.core.spec.style.AnnotationSpec
-import io.kotest.matchers.types.shouldBeTypeOf
 import org.assertj.core.api.Assertions.assertThat
 import java.io.File
 
@@ -24,7 +23,7 @@ class KotlinExampleTest : AnnotationSpec() {
         assertThat(quantomix.quantomixName).isEqualTo("Test")
         assertThat(quantomix.typ1).isEqualTo("hello")
         assertThat(quantomix.typ2).isEqualTo("world")
-        assertThat(quantomix.inputKp).isEqualTo(200)
+        assertThat(quantomix.kp).isEqualTo(200)
         assertThat(quantomix.attack).isEqualTo(100)
         assertThat(quantomix.defense).isEqualTo(30)
         assertThat(quantomix.specialAttack).isEqualTo(70)
@@ -38,6 +37,6 @@ class KotlinExampleTest : AnnotationSpec() {
         val monster:Quantomix=DBHandler().getMonsterbyNameObject(monsterDB, "Glurak")
         assertThat(monster).isNotNull
         //assertThat(monster).shouldBeTypeOf<Quantomix>()
-        assertThat(monster.inputKp).isEqualTo(78)
+        assertThat(monster.kp).isEqualTo(78)
     }
 }

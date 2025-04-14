@@ -39,7 +39,7 @@ class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomi
         // changes the kp value of a quantomix
         val attackPower=attackPower(attack)
         val otherQuantomix = otherAttacker()
-        otherQuantomix.inputKp -= attackPower
-        return otherQuantomix.inputKp == 0
+        otherQuantomix.kp -= attackPower
+        return otherQuantomix.kp == 0
     }
 }
