@@ -49,4 +49,37 @@ class BattleTest : AnnotationSpec() {
         assertThat(monster1.kp).isEqualTo(78)
         assertThat(monster2.kp).isEqualTo(32)
     }
+    @Test
+    fun `Batteltest less effectiviness`() {
+        val monsterDB = GameData().monsterDB;
+        val monster1:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Glurak")
+        val monster2:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Owei")
+        val battle = Battle(monster1, monster2)
+        val attack:Attack=Attack("Tackle", "Normal", 40, 100, "nicht effektiv")
+        battle.newKp(attack)
+        assertThat(monster1.kp).isEqualTo(78)
+        assertThat(monster2.kp).isEqualTo(51)
+    }
+    @Test
+    fun `Batteltest effectiviness`() {
+        val monsterDB = GameData().monsterDB;
+        val monster1:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Glurak")
+        val monster2:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Owei")
+        val battle = Battle(monster1, monster2)
+        val attack:Attack=Attack("Test", "Gift", 40, 100, "nicht effektiv")
+        battle.newKp(attack)
+        assertThat(monster1.kp).isEqualTo(78)
+        assertThat(monster2.kp).isEqualTo(42)
+    }
+    @Test
+    fun `Batteltest not effectiv`() {
+        val monsterDB = GameData().monsterDB;
+        val monster1:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Glurak")
+        val monster2:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Rattfratz")
+        val battle = Battle(monster1, monster2)
+        val attack:Attack=Attack("Test", "Kampf", 40, 100, "nicht effektiv")
+        battle.newKp(attack)
+        assertThat(monster1.kp).isEqualTo(78)
+        assertThat(monster2.kp).isEqualTo(30)
+    }
 }
