@@ -14,7 +14,7 @@ class KotlinExampleTest : AnnotationSpec() {
     @Test
     fun `DBHandler test`() {
         val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv")
-        assertThat(DBHandler().getMonsterbyNameObject(monsterDB, "Glurak")).isNotNull
+        assertThat(DBHandler().createQuantomixObject(monsterDB, "Glurak")).isNotNull
     }
 
     @Test
@@ -34,7 +34,7 @@ class KotlinExampleTest : AnnotationSpec() {
     @Test
     fun `Quantomix out of DB test`() {
         val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv")
-        val monster:Quantomix=DBHandler().getMonsterbyNameObject(monsterDB, "Glurak")
+        val monster:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Glurak")
         assertThat(monster).isNotNull
         //assertThat(monster).shouldBeTypeOf<Quantomix>()
         assertThat(monster.kp).isEqualTo(78)
