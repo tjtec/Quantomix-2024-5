@@ -25,11 +25,9 @@ class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomi
     private fun attackPower(attack: Attack): Int {
         //ToDo: Attacken ohne Schaden miteinbeziehen?
         return if (attack.type == nextAttacker().typ1 || attack.type == nextAttacker().typ2) {
-            formulaAttackForce(attack.damage, nextAttacker().specialAttack)
-            //*effectivity(attack)
+            formulaAttackForce(attack.damage, nextAttacker().specialAttack)*effectivity(attack)
         } else {
-            formulaAttackForce(attack.damage, nextAttacker().attack)
-            //*effectivity(attack)
+            formulaAttackForce(attack.damage, nextAttacker().attack)*effectivity(attack)
         }
     }
 
