@@ -6,7 +6,7 @@ import java.io.File
 
 class BattleTest : AnnotationSpec() {
     @Test
-    fun `Batteltest`() {
+    fun `Batteltest with normal Attack`() {
         val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv");
         val monster1:Quantomix=DBHandler().getMonsterbyNameObject(monsterDB, "Glurak")
         val monster2:Quantomix=DBHandler().getMonsterbyNameObject(monsterDB, "Schillok")
@@ -17,7 +17,7 @@ class BattleTest : AnnotationSpec() {
         assertThat(monster2.inputKp).isEqualTo(41)
     }
     @Test
-    fun `Batteltest with special Attack`() {
+    fun `Batteltest with special Attack Type 2`() {
         val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv");
         val monster1:Quantomix=DBHandler().getMonsterbyNameObject(monsterDB, "Glurak")
         val monster2:Quantomix=DBHandler().getMonsterbyNameObject(monsterDB, "Schillok")
@@ -28,7 +28,7 @@ class BattleTest : AnnotationSpec() {
         assertThat(monster2.inputKp).isEqualTo(31)
     }
     @Test
-    fun `Batteltest with other Quantomix`() {
+    fun `Batteltest with other Quantomix and special Attack Type 1`() {
         val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv");
         val monster1:Quantomix=DBHandler().getMonsterbyNameObject(monsterDB, "Glurak")
         val monster2:Quantomix=DBHandler().getMonsterbyNameObject(monsterDB, "Tauboss")
