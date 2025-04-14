@@ -38,4 +38,15 @@ class BattleTest : AnnotationSpec() {
         assertThat(monster1.kp).isEqualTo(61)
         assertThat(monster2.kp).isEqualTo(83)
     }
+    @Test
+    fun `Batteltest extrem effectiviness`() {
+        val monsterDB = GameData().monsterDB;
+        val monster1:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Glurak")
+        val monster2:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Owei")
+        val battle = Battle(monster1, monster2)
+        val attack:Attack=Attack("Glut", "Feuer", 40, 100, "nicht effektiv")
+        battle.newKp(attack)
+        assertThat(monster1.kp).isEqualTo(78)
+        assertThat(monster2.kp).isEqualTo(32)
+    }
 }
