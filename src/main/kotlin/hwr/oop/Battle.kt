@@ -25,15 +25,30 @@ class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomi
     private fun attackPower(attack: Attack): Int {
         //ToDo: Attacken ohne Schaden miteinbeziehen?
         return if (attack.type == nextAttacker().typ1 || attack.type == nextAttacker().typ2) {
-            formulaAttackForce(attack.damage, nextAttacker().specialAttack)
+            formulaAttackForce(attack.damage, nextAttacker().specialAttack)*effectivity(attack)
         } else {
-            formulaAttackForce(attack.damage, nextAttacker().attack)
+            formulaAttackForce(attack.damage, nextAttacker().attack)*effectivity(attack)
         }
     }
 
-//    fun effectivity(attack: Attack): Int{
-//
-//    }
+    fun effectivity(attack: Attack): Int{
+        var otherAttacker = otherAttacker()
+        var effictivity1= getEffectivity(otherAttacker().typ1,attack.type) //braucht einen Int
+        // 2 für sehr effektiv, 1 für effektiv, 0,5 für nicht effektiv und 0 für wirkungslos
+        var effictivity2 = if (otherAttacker().typ2 != ""){
+            getEffectivity(otherAttacker().typ2,attack.type)
+        }
+        else {0}
+        if (effictivity1*effictivity2==1){
+            return effictivity1*effictivity2
+        }
+        else if (effictivity1>effictivity2){
+            return effictivity1
+        }
+        else{
+            return effictivity2
+        }
+    }
 
     fun newKp(attack: Attack): Boolean{
         // changes the kp value of a quantomix

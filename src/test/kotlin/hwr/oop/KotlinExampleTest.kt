@@ -8,7 +8,7 @@ import java.io.File
 class KotlinExampleTest : AnnotationSpec() {
     @Test
     fun `example returns hello world`() {
-        assertThat(KotlinExample().sayHello()).isEqualTo("Hello World!")
+        assertThat(KotlinExample().sayHello()).isEqualTo("Hello Emily!")
     }
 
     @Test
