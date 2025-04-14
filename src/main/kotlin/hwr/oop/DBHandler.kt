@@ -81,15 +81,15 @@ class DBHandler {
     }
 }
 fun main(){
-    val monsterDB = File("src/main/resources/test.csv");
-    val effDB = File("src/main/resources/Effektivitaet.csv");
+    val monsterDB = GameData().monsterDB
+    val effDB = GameData().effDB
 
     println("Create Quantomix Object");
     val temp_quantomix = DBHandler().createQuantomixObject(monsterDB, "Schlatompfe");
     println(temp_quantomix.quantomixName);
     println(temp_quantomix.typ1);
     println(temp_quantomix.typ2);
-    println(temp_quantomix.inputKp);
+    println(temp_quantomix.kp);
     println(temp_quantomix.attack);
     println(temp_quantomix.defense);
     println(temp_quantomix.specialAttack);

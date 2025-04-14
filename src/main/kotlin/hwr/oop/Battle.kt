@@ -33,21 +33,36 @@ class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomi
         }
     }
 
-//    private fun effectivity(attack: Attack): Int{
-//        val effictivity1= getEffectivity(otherAttacker().typ1,attack.type) //braucht einen Int
-//        // 2 für sehr effektiv, 1 für effektiv, 0,5 für nicht effektiv und 0 für wirkungslos
-//        val effictivity2 = if (otherAttacker().typ2 != ""){
-//            getEffectivity(otherAttacker().typ2,attack.type)
-//        }
-//        else {0}
-//        return if (effictivity1*effictivity2==1){
-//            effictivity1*effictivity2
-//        } else if (effictivity1>effictivity2){
-//            effictivity1
-//        } else{
-//            effictivity2
-//        }
-//    }
+    private fun effectivity(attack: Attack): Double{
+        val effDB = GameData().effDB;
+        val effictivity1= when(DBHandler().getData(effDB,Effektivitaet().Klassen.get(otherAttacker().typ1)!!,Effektivitaet().Klassen.get(attack.type)!!)[0]) {
+            "+" -> 2.0
+            "-" -> 1.0
+            "0" -> 0.5
+            "x" -> 0.0
+            else -> throw IllegalArgumentException("Ungültiges Symbol")
+        }
+        val effictivity2= when(DBHandler().getData(effDB,Effektivitaet().Klassen.get(otherAttacker().typ2)!!,Effektivitaet().Klassen.get(attack.type)!!)[0]) {
+            "+" -> 2.0
+            "-" -> 1.0
+            "0" -> 0.5
+            "x" -> 0.0
+            else -> throw IllegalArgumentException("Ungültiges Symbol")
+        }
+
+        //val effictivity1= getEffectivity(otherAttacker().typ1,attack.type) //braucht einen Int
+        // 2 für sehr effektiv, 1 für effektiv, 0,5 für nicht effektiv und 0 für wirkungslos
+        //val effictivity2 = if (otherAttacker().typ2 != ""){
+        //    getEffectivity(otherAttacker().typ2,attack.type)
+
+        return if (effictivity1*effictivity2==1.0){
+            effictivity1*effictivity2
+        } else if (effictivity1>effictivity2){
+            effictivity1
+        } else{
+            effictivity2
+        }
+    }
 
     fun newKp(attack: Attack): Boolean{
         // changes the kp value of a quantomix
