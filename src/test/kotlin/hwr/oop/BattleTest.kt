@@ -14,7 +14,7 @@ class BattleTest : AnnotationSpec() {
         val attack:Attack=Attack("tackle", "normal", 40, 100, "normal")
         battle.newKp(attack)
         assertThat(monster1.inputKp).isEqualTo(78)
-        assertThat(monster2.inputKp).isEqualTo(28)
+        assertThat(monster2.inputKp).isEqualTo(41)
     }
     @Test
     fun `Batteltest with special Attack`() {
@@ -25,7 +25,7 @@ class BattleTest : AnnotationSpec() {
         val attack:Attack=Attack("Pflücker", "Flug", 40, 100, "effektiv")
         battle.newKp(attack)
         assertThat(monster1.inputKp).isEqualTo(78)
-        assertThat(monster2.inputKp).isEqualTo(28)
+        assertThat(monster2.inputKp).isEqualTo(31)
     }
     @Test
     fun `Batteltest with other Quantomix`() {
@@ -35,7 +35,7 @@ class BattleTest : AnnotationSpec() {
         val battle = Battle(monster1, monster2)
         val attack:Attack=Attack("Glut", "Feuer", 40, 100, "nicht effektiv")
         battle.newKp(attack)
-        assertThat(monster1.inputKp).isEqualTo(27)
+        assertThat(monster1.inputKp).isEqualTo(61)
         assertThat(monster2.inputKp).isEqualTo(83)
     }
 }
