@@ -1,34 +1,34 @@
 package hwr.oop
 
-import java.io.File
 
-class Battle(var quantomixA: Quantomix, var quantomixB: Quantomix) {
+class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomix) {
 
-    fun nextAttacker(): Quantomix {
-        if (quantomixA.speed >= quantomixB.speed) {
-            return quantomixA;
-        } else {
-            return quantomixB;
-        }
-    }
-
-    fun attackPower(attack: Attack): Int {
-        //ToDo: überlege eine bessere Berechnung
-        //ToDo: Attacken ohne Schaden miteinbeziehen?
-        var attackPower: Int = 0
-        val otherQuantomix = if (nextAttacker() == quantomixA) {
+    private fun nextAttacker(): Quantomix {
+        return if (quantomixA.speed >= quantomixB.speed) {
             quantomixA
         } else {
             quantomixB
         }
-        if (attack.type == nextAttacker().typ1) {
-            attackPower = attack.damage * nextAttacker().specialAttack / otherQuantomix.specialDefense
-        } else if (attack.type == nextAttacker().typ2) {
-            attackPower = attack.damage * nextAttacker().specialAttack / otherQuantomix.specialDefense
+    }
+    private fun otherAttacker(): Quantomix {
+        return if (nextAttacker() == quantomixA)  {
+            quantomixB
         } else {
-            attackPower = attack.damage * nextAttacker().attack / otherQuantomix.defense
+            quantomixA
         }
-        return attackPower
+    }
+
+    private fun formulaAttackForce(attackDamage: Int, attackValue:Int):Int{
+        return attackDamage * attackValue / 100 - 15
+    }
+
+    private fun attackPower(attack: Attack): Int {
+        //ToDo: Attacken ohne Schaden miteinbeziehen?
+        return if (attack.type == nextAttacker().typ1 || attack.type == nextAttacker().typ2) {
+            formulaAttackForce(attack.damage, nextAttacker().specialAttack)
+        } else {
+            formulaAttackForce(attack.damage, nextAttacker().attack)
+        }
     }
 
 //    fun effectivity(attack: Attack): Int{
@@ -38,22 +38,8 @@ class Battle(var quantomixA: Quantomix, var quantomixB: Quantomix) {
     fun newKp(attack: Attack): Boolean{
         // changes the kp value of a quantomix
         val attackPower=attackPower(attack)
-        val otherQuantomix = if (nextAttacker() == quantomixA) {
-            quantomixA
-        } else {
-            quantomixB
-        }
+        val otherQuantomix = otherAttacker()
         otherQuantomix.inputKp -= attackPower
         return otherQuantomix.inputKp == 0
     }
-}
-
-fun main() {
-    val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv");
-    val monster1:Quantomix=DBHandler().getMonsterbyNameObject(monsterDB, "Glurak")
-    val monster2:Quantomix=DBHandler().getMonsterbyNameObject(monsterDB, "Schillok")
-    val battle = Battle(monster1, monster2)
-    val attack:Attack=Attack("tackle", "normal", 40, 100, "normal")
-    battle.newKp(attack)
-
 }
