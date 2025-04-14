@@ -1,9 +1,11 @@
 package hwr.oop
 
+import java.io.File
+
 class Battle(var quantomixA: Quantomix, var quantomixB: Quantomix) {
 
     fun nextAttacker(): Quantomix {
-        if ((quantomixA.speed*5/quantomixA.speed) >= (quantomixB.speed*5/quantomixB.speed)) {
+        if (quantomixA.speed >= quantomixB.speed) {
             return quantomixA;
         } else {
             return quantomixB;
@@ -44,4 +46,14 @@ class Battle(var quantomixA: Quantomix, var quantomixB: Quantomix) {
         otherQuantomix.inputKp -= attackPower
         return otherQuantomix.inputKp == 0
     }
+}
+
+fun main() {
+    val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv");
+    val monster1:Quantomix=DBHandler().getMonsterbyNameObject(monsterDB, "Glurak")
+    val monster2:Quantomix=DBHandler().getMonsterbyNameObject(monsterDB, "Schillok")
+    val battle = Battle(monster1, monster2)
+    val attack:Attack=Attack("tackle", "normal", 40, 100, "normal")
+    battle.newKp(attack)
+
 }
