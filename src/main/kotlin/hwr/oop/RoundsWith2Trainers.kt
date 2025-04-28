@@ -5,26 +5,14 @@ class RoundsWith2Trainers(private val trainer1:Coach, private val trainer2:Coach
     var currentQuantomixTrainer2=trainer2.quantomix2
     fun start(): Coach {
         var battle = Battle(currentQuantomixTrainer1, currentQuantomixTrainer2)
-        var nextAttacker = battle.nextAttacker()
-        var attack1 = askForFirstAttackTrainer1()
-        var attack2 = askForFirstAttackTrainer2()
-        var battleEnd = false
-        while (battleEnd == false){
-            if (nextAttacker == currentQuantomixTrainer1){
-                battle.newKp(attack1, nextAttacker)
-                attack1 = askForFirstAttackTrainer1()
+        while (nextQuantomix() != null){
+            round(battle)
+            if (currentQuantomixTrainer1.kp==0){
+                currentQuantomixTrainer1=nextQuantomix()
             }
             else{
-                battle.newKp(attack2, nextAttacker)
-                askForFirstAttackTrainer2()
+                currentQuantomixTrainer2=nextQuantomix()
             }
-            nextAttacker = battle.otherAttacker()
-        }
-        if (currentQuantomixTrainer1.kp==0){
-            currentQuantomixTrainer1=nextQuantomix()
-        }
-        else{
-            currentQuantomixTrainer2=nextQuantomix()
         }
         if (currentQuantomixTrainer1 == null){
             return trainer1
@@ -36,6 +24,23 @@ class RoundsWith2Trainers(private val trainer1:Coach, private val trainer2:Coach
 
     // ToDo: schauen, dass man hier die Initiative miteinbezieht und nicht einfach stumpf
          //ToDO: (Fortsetzung) die Quantomix nacheinander
+    }
+    private fun round(battle: Battle){
+        var nextAttacker = battle.nextAttacker()
+        var attack1 = askForFirstAttackTrainer1()
+        var attack2 = askForFirstAttackTrainer2()
+        var battleEnd = false
+        while (battleEnd == false){
+            if (nextAttacker == currentQuantomixTrainer1){
+                battle.newKp(attack1)
+                attack1 = askForFirstAttackTrainer1()
+            }
+            else{
+                battle.newKp(attack2)
+                askForFirstAttackTrainer2()
+            }
+            nextAttacker = battle.otherAttacker()
+        }
     }
     fun askForFirstAttackTrainer1 (): Attack{
         return TODO("We have to implement a function, " +
