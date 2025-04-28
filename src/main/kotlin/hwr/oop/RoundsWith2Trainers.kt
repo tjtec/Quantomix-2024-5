@@ -30,6 +30,9 @@ class RoundsWith2Trainers(private val trainer1:Coach, private val trainer2:Coach
     fun askForFirstAttackTrainer1 (): Attack{
         return TODO("We have to implement a function, " +
                 "which gets the attack from the cli and give it to this function.")
+
+
+
     }
     fun askForFirstAttackTrainer2 (): Attack{
         return TODO("We have to implement a function, " +
