@@ -3,15 +3,16 @@ package hwr.oop
 
 class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomix) {
 
-    fun nextAttacker(): Quantomix {
+    internal fun nextAttacker(): Quantomix {
         return if (quantomixA.speed >= quantomixB.speed) {
             quantomixA
         } else {
             quantomixB
         }
     }
-    fun otherAttacker(): Quantomix {
-        return if (nextAttacker() == quantomixA)  {
+
+    internal fun otherAttacker(): Quantomix {
+        return if (nextAttacker() == quantomixA) {
             quantomixB
         } else {
             quantomixA
@@ -22,11 +23,11 @@ class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomi
         return attackDamage * attackValue / 100 - 15
     }
 
-    private fun attackPower(attack: Attack, nextAttacker:Quantomix): Int {
+    private fun attackPower(attack: Attack, nextAttacker: Quantomix): Int {
         //ToDo: Attacken ohne Schaden miteinbeziehen?
-        var result=0.0
-        if (attack.type == nextAttacker().typ1.name || attack.type == nextAttacker().typ2.name) {
-            result= formulaAttackForce(attack.damage!!, nextAttacker.specialAttack) *effectivity(attack)
+        var result = 0.0
+        if (attack.type == nextAttacker().typ1.name || (nextAttacker().typ2 != null && attack.type == nextAttacker().typ2!!.name)) {
+            result = formulaAttackForce(attack.damage!!, nextAttacker.specialAttack) * effectivity(attack)
         } else {
             result = formulaAttackForce(attack.damage!!, nextAttacker.attack) * effectivity(attack)
         }
@@ -46,17 +47,20 @@ class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomi
             "x" -> 0.0
             else -> throw IllegalArgumentException("Ungültiges Symbol")
         }
-        val effictivity2 = when (DBHandler().getData(
+        var effictivity2 = 0.0
+        if (otherAttacker().typ2 != null) {
+            effictivity2 = when ((DBHandler().getData(
 
-            effDB,
-            Effektivitaet().Klassen.get(otherAttacker().typ2.name)!!,
-            Effektivitaet().Klassen.get(attack.type)!!
-        )[0]) {
-            "+" -> 2.0
-            "-" -> 1.0
-            "0" -> 0.5
-            "x" -> 0.0
-            else -> throw IllegalArgumentException("Ungültiges Symbol")
+                effDB,
+                Effektivitaet().Klassen.get(otherAttacker().typ2!!.name)!!,
+                Effektivitaet().Klassen.get(attack.type)!!
+            )[0])) {
+                "+" -> 2.0
+                "-" -> 1.0
+                "0" -> 0.5
+                "x" -> 0.0
+                else -> throw IllegalArgumentException("Ungültiges Symbol")
+            }
         }
         return if (effictivity1 * effictivity2 == 1.0) {
             effictivity1 * effictivity2
@@ -71,11 +75,10 @@ class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomi
         // changes the kp value of a quantomix
         val attackPower = attackPower(attack, nextAttacker())
         val otherQuantomix = otherAttacker()
-        if (attackPower>otherQuantomix.kp){
+        if (attackPower > otherQuantomix.kp) {
             otherQuantomix.kp = 0
-        }
-        else{
-        otherQuantomix.kp -= attackPower
+        } else {
+            otherQuantomix.kp -= attackPower
         }
         return otherQuantomix.kp == 0
     }
