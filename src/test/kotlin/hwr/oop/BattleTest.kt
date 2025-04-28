@@ -7,6 +7,7 @@ import java.io.File
 class BattleTest : AnnotationSpec() {
     @Test
     fun `Batteltest with normal Attack`() {
+        //ToDo: make test work without the monsterDB
         val monsterDB = GameData().monsterDB;
         val monster1:Quantomix= DBHandler().createQuantomixObject(monsterDB, "Glurak")!!
         val monster2:Quantomix= DBHandler().createQuantomixObject(monsterDB, "Schillok")!!
@@ -18,6 +19,7 @@ class BattleTest : AnnotationSpec() {
     }
     @Test
     fun `Batteltest with special Attack Type 2`() {
+        //ToDo: make test work without the monsterDB
         val monsterDB = GameData().monsterDB;
         val monster1:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Glurak")!!
         val monster2:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Schillok")!!
@@ -29,6 +31,7 @@ class BattleTest : AnnotationSpec() {
     }
     @Test
     fun `Batteltest with other Quantomix and special Attack Type 1`() {
+        //ToDo: make test work without the monsterDB
         val monsterDB = GameData().monsterDB;
         val monster1:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Glurak")!!
         val monster2:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Tauboss")!!
@@ -40,6 +43,7 @@ class BattleTest : AnnotationSpec() {
     }
     @Test
     fun `Batteltest extrem effectiviness`() {
+        //ToDo: make test work without the monsterDB
         val monsterDB = GameData().monsterDB;
         val monster1:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Glurak")!!
         val monster2:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Owei")!!
@@ -51,6 +55,7 @@ class BattleTest : AnnotationSpec() {
     }
     @Test
     fun `Batteltest less effectiviness`() {
+        //ToDo: make test work without the monsterDB
         val monsterDB = GameData().monsterDB;
         val monster1:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Glurak")!!
         val monster2:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Owei")!!
@@ -62,6 +67,7 @@ class BattleTest : AnnotationSpec() {
     }
     @Test
     fun `Batteltest effectiviness`() {
+        //ToDo: make test work without the monsterDB
         val monsterDB = GameData().monsterDB;
         val monster1:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Glurak")!!
         val monster2:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Owei")!!
@@ -73,6 +79,7 @@ class BattleTest : AnnotationSpec() {
     }
     @Test
     fun `Batteltest not effectiv`() {
+        //ToDo: make test work without the monsterDB
         val monsterDB = GameData().monsterDB;
         val monster1:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Glurak")!!
         val monster2:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Rattfratz")!!
