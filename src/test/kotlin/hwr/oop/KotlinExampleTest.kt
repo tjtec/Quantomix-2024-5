@@ -1,5 +1,6 @@
 package hwr.oop
 
+import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 import java.io.File
@@ -19,10 +20,14 @@ class KotlinExampleTest : AnnotationSpec() {
 
     @Test
     fun `Quantomix test`() {
-        val quantomix = Quantomix("Test", "hello", "world", 200, 100, 30, 70, 35, 88)
+        val type1= Typ("hello")
+        val type2= Typ("world")
+        val attack=Attack("attack", "Normal", 40, 100)
+        val attacks = listOf(attack)
+        val quantomix = Quantomix("Test", type1, type2, 200, 100, 30, 70, 35, 88, attacks)
         assertThat(quantomix.quantomixName).isEqualTo("Test")
-        assertThat(quantomix.typ1).isEqualTo("hello")
-        assertThat(quantomix.typ2).isEqualTo("world")
+        assertThat(quantomix.typ1.name).isEqualTo("hello")
+        assertThat(quantomix.typ2.name).isEqualTo("world")
         assertThat(quantomix.kp).isEqualTo(200)
         assertThat(quantomix.attack).isEqualTo(100)
         assertThat(quantomix.defense).isEqualTo(30)
@@ -34,7 +39,7 @@ class KotlinExampleTest : AnnotationSpec() {
     @Test
     fun `Quantomix out of DB test`() {
         val monsterDB = File("src/main/kotlin/hwr/oop/resources/test.csv")
-        val monster:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Glurak")
+        val monster:Quantomix=DBHandler().createQuantomixObject(monsterDB, "Glurak")!!
         assertThat(monster).isNotNull
         //assertThat(monster).shouldBeTypeOf<Quantomix>()
         assertThat(monster.kp).isEqualTo(78)

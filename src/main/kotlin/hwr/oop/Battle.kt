@@ -25,10 +25,10 @@ class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomi
     private fun attackPower(attack: Attack, nextAttacker:Quantomix): Int {
         //ToDo: Attacken ohne Schaden miteinbeziehen?
         var result=0.0
-        if (attack.type == nextAttacker().typ1 || attack.type == nextAttacker().typ2) {
-            result= formulaAttackForce(attack.damage, nextAttacker.specialAttack) *effectivity(attack)
+        if (attack.type == nextAttacker().typ1.name || attack.type == nextAttacker().typ2.name) {
+            result= formulaAttackForce(attack.damage!!, nextAttacker.specialAttack) *effectivity(attack)
         } else {
-            result = formulaAttackForce(attack.damage, nextAttacker.attack) * effectivity(attack)
+            result = formulaAttackForce(attack.damage!!, nextAttacker.attack) * effectivity(attack)
         }
         return result.toInt()
     }
@@ -37,7 +37,7 @@ class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomi
         val effDB = GameData().effDB;
         val effictivity1 = when (DBHandler().getData(
             effDB,
-            Effektivitaet().Klassen.get(otherAttacker().typ1)!!,
+            Effektivitaet().Klassen.get(otherAttacker().typ1.name)!!,
             Effektivitaet().Klassen.get(attack.type)!!
         )[0]) {
             "+" -> 2.0
@@ -47,8 +47,9 @@ class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomi
             else -> throw IllegalArgumentException("Ungültiges Symbol")
         }
         val effictivity2 = when (DBHandler().getData(
+
             effDB,
-            Effektivitaet().Klassen.get(otherAttacker().typ2)!!,
+            Effektivitaet().Klassen.get(otherAttacker().typ2.name)!!,
             Effektivitaet().Klassen.get(attack.type)!!
         )[0]) {
             "+" -> 2.0

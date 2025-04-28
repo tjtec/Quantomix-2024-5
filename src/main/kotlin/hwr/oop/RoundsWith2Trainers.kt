@@ -1,13 +1,17 @@
 package hwr.oop
 
 class RoundsWith2Trainers(private val trainer1:Coach, private val trainer2:Coach) {
-    var currentQuantomixTrainer1=trainer1.quantomix1
-    var currentQuantomixTrainer2=trainer2.quantomix2
+    var currentQuantomixTrainer1: Quantomix?=trainer1.quantomix1
+    var currentQuantomixTrainer2: Quantomix?=trainer2.quantomix2
     fun start(): Coach {
-        var battle = Battle(currentQuantomixTrainer1, currentQuantomixTrainer2)
+        if (currentQuantomixTrainer1==null || currentQuantomixTrainer2==null) {
+            error("No Quantomix found")
+        }
+        else {
+        var battle = Battle(currentQuantomixTrainer1!!, currentQuantomixTrainer2!!)
         while (nextQuantomix() != null){
             round(battle)
-            if (currentQuantomixTrainer1.kp==0){
+            if (currentQuantomixTrainer1!!.kp==0){
                 currentQuantomixTrainer1=nextQuantomix()
             }
             else{
@@ -25,6 +29,7 @@ class RoundsWith2Trainers(private val trainer1:Coach, private val trainer2:Coach
     // ToDo: schauen, dass man hier die Initiative miteinbezieht und nicht einfach stumpf
          //ToDO: (Fortsetzung) die Quantomix nacheinander
     }
+    }
     private fun round(battle: Battle){
         var nextAttacker = battle.nextAttacker()
         var attack1 = askForFirstAttackTrainer1()
@@ -32,11 +37,11 @@ class RoundsWith2Trainers(private val trainer1:Coach, private val trainer2:Coach
         var battleEnd = false
         while (battleEnd == false){
             if (nextAttacker == currentQuantomixTrainer1){
-                battle.newKp(attack1)
+                battleEnd =battle.newKp(attack1)
                 attack1 = askForFirstAttackTrainer1()
             }
             else{
-                battle.newKp(attack2)
+                battleEnd =battle.newKp(attack2)
                 askForFirstAttackTrainer2()
             }
             nextAttacker = battle.otherAttacker()
@@ -51,9 +56,14 @@ class RoundsWith2Trainers(private val trainer1:Coach, private val trainer2:Coach
                 "which gets the attack from the cli and give it to this function.")
     }
 
-    fun nextQuantomix(): Quantomix{
-        return TODO("This function should check, if the trainer has other Quantomix " +
-                "which are alive. The function should also work with the answer of the trainer " +
-                "which of the alive Quantomix he want to use next.")
+    fun nextQuantomix(): Quantomix?{
+        if (currentQuantomixTrainer1 != null) {
+            return TODO(
+                "This function should check, if the trainer has other Quantomix " +
+                        "which are alive. The function should also work with the answer of the trainer " +
+                        "which of the alive Quantomix he want to use next."
+            )
+        }
+        return null
     }
 }
