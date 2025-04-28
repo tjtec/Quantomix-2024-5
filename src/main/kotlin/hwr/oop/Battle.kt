@@ -36,6 +36,7 @@ class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomi
 
     private fun effectivity(attack: Attack): Double {
         val effDB = GameData().effDB;
+        print("${otherAttacker().quantomixName}")
         val effictivity1 = when (DBHandler().getData(
             effDB,
             Effektivitaet().Klassen.get(otherAttacker().typ1.name)!!,
