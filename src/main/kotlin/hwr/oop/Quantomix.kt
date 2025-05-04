@@ -12,5 +12,6 @@ class Quantomix(
     val specialAttack: Int,
     val specialDefense: Int,
     val speed: Int,
-    val attacks: List<Attack>
+    val attacks: List<Attack>,
+    var battleStats: BattleStats?
 )
