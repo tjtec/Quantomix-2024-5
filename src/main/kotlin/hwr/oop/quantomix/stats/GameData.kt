@@ -4,7 +4,7 @@ import hwr.oop.quantomix.csvparser.CsvFile
 import hwr.oop.quantomix.fight.objects.Effektivitaet
 import java.io.File
 
-class GameData {
+object GameData {
     //Global Game Data
     val effDB = File("src/main/resources/Effektivitaet.csv")
 
@@ -18,6 +18,6 @@ class GameData {
 }
 
 fun main(){
-    val returnval = GameData().getEffektivitaet("Normal", "Kampf")
+    val returnval = GameData.getEffektivitaet("Normal", "Kampf")
     println(returnval)
 }

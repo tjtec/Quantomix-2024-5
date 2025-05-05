@@ -66,7 +66,7 @@ class BattleForMorePlayers(private var ListOfQuantomix: MutableList<Quantomix>) 
             if (quantomixType.name == "0") {
                 return 1.0
             }
-            return GameData().getEffektivitaet(quantomixType.name, attackTyp.name)
+            return GameData.getEffektivitaet(quantomixType.name, attackTyp.name)
         }
     }
 
