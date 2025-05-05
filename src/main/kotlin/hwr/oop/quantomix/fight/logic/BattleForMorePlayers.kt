@@ -23,7 +23,7 @@ class BattleForMorePlayers(private var ListOfQuantomix: MutableList<Quantomix>) 
         //ToDo: Attacken ohne Schaden miteinbeziehen?
         val attack = damageDealer.battleStats!!.nextAttack
         val nextAttacker = damageDealer
-        when (attack.type == nextAttacker.typ1.name || (nextAttacker.typ2 != null && attack.type == nextAttacker.typ2.name)) {
+        when (attack.type.name == nextAttacker.typ1.name || (nextAttacker.typ2 != null && attack.type.name == nextAttacker.typ2.name)) {
             true -> return formulaAttackForce(
                 attack.damage!!,
                 nextAttacker.battleStats!!.battleSpecialAttack,
@@ -36,7 +36,9 @@ class BattleForMorePlayers(private var ListOfQuantomix: MutableList<Quantomix>) 
                 nextAttacker.attack,
                 nextAttacker.battleStats!!.target.battleStats!!.battleDefense,
                 effectivity(
-                    damageDealer.battleStats!!.target.typ1, formulaEffectivity(damageDealer, effectiv1, effectiv2)
+                    damageDealer.battleStats!!.target.typ1,
+                    damageDealer.battleStats!!.nextAttack.type,
+                    formulaEffectivity(damageDealer, effectiv1, effectiv2)
                 )
             )
         }
@@ -46,8 +48,8 @@ class BattleForMorePlayers(private var ListOfQuantomix: MutableList<Quantomix>) 
         val target = damageDealer.battleStats!!.target
         val typ2 = target.typ2 ?: Typ("0") // Setzt "0" als Standard, falls kein zweiter Typ vorhanden ist
 
-        val eff1 = effectivity(target.typ1, effectiv1)
-        val eff2 = effectivity(typ2, effectiv2)
+        val eff1 = effectivity(target.typ1, damageDealer.battleStats!!.nextAttack.type, effectiv1)
+        val eff2 = effectivity(typ2, damageDealer.battleStats!!.nextAttack.type, effectiv2)
 
         return when {
             eff1 * eff2 == 1.0 -> 1.0
@@ -56,7 +58,7 @@ class BattleForMorePlayers(private var ListOfQuantomix: MutableList<Quantomix>) 
         }
     }
 
-    private fun effectivity(quantomixType: Typ, effective: Double? = null): Double {
+    private fun effectivity(quantomixType: Typ, attackTyp: Typ, effective: Double? = null): Double {
         if (effective != null) {
             return effective
         } else {
@@ -83,7 +85,7 @@ class BattleForMorePlayers(private var ListOfQuantomix: MutableList<Quantomix>) 
                         attackPower(
                             currentDamageDealer,
                             effectiv[indexEffektivitieList!!],
-                            effectiv[indexEffektivitieList!! + 1]
+                            effectiv[indexEffektivitieList + 1]
                         )
                     } else {
                         attackPower(currentDamageDealer)

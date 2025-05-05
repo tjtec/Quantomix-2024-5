@@ -10,7 +10,7 @@ class QuantomixTest: AnnotationSpec() {
     fun `Quantomix test`() {
         val type1= Typ("hello")
         val type2= Typ("world")
-        val attack= Attack("attack", "Normal", 40, 100)
+        val attack= Attack("attack", Typ("Normal"), 40, 100)
         val attacks = listOf(attack)
         val quantomix = Quantomix("Test", type1, type2, 200, 100, 30, 70, 35, 88, attacks)
         Assertions.assertThat(quantomix.quantomixName).isEqualTo("Test")

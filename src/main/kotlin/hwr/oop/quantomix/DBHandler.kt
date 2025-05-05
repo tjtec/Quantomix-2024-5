@@ -93,7 +93,7 @@ class DBHandler {
     }
 
     private fun createAttack(attackName: String): Attack {
-        return Attack(attackName, null, null, null)
+        return Attack(attackName, Typ("normal"), null, null)
     }
 }
 
