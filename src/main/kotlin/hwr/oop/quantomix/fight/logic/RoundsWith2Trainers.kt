@@ -1,6 +1,10 @@
-package hwr.oop
+package hwr.oop.quantomix.fight.logic
 
-class RoundsWith2Trainers(private val trainer1:Coach, private val trainer2:Coach) {
+import hwr.oop.quantomix.fight.objects.Attack
+import hwr.oop.quantomix.monster.Quantomix
+import hwr.oop.quantomix.objects.Coach
+
+class RoundsWith2Trainers(private val trainer1: Coach, private val trainer2: Coach) {
     var currentQuantomixTrainer1: Quantomix?=trainer1.quantomix1
     var currentQuantomixTrainer2: Quantomix?=trainer2.quantomix2
     fun start(): Coach {
@@ -47,11 +51,11 @@ class RoundsWith2Trainers(private val trainer1:Coach, private val trainer2:Coach
             nextAttacker = battle.otherAttacker()
         }
     }
-    fun askForFirstAttackTrainer1 (): Attack{
+    fun askForFirstAttackTrainer1 (): Attack {
         return TODO("We have to implement a function, " +
                 "which gets the attack from the cli and give it to this function.")
     }
-    fun askForFirstAttackTrainer2 (): Attack{
+    fun askForFirstAttackTrainer2 (): Attack {
         return TODO("We have to implement a function, " +
                 "which gets the attack from the cli and give it to this function.")
     }

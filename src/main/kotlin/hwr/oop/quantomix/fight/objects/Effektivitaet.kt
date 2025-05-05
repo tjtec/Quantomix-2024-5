@@ -1,4 +1,4 @@
-package hwr.oop
+package hwr.oop.quantomix.fight.objects
 
 data class Effektivitaet(
     public var Klassen: Map<String, Int> = mapOf(
