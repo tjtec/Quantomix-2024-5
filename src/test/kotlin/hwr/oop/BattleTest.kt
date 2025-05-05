@@ -3,7 +3,6 @@ package hwr.oop
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
-import java.io.File
 
 class BattleTest : AnnotationSpec() {
     @Test
@@ -13,8 +12,8 @@ class BattleTest : AnnotationSpec() {
         val type3= Typ("Wasser")
         val attack:Attack=Attack("tackle", "normal", 40, 100)
         val attacks= listOf(attack)
-        val glurak=Quantomix("Glurak", type1, type2, 78,84,78,109,85,100, attacks)
-        val schillok=Quantomix("Schillok", type3, null, 59,63,80,65,80,58, attacks)
+        val glurak = Quantomix("Glurak", type1, type2, 78, 84, 78, 109, 85, 100, attacks)
+        val schillok = Quantomix("Schillok", type3, null, 59, 63, 80, 65, 80, 58, attacks)
         val battle = Battle(glurak, schillok)
         battle.newKp(attack)
         assertThat(glurak.kp).isEqualTo(78)
