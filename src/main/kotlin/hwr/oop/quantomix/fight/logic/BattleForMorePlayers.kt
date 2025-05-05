@@ -64,7 +64,7 @@ class BattleForMorePlayers(private var ListOfQuantomix: MutableList<Quantomix>) 
             return effective
         } else {
             if (quantomixType.name == "0") {
-                error("No type for quantomix found")
+                return 1.0
             }
             return GameData().getEffektivitaet(quantomixType.name, attackTyp.name)
         }

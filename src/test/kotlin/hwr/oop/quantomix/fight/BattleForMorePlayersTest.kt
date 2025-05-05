@@ -107,11 +107,10 @@ class BattleForMorePlayersTest : AnnotationSpec() {
         val type1 = Typ("Feuer")
         val type2 = Typ("Flug")
         val type3 = Typ("Pflanze")
-        val type4 = Typ("Psycho")
         val attack = Attack("Glut", Typ("Feuer"), 20, 100)
         val attacks = listOf(attack)
         val glurak = Quantomix("Glurak", type1, type2, 78, 64, 58, 80, 65, 80, attacks)
-        val owei = Quantomix("Owei", type3, type4, 60, 40, 80, 60, 45, 40, attacks)
+        val owei = Quantomix("Owei", type3, null, 60, 40, 80, 60, 45, 40, attacks)
         val trainer1 = Coach("trainer1", glurak, owei, glurak, owei, glurak, owei)
         val statsGlurak = BattleStats(78, 84, 78, 109, 85, 100, owei, attack, trainer1)
         glurak.battleStats = statsGlurak
