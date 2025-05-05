@@ -1,4 +1,8 @@
-package hwr.oop
+package hwr.oop.quantomix.fight.logic
+
+import hwr.oop.quantomix.fight.objects.Attack
+import hwr.oop.quantomix.monster.Quantomix
+import hwr.oop.quantomix.objects.Coach
 
 class BattleStats(
     var battleKp: Int,
@@ -8,14 +12,13 @@ class BattleStats(
     var BattleSpecialDefense: Int,
     var BattleSpeed: Int,
     var target: Quantomix,
-    var nextAttack:Attack,
-    val trainer:Coach,
+    var nextAttack: Attack,
+    val trainer: Coach,
 ) {
-    fun newKp(damage:Int) {
-        if (damage > battleKp){
+    fun newKp(damage: Int) {
+        if (damage > battleKp) {
             this.battleKp = 0
-        }
-        else{
+        } else {
             this.battleKp -= damage
         }
     }
@@ -44,7 +47,7 @@ class BattleStats(
         this.target = target
     }
 
-    fun newAttack(attack: Attack){
+    fun newAttack(attack: Attack) {
         this.nextAttack = attack
     }
 }

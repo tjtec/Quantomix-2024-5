@@ -1,4 +1,8 @@
-package hwr.oop
+package hwr.oop.quantomix.fight.logic
+
+import hwr.oop.quantomix.fight.objects.Attack
+import hwr.oop.quantomix.monster.Quantomix
+import hwr.oop.quantomix.objects.Coach
 
 class RoundsWithMorePlayers(val trainer: List<Coach>) {
     fun start(): Coach {
