@@ -1,5 +1,6 @@
 package hwr.oop.quantomix.monster
 
+import hwr.oop.quantomix.fight.logic.BattleStats
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.objects.Typ
 
@@ -13,5 +14,6 @@ class Quantomix(
     val specialAttack: Int,
     val specialDefense: Int,
     val speed: Int,
-    val attacks: List<Attack>
+    val attacks: List<Attack>,
+    var battleStats: BattleStats? = null
 )

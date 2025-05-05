@@ -1,6 +1,6 @@
 package hwr.oop.quantomix.fight
 
-import hwr.oop.quantomix.fight.logic.RoundsWith2Trainers
+import hwr.oop.quantomix.fight.logic.Rounds
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
@@ -21,7 +21,7 @@ class RoundsTest: AnnotationSpec() {
         val quantomix2= Quantomix("Test", feuer, geist, 50, 50, 50, 50, 50, 50, listOf(Tackle, Glut, Spukball, Fluch))
         val trainer1= Coach("Pepe", quantomix, quantomix, quantomix, quantomix, quantomix, quantomix)
         val trainer2= Coach("Lilly", quantomix2, quantomix2, quantomix2, quantomix2, quantomix2, quantomix2)
-        RoundsWith2Trainers(trainer1, trainer2).start()
+        Rounds(listOf(trainer1, trainer2)).start()
         Assertions.assertThat(trainer1.quantomix1.kp == 0 || trainer2.quantomix1.kp == 0)
     }
 }
