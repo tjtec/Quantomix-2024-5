@@ -2,6 +2,7 @@ package hwr.oop.quantomix.fight.logic
 
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
+import hwr.oop.quantomix.stats.GameData
 
 class BattleForMorePlayers(private var ListOfQuantomix: MutableList<Quantomix>) {
 
@@ -63,13 +64,9 @@ class BattleForMorePlayers(private var ListOfQuantomix: MutableList<Quantomix>) 
             return effective
         } else {
             if (quantomixType.name == "0") {
-                return 1.0
+                error("No type for quantomix found")
             }
-            TODO(
-                "Diese Funktion auch mehrspielernutzbar implementieren." +
-                        "if attack.typ == quantomixType" +
-                        "return effective"
-            )
+            return GameData().getEffektivitaet(quantomixType.name, attackTyp.name)
         }
     }
 

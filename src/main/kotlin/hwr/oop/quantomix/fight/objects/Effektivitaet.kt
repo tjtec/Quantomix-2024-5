@@ -1,7 +1,7 @@
 package hwr.oop.quantomix.fight.objects
 
 data class Effektivitaet(
-    public var Klassen: Map<String, Int> = mapOf(
+    var Klassen: Map<String, Int> = mapOf(
         "Normal" to 1,
         "Kampf" to 2,
         "Flug" to 3,
@@ -20,5 +20,12 @@ data class Effektivitaet(
         "Drache" to 16,
         "Unlicht" to 17,
         "Fee" to 18
+    ),
+
+    val scale: Map<String, Double> = mapOf(
+        "+" to 2.0,
+        "-" to 1.0,
+        "0" to 0.5,
+        "x" to 0.0
     )
 )
