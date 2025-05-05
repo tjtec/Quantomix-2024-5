@@ -1,5 +1,6 @@
-package hwr.oop
+package hwr.oop.quantomix.monster
 
+import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.objects.Typ
 
 class Quantomix(

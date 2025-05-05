@@ -1,6 +1,10 @@
-package hwr.oop
+package hwr.oop.quantomix
 
+import hwr.oop.quantomix.fight.objects.Attack
+import hwr.oop.quantomix.fight.objects.Effektivitaet
+import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
+import hwr.oop.quantomix.stats.GameData
 import java.io.File
 import java.lang.Integer.parseInt
 

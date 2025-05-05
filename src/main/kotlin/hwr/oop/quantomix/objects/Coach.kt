@@ -1,4 +1,6 @@
-package hwr.oop
+package hwr.oop.quantomix.objects
+
+import hwr.oop.quantomix.monster.Quantomix
 
 class Coach (
     val coachName: String,

@@ -1,4 +1,4 @@
-package hwr.oop
+package hwr.oop.quantomix.stats
 
 import java.io.File
 

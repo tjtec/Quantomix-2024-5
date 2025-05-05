@@ -1,5 +1,10 @@
-package hwr.oop
+package hwr.oop.quantomix.fight.logic
 
+import hwr.oop.quantomix.DBHandler
+import hwr.oop.quantomix.stats.GameData
+import hwr.oop.quantomix.fight.objects.Attack
+import hwr.oop.quantomix.fight.objects.Effektivitaet
+import hwr.oop.quantomix.monster.Quantomix
 
 class Battle(private var quantomixA: Quantomix, private var quantomixB: Quantomix) {
 

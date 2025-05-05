@@ -1,4 +1,4 @@
-package hwr.oop
+package hwr.oop.quantomix.fight.objects
 
 class Attack (
     val attackName: String,
