@@ -6,11 +6,11 @@ import hwr.oop.quantomix.objects.Coach
 
 class BattleStats(
     var battleKp: Int,
-    var BattleAttack: Int,
-    var BattleDefense: Int,
-    var BattleSpecialAttack: Int,
-    var BattleSpecialDefense: Int,
-    var BattleSpeed: Int,
+    var battleAttack: Int,
+    var battleDefense: Int,
+    var battleSpecialAttack: Int,
+    var battleSpecialDefense: Int,
+    var battleSpeed: Int,
     var target: Quantomix,
     var nextAttack: Attack,
     val trainer: Coach,
@@ -24,23 +24,23 @@ class BattleStats(
     }
 
     fun newBattleAttack(damage: Int) {
-        this.BattleAttack -= damage
+        this.battleAttack -= damage
     }
 
     fun newBattleDefense(damage: Int) {
-        this.BattleDefense -= damage
+        this.battleDefense -= damage
     }
 
     fun newBattleSpecialAttack(damage: Int) {
-        this.BattleSpecialAttack -= damage
+        this.battleSpecialAttack -= damage
     }
 
     fun newBattleSpecialDefense(damage: Int) {
-        this.BattleSpecialDefense -= damage
+        this.battleSpecialDefense -= damage
     }
 
     fun newBattleSpeed(damage: Int) {
-        this.BattleSpeed -= damage
+        this.battleSpeed -= damage
     }
 
     fun newTarget(target: Quantomix) {

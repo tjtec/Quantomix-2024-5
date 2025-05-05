@@ -1,54 +1,103 @@
 package hwr.oop.quantomix.fight.logic
 
-import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.monster.Quantomix
+import hwr.oop.quantomix.objects.Typ
 
 class BattleForMorePlayers(private var ListOfQuantomix: MutableList<Quantomix>) {
 
     internal fun nextAttacker(): MutableList<Quantomix> {
         // sorts the Quantomix according to the speed. At the end of this function is the
         // fasts Quantomix the first in the list.
-        return ListOfQuantomix.sortedBy { it.speed }.toMutableList()
+        if (!(ListOfQuantomix.size >= 2)) {
+            error("Not enough number of players")
+        }
+        return ListOfQuantomix.sortedByDescending { it.battleStats!!.battleSpeed }.toMutableList()
     }
 
-    private fun formulaAttackForce(attackDamage: Int, attackValue: Int, multiFactor: Double): Int {
-        var damage = attackDamage * attackValue / 100 - 15 * multiFactor
+    private fun formulaAttackForce(attackDamage: Int, attackValue: Int, defense: Int, multiFactor: Double): Int {
+        val damage = (attackDamage * attackValue) / 100 * multiFactor / ((defense) / 100 + 1)
         return damage.toInt()
     }
 
-    private fun attackPower(DamageDealer: Quantomix): Int {
+    private fun attackPower(damageDealer: Quantomix, effectiv1: Double? = null, effectiv2: Double? = null): Int {
         //ToDo: Attacken ohne Schaden miteinbeziehen?
-        var attack = DamageDealer.battleStats!!.nextAttack
-        val nextAttacker = DamageDealer
-        var result = 0
-        if (attack.type == nextAttacker.typ1.name || (nextAttacker.typ2 != null && attack.type == nextAttacker.typ2.name)) {
-            result = formulaAttackForce(attack.damage!!, nextAttacker.specialAttack, effectivity(attack))
-        } else {
-            result = formulaAttackForce(attack.damage!!, nextAttacker.attack, effectivity(attack))
+        val attack = damageDealer.battleStats!!.nextAttack
+        val nextAttacker = damageDealer
+        when (attack.type == nextAttacker.typ1.name || (nextAttacker.typ2 != null && attack.type == nextAttacker.typ2.name)) {
+            true -> return formulaAttackForce(
+                attack.damage!!,
+                nextAttacker.battleStats!!.battleSpecialAttack,
+                nextAttacker.battleStats!!.target.battleStats!!.battleSpecialDefense,
+                formulaEffectivity(damageDealer, effectiv1, effectiv2)
+            )
+
+            false -> return formulaAttackForce(
+                attack.damage!!,
+                nextAttacker.attack,
+                nextAttacker.battleStats!!.target.battleStats!!.battleDefense,
+                effectivity(
+                    damageDealer.battleStats!!.target.typ1, formulaEffectivity(damageDealer, effectiv1, effectiv2)
+                )
+            )
         }
-        return result
     }
 
-    private fun effectivity(attack: Attack): Double {
-        TODO("Diese Funktion auch mehrspielernutzbar implementieren.")
+    private fun formulaEffectivity(damageDealer: Quantomix, effectiv1: Double?, effectiv2: Double?): Double {
+        val target = damageDealer.battleStats!!.target
+        val typ2 = target.typ2 ?: Typ("0") // Setzt "0" als Standard, falls kein zweiter Typ vorhanden ist
+
+        val eff1 = effectivity(target.typ1, effectiv1)
+        val eff2 = effectivity(typ2, effectiv2)
+
+        return when {
+            eff1 * eff2 == 1.0 -> 1.0
+            eff1 >= eff2 -> eff1
+            else -> eff2
+        }
     }
 
-    fun start(): List<Quantomix> {
-        // changes the kp value of all quantomix
-        var attackOrder = nextAttacker()
-        for (currentDamageDealer in attackOrder) {
-            for (currentDamageResever in attackOrder) {
-                if (currentDamageDealer.battleStats!!.target == currentDamageResever) {
-                    val power = attackPower(currentDamageDealer)
-                    if (power <= 0) {
-                        currentDamageResever.battleStats!!.battleKp = 0
-                        attackOrder.remove(currentDamageResever)
+    private fun effectivity(quantomixType: Typ, effective: Double? = null): Double {
+        if (effective != null) {
+            return effective
+        } else {
+            if (quantomixType.name == "0") {
+                return 1.0
+            }
+            TODO(
+                "Diese Funktion auch mehrspielernutzbar implementieren." +
+                        "if attack.typ == quantomixType" +
+                        "return effective"
+            )
+        }
+    }
+
+    fun start(effectiv: List<Double>? = null): List<Quantomix> {
+        val attackOrder = nextAttacker()
+        var indexEffektivitieList = if (effectiv == null) null else 0
+        val iterator = attackOrder.iterator()
+        while (iterator.hasNext()) {
+            val currentDamageDealer = iterator.next()
+            for (currentDamageReceiver in attackOrder) {
+                if (currentDamageDealer.battleStats!!.target == currentDamageReceiver) {
+                    val power = if (effectiv != null) {
+                        attackPower(
+                            currentDamageDealer,
+                            effectiv[indexEffektivitieList!!],
+                            effectiv[indexEffektivitieList!! + 1]
+                        )
                     } else {
-                        currentDamageResever.battleStats!!.battleKp -= power
+                        attackPower(currentDamageDealer)
                     }
+                    if (power >= currentDamageReceiver.battleStats!!.battleKp) {
+                        currentDamageReceiver.battleStats!!.battleKp = 0
+                        attackOrder.remove(currentDamageReceiver)
+                    } else {
+                        currentDamageReceiver.battleStats!!.newKp(power)
+                    }
+                    indexEffektivitieList?.let { indexEffektivitieList++ }
+                    break
                 }
             }
-
         }
         return attackOrder
     }
