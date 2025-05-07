@@ -19,9 +19,9 @@ class RoundsTest: AnnotationSpec() {
         val Spukball = Attack("Spukball", Typ("Geist"), 60, 100)
         val quantomix= Quantomix("Test", feuer, geist, 60, 60, 60, 60, 60, 60, listOf(Tackle, Glut, Spukball, Fluch))
         val quantomix2= Quantomix("Test", feuer, geist, 50, 50, 50, 50, 50, 50, listOf(Tackle, Glut, Spukball, Fluch))
-        val trainer1= Coach("Pepe", quantomix, quantomix, quantomix, quantomix, quantomix, quantomix)
-        val trainer2= Coach("Lilly", quantomix2, quantomix2, quantomix2, quantomix2, quantomix2, quantomix2)
+        val trainer1= Coach("Pepe", listOf(quantomix, quantomix, quantomix, quantomix, quantomix, quantomix))
+        val trainer2= Coach("Lilly", listOf(quantomix2, quantomix2, quantomix2, quantomix2, quantomix2, quantomix2))
         Rounds(listOf(trainer1, trainer2)).start()
-        Assertions.assertThat(trainer1.quantomix1.kp == 0 || trainer2.quantomix1.kp == 0)
+        Assertions.assertThat(trainer1.quantomixTeam[0].kp == 0 || trainer2.quantomixTeam[0].kp == 0)
     }
 }
