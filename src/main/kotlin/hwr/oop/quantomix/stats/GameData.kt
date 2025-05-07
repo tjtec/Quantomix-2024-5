@@ -16,8 +16,3 @@ object GameData {
         return Effektivitaet().scale[effektivitaet]!!
     }
 }
-
-fun main(){
-    val returnval = GameData.getEffektivitaet("Normal", "Kampf")
-    println(returnval)
-}
