@@ -12,18 +12,18 @@ class Rounds(val trainer: List<Coach>) {
             val attack = askForAttack(currentPlayer)
             val target = askForTarget(currentPlayer)
             val stats = BattleStats(
-                currentPlayer.quantomix1.kp,
-                currentPlayer.quantomix1.attack,
-                currentPlayer.quantomix1.defense,
-                currentPlayer.quantomix1.specialAttack,
-                currentPlayer.quantomix1.specialDefense,
-                currentPlayer.quantomix1.speed,
+                currentPlayer.quantomixTeam[0].kp,
+                currentPlayer.quantomixTeam[0].attack,
+                currentPlayer.quantomixTeam[0].defense,
+                currentPlayer.quantomixTeam[0].specialAttack,
+                currentPlayer.quantomixTeam[0].specialDefense,
+                currentPlayer.quantomixTeam[0].speed,
                 target,
                 attack,
                 currentPlayer
             )
-            currentPlayer.quantomix1.battleStats = stats
-            listOfQuantomixInBattle.add(currentPlayer.quantomix1)
+            currentPlayer.quantomixTeam[0].battleStats = stats
+            listOfQuantomixInBattle.add(currentPlayer.quantomixTeam[0])
         }
         val battle = Battle(listOfQuantomixInBattle)
         val winner = round(battle, listOfQuantomixInBattle, numberOfPlayers)

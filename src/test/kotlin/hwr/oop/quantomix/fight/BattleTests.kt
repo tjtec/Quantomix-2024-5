@@ -189,7 +189,7 @@ class BattleTests : AnnotationSpec() {
             80,
             listOf(Attack("Glut", Typ("Feuer"), 30, 100))
         )
-        val trainer1 = Coach("Test", quantomix, quantomix, quantomix, quantomix, quantomix, quantomix)
+        val trainer1 = Coach("Test", listOf(quantomix, quantomix, quantomix, quantomix, quantomix, quantomix))
         val battleStatsQuantomix =
             BattleStats(78, 84, 78, 109, 85, 100, quantomix, Attack("Glut", Typ("Feuer"), 30, 100), trainer1)
         quantomix.battleStats = battleStatsQuantomix
@@ -203,8 +203,8 @@ class BattleTests : AnnotationSpec() {
         val type = Typ("Normal")
         val quantomix1 = Quantomix("With no 2.Typ", type, null, 100, 100, 100, 100, 100, 100, listOf(attack))
         val quantomix2 = Quantomix("With no 2.Typ", type, null, 100, 100, 100, 100, 100, 100, listOf(attack))
-        val trainer1 = Coach("Trainer1", quantomix1, quantomix2, quantomix1, quantomix2, quantomix1, quantomix2)
-        val trainer2 = Coach("Trainer2", quantomix2, quantomix1, quantomix2, quantomix1, quantomix2, quantomix1)
+        val trainer1 = Coach("Trainer1", listOf(quantomix1, quantomix2, quantomix1, quantomix2, quantomix1, quantomix2))
+        val trainer2 = Coach("Trainer2", listOf(quantomix2, quantomix1, quantomix2, quantomix1, quantomix2, quantomix1))
         quantomix1.battleStats = BattleStats(100, 50, 100, 100, 100, 100, quantomix2, attack, trainer1)
         quantomix2.battleStats = BattleStats(100, 50, 100, 100, 100, 100, quantomix1, attack, trainer2)
 
