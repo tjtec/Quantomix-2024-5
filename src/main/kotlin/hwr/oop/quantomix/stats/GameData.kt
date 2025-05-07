@@ -10,9 +10,9 @@ object GameData {
 
     fun getEffektivitaet(quantomixType: String, attackType: String): Double {
         val csvFile = CsvFile.parseCsv(effDB)
-        val row = Effektivitaet().Klassen.get(attackType)
-        val col = Effektivitaet().Klassen.get(quantomixType)
-        val effektivitaet = csvFile.lines[row!!].values[col!!]
-        return Effektivitaet().scale[effektivitaet]!!
+        val row = Effektivitaet().Klassen.get(attackType) ?: throw IllegalArgumentException("Angriffstyp '$attackType' nicht gefunden.")
+        val col = Effektivitaet().Klassen.get(quantomixType) ?: throw IllegalArgumentException("Quantomix-Typ '$quantomixType' nicht gefunden.")
+        val effektivitaet = csvFile.lines.getOrNull(row)?.values?.getOrNull(col) ?: throw IllegalStateException("Effektivitätswert für '$attackType' gegen '$quantomixType' nicht gefunden.")
+        return Effektivitaet().scale[effektivitaet] ?: throw IllegalStateException("Skalierungswert für '$effektivitaet' nicht gefunden.")
     }
 }
