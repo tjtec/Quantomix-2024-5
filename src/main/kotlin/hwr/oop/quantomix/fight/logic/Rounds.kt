@@ -25,13 +25,13 @@ class Rounds(val trainer: List<Coach>) {
             currentPlayer.quantomix1.battleStats = stats
             listOfQuantomixInBattle.add(currentPlayer.quantomix1)
         }
-        val battle = BattleForMorePlayers(listOfQuantomixInBattle)
+        val battle = Battle(listOfQuantomixInBattle)
         val winner = round(battle, listOfQuantomixInBattle, numberOfPlayers)
         return trainer[winner]
     }
 
     private fun round(
-        battle: BattleForMorePlayers,
+        battle: Battle,
         listOfPreviusQuantomixInBattle: MutableList<Quantomix>,
         numberOfPlayers: Int
     ): Int {
@@ -62,7 +62,7 @@ class Rounds(val trainer: List<Coach>) {
                     askPlayer(currentQuantomix.battleStats!!.trainer)
                     QuantomixInTheNextRound.add(currentQuantomix)
                 }
-                val nextBattle = BattleForMorePlayers(QuantomixInTheNextRound)
+                val nextBattle = Battle(QuantomixInTheNextRound)
                 nextBattle.start()
             }
         }
