@@ -1,6 +1,6 @@
 package hwr.oop.quantomix.fight
 
-import hwr.oop.quantomix.fight.logic.BattleForMorePlayers
+import hwr.oop.quantomix.fight.logic.Battle
 import hwr.oop.quantomix.fight.logic.BattleStats
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.monster.Quantomix
@@ -9,9 +9,9 @@ import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions
 
-class BattleForMorePlayersTest : AnnotationSpec() {
+class BattleTests : AnnotationSpec() {
     @Test
-    fun `BattleForMorePlayersTest with normal Attack`() {
+    fun `BattleTest with normal Attack`() {
         val type1 = Typ("Feuer")
         val type2 = Typ("Flug")
         val type3 = Typ("Wasser")
@@ -25,7 +25,7 @@ class BattleForMorePlayersTest : AnnotationSpec() {
         val statsSchillok = BattleStats(59, 63, 80, 65, 80, 58, glurak, attack, trainer2)
         glurak.battleStats = statsGlurak
         schillok.battleStats = statsSchillok
-        val battle = BattleForMorePlayers(mutableListOf(glurak, schillok))
+        val battle = Battle(mutableListOf(glurak, schillok))
         battle.start(listOf(1.0, 1.0, 1.0, 1.0))
         Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(53)
         Assertions.assertThat(glurak.kp).isEqualTo(78)
@@ -34,7 +34,7 @@ class BattleForMorePlayersTest : AnnotationSpec() {
     }
 
     @Test
-    fun `BattleForMorePlayersTest with special Attack Type 2`() {
+    fun `BattleTest with special Attack Type 2`() {
         val type1 = Typ("Feuer")
         val type2 = Typ("Flug")
         val type3 = Typ("Wasser")
@@ -48,8 +48,8 @@ class BattleForMorePlayersTest : AnnotationSpec() {
         glurak.battleStats = statsGlurak
         val statsSchillok = BattleStats(59, 63, 80, 65, 80, 58, glurak, attack, trainer2)
         schillok.battleStats = statsSchillok
-        val battle = BattleForMorePlayers(mutableListOf(glurak, schillok))
-        battle.start(listOf(1.0, 1.0, 1.0, 1.0))
+        val battle = Battle(mutableListOf(glurak, schillok))
+        battle.start(listOf(4.0, 0.25, 1.0, 1.0))
         Assertions.assertThat(glurak.kp).isEqualTo(78)
         Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(53)
         Assertions.assertThat(schillok.battleStats!!.battleKp).isEqualTo(16)
@@ -57,7 +57,7 @@ class BattleForMorePlayersTest : AnnotationSpec() {
     }
 
     @Test
-    fun `BattleForMorePlayersTest with other Quantomix and special Attack Type 1`() {
+    fun `BattleTest with other Quantomix and special Attack Type 1`() {
         val type1 = Typ("Feuer")
         val type2 = Typ("Flug")
         val type3 = Typ("Normal")
@@ -71,7 +71,7 @@ class BattleForMorePlayersTest : AnnotationSpec() {
         glurak.battleStats = statsGlurak
         val statsTauboss = BattleStats(83, 80, 75, 70, 70, 101, glurak, attack, trainer2)
         tauboss.battleStats = statsTauboss
-        val battle = BattleForMorePlayers(mutableListOf(glurak, tauboss))
+        val battle = Battle(mutableListOf(glurak, tauboss))
         battle.start(listOf(1.0, 1.0, 1.0, 1.0))
         Assertions.assertThat(glurak.kp).isEqualTo(78)
         Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(50)
@@ -80,7 +80,7 @@ class BattleForMorePlayersTest : AnnotationSpec() {
     }
 
     @Test
-    fun `BattleForMorePlayersTest extrem effectiviness and less effectiviness`() {
+    fun `BattleTest extrem effectiviness and less effectiviness`() {
         val type1 = Typ("Feuer")
         val type2 = Typ("Flug")
         val type3 = Typ("Pflanze")
@@ -95,15 +95,16 @@ class BattleForMorePlayersTest : AnnotationSpec() {
         val trainer2 = Coach("trainer2", listOf(owei, glurak, glurak, owei, glurak, owei))
         val statsOwei = BattleStats(60, 40, 80, 60, 45, 40, glurak, attack, trainer2)
         owei.battleStats = statsOwei
-        val battle = BattleForMorePlayers(mutableListOf(glurak, owei))
+        val battle = Battle(mutableListOf(glurak, owei))
         battle.start(listOf(2.0, 1.0, 0.5, 1.0))
         Assertions.assertThat(glurak.kp).isEqualTo(78)
         Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(70)
         Assertions.assertThat(owei.kp).isEqualTo(60)
-        Assertions.assertThat(owei.battleStats!!.battleKp).isEqualTo(18)
+        Assertions.assertThat(owei.battleStats!!.battleKp).isEqualTo(17)
     }
+
     @Test
-    fun `BattleForMorePlayersTest extrem effectiviness and less effectiviness with data from table`() {
+    fun `BattleTest extrem effectiviness and less effectiviness with data from table`() {
         val type1 = Typ("Feuer")
         val type2 = Typ("Flug")
         val type3 = Typ("Pflanze")
@@ -117,17 +118,17 @@ class BattleForMorePlayersTest : AnnotationSpec() {
         val trainer2 = Coach("trainer2", listOf(owei, glurak, glurak, owei, glurak, owei))
         val statsOwei = BattleStats(60, 40, 80, 60, 45, 40, glurak, attack, trainer2)
         owei.battleStats = statsOwei
-        val battle = BattleForMorePlayers(mutableListOf(glurak, owei))
+        val battle = Battle(mutableListOf(glurak, owei))
         battle.start()
         Assertions.assertThat(glurak.kp).isEqualTo(78)
         Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(70)
         Assertions.assertThat(owei.kp).isEqualTo(60)
-        Assertions.assertThat(owei.battleStats!!.battleKp).isEqualTo(18)
+        Assertions.assertThat(owei.battleStats!!.battleKp).isEqualTo(17)
     }
 
     @Test
     fun `Batteltest not effectiv`() {
-        //ToDo:Umschreiben für BattleForMorePlayersTest und nextAttacker bekommt weniger als 2 quantomix
+        //ToDo:Umschreiben für BattleTest und nextAttacker bekommt weniger als 2 quantomix
         val type1 = Typ("Feuer")
         val type2 = Typ("Flug")
         val type3 = Typ("Normal")
@@ -141,7 +142,7 @@ class BattleForMorePlayersTest : AnnotationSpec() {
         val trainer2 = Coach("trainer2", listOf(rattfratz, glurak, glurak, rattfratz, glurak, rattfratz))
         val statsRattfratz = BattleStats(55, 81, 60, 50, 70, 97, glurak, attack, trainer2)
         rattfratz.battleStats = statsRattfratz
-        val battle = BattleForMorePlayers(mutableListOf(glurak, rattfratz))
+        val battle = Battle(mutableListOf(glurak, rattfratz))
         battle.start(listOf(0.0, 0.0, 1.0, 1.0))
         Assertions.assertThat(glurak.kp).isEqualTo(78)
         Assertions.assertThat(rattfratz.kp).isEqualTo(55)
@@ -150,7 +151,7 @@ class BattleForMorePlayersTest : AnnotationSpec() {
     }
 
     @Test
-    fun `BattleForMorePlayersTest second Quantomix dead`() {
+    fun `BattleTest second Quantomix dead`() {
         val type1 = Typ("Feuer")
         val type2 = Typ("Flug")
         val type3 = Typ("Pflanze")
@@ -165,11 +166,51 @@ class BattleForMorePlayersTest : AnnotationSpec() {
         val trainer2 = Coach("trainer2", listOf(owei, glurak, glurak, owei, glurak, owei))
         val statsOwei = BattleStats(60, 40, 80, 60, 45, 40, glurak, attack, trainer2)
         owei.battleStats = statsOwei
-        val battle = BattleForMorePlayers(mutableListOf(glurak, owei))
+        val battle = Battle(mutableListOf(glurak, owei))
         battle.start(listOf(2.0, 0.5))
         Assertions.assertThat(glurak.kp).isEqualTo(78)
         Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(78)
         Assertions.assertThat(owei.kp).isEqualTo(60)
         Assertions.assertThat(owei.battleStats!!.battleKp).isEqualTo(0)
+        Assertions.assertThat(battle.start(listOf(2.0, 0.5))).isNotEmpty
+    }
+
+    @Test
+    fun `Test not enough number of players`() {
+        val quantomix = Quantomix(
+            "Glurak",
+            Typ("Feuer"),
+            Typ("Flug"),
+            78,
+            64,
+            58,
+            80,
+            65,
+            80,
+            listOf(Attack("Glut", Typ("Feuer"), 30, 100))
+        )
+        val trainer1 = Coach("Test", quantomix, quantomix, quantomix, quantomix, quantomix, quantomix)
+        val battleStatsQuantomix =
+            BattleStats(78, 84, 78, 109, 85, 100, quantomix, Attack("Glut", Typ("Feuer"), 30, 100), trainer1)
+        quantomix.battleStats = battleStatsQuantomix
+        val battle = Battle(mutableListOf(quantomix))
+        Assertions.assertThatThrownBy { battle.start() }.message().isEqualTo("Not enough number of players")
+    }
+
+    @Test
+    fun `Test right effectivity by no second typ`() {
+        val attack = Attack("Direkter Treffer", Typ("Geist"), 100, 100)
+        val type = Typ("Normal")
+        val quantomix1 = Quantomix("With no 2.Typ", type, null, 100, 100, 100, 100, 100, 100, listOf(attack))
+        val quantomix2 = Quantomix("With no 2.Typ", type, null, 100, 100, 100, 100, 100, 100, listOf(attack))
+        val trainer1 = Coach("Trainer1", quantomix1, quantomix2, quantomix1, quantomix2, quantomix1, quantomix2)
+        val trainer2 = Coach("Trainer2", quantomix2, quantomix1, quantomix2, quantomix1, quantomix2, quantomix1)
+        quantomix1.battleStats = BattleStats(100, 50, 100, 100, 100, 100, quantomix2, attack, trainer1)
+        quantomix2.battleStats = BattleStats(100, 50, 100, 100, 100, 100, quantomix1, attack, trainer2)
+
+        val battle = Battle(mutableListOf(quantomix1, quantomix2))
+        battle.start()
+        Assertions.assertThat(quantomix1.battleStats!!.battleKp).isEqualTo(50)
+        Assertions.assertThat(quantomix2.battleStats!!.battleKp).isEqualTo(50)
     }
 }
