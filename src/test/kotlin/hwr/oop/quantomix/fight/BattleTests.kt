@@ -193,7 +193,7 @@ class BattleTests : AnnotationSpec() {
         val battleStatsQuantomix =
             BattleStats(78, 84, 78, 109, 85, 100, quantomix, Attack("Glut", Typ("Feuer"), 30, 100), trainer1)
         quantomix.battleStats = battleStatsQuantomix
-        val battle = BattleForMorePlayers(mutableListOf(quantomix))
+        val battle = Battle(mutableListOf(quantomix))
         Assertions.assertThatThrownBy { battle.start() }.message().isEqualTo("Not enough number of players")
     }
 
@@ -208,7 +208,7 @@ class BattleTests : AnnotationSpec() {
         quantomix1.battleStats = BattleStats(100, 50, 100, 100, 100, 100, quantomix2, attack, trainer1)
         quantomix2.battleStats = BattleStats(100, 50, 100, 100, 100, 100, quantomix1, attack, trainer2)
 
-        val battle = BattleForMorePlayers(mutableListOf(quantomix1, quantomix2))
+        val battle = Battle(mutableListOf(quantomix1, quantomix2))
         battle.start()
         Assertions.assertThat(quantomix1.battleStats!!.battleKp).isEqualTo(50)
         Assertions.assertThat(quantomix2.battleStats!!.battleKp).isEqualTo(50)
