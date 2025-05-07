@@ -54,7 +54,7 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
 
         return when {
             eff1 * eff2 == 1.0 -> 1.0
-            eff1 >= eff2 -> eff1
+            eff1 > eff2 -> eff1
             else -> eff2
         }
     }
