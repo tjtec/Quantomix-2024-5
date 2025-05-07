@@ -16,7 +16,7 @@ class BattleForMorePlayers(private var ListOfQuantomix: MutableList<Quantomix>) 
     }
 
     private fun formulaAttackForce(attackDamage: Int, attackValue: Int, defense: Int, multiFactor: Double): Int {
-        val damage = (attackDamage * attackValue) / 100 * multiFactor / ((defense) / 100 + 1)
+        val damage = (attackDamage * attackValue * multiFactor) / ((defense / 100 + 1) * 100)
         return damage.toInt()
     }
 

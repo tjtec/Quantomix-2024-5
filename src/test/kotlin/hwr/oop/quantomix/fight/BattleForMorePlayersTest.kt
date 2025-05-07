@@ -49,7 +49,7 @@ class BattleForMorePlayersTest : AnnotationSpec() {
         val statsSchillok = BattleStats(59, 63, 80, 65, 80, 58, glurak, attack, trainer2)
         schillok.battleStats = statsSchillok
         val battle = BattleForMorePlayers(mutableListOf(glurak, schillok))
-        battle.start(listOf(1.0, 1.0, 1.0, 1.0))
+        battle.start(listOf(4.0, 0.25, 1.0, 1.0))
         Assertions.assertThat(glurak.kp).isEqualTo(78)
         Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(53)
         Assertions.assertThat(schillok.battleStats!!.battleKp).isEqualTo(16)
@@ -100,8 +100,9 @@ class BattleForMorePlayersTest : AnnotationSpec() {
         Assertions.assertThat(glurak.kp).isEqualTo(78)
         Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(70)
         Assertions.assertThat(owei.kp).isEqualTo(60)
-        Assertions.assertThat(owei.battleStats!!.battleKp).isEqualTo(18)
+        Assertions.assertThat(owei.battleStats!!.battleKp).isEqualTo(17)
     }
+
     @Test
     fun `BattleForMorePlayersTest extrem effectiviness and less effectiviness with data from table`() {
         val type1 = Typ("Feuer")
@@ -122,7 +123,7 @@ class BattleForMorePlayersTest : AnnotationSpec() {
         Assertions.assertThat(glurak.kp).isEqualTo(78)
         Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(70)
         Assertions.assertThat(owei.kp).isEqualTo(60)
-        Assertions.assertThat(owei.battleStats!!.battleKp).isEqualTo(18)
+        Assertions.assertThat(owei.battleStats!!.battleKp).isEqualTo(17)
     }
 
     @Test
@@ -171,5 +172,45 @@ class BattleForMorePlayersTest : AnnotationSpec() {
         Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(78)
         Assertions.assertThat(owei.kp).isEqualTo(60)
         Assertions.assertThat(owei.battleStats!!.battleKp).isEqualTo(0)
+        Assertions.assertThat(battle.start(listOf(2.0, 0.5))).isNotEmpty
+    }
+
+    @Test
+    fun `Test not enough number of players`() {
+        val quantomix = Quantomix(
+            "Glurak",
+            Typ("Feuer"),
+            Typ("Flug"),
+            78,
+            64,
+            58,
+            80,
+            65,
+            80,
+            listOf(Attack("Glut", Typ("Feuer"), 30, 100))
+        )
+        val trainer1 = Coach("Test", quantomix, quantomix, quantomix, quantomix, quantomix, quantomix)
+        val battleStatsQuantomix =
+            BattleStats(78, 84, 78, 109, 85, 100, quantomix, Attack("Glut", Typ("Feuer"), 30, 100), trainer1)
+        quantomix.battleStats = battleStatsQuantomix
+        val battle = BattleForMorePlayers(mutableListOf(quantomix))
+        Assertions.assertThatThrownBy { battle.start() }.message().isEqualTo("Not enough number of players")
+    }
+
+    @Test
+    fun `Test right effectivity by no second typ`() {
+        val attack = Attack("Direkter Treffer", Typ("Geist"), 100, 100)
+        val type = Typ("Normal")
+        val quantomix1 = Quantomix("With no 2.Typ", type, null, 100, 100, 100, 100, 100, 100, listOf(attack))
+        val quantomix2 = Quantomix("With no 2.Typ", type, null, 100, 100, 100, 100, 100, 100, listOf(attack))
+        val trainer1 = Coach("Trainer1", quantomix1, quantomix2, quantomix1, quantomix2, quantomix1, quantomix2)
+        val trainer2 = Coach("Trainer2", quantomix2, quantomix1, quantomix2, quantomix1, quantomix2, quantomix1)
+        quantomix1.battleStats = BattleStats(100, 50, 100, 100, 100, 100, quantomix2, attack, trainer1)
+        quantomix2.battleStats = BattleStats(100, 50, 100, 100, 100, 100, quantomix1, attack, trainer2)
+
+        val battle = BattleForMorePlayers(mutableListOf(quantomix1, quantomix2))
+        battle.start()
+        Assertions.assertThat(quantomix1.battleStats!!.battleKp).isEqualTo(50)
+        Assertions.assertThat(quantomix2.battleStats!!.battleKp).isEqualTo(50)
     }
 }
