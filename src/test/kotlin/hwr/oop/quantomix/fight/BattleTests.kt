@@ -27,9 +27,9 @@ class BattleTests : AnnotationSpec() {
         schillok.battleStats = statsSchillok
         val battle = Battle(mutableListOf(glurak, schillok))
         battle.start(listOf(1.0, 1.0, 1.0, 1.0))
-        Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(53)
+        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(53)
         Assertions.assertThat(glurak.kp).isEqualTo(78)
-        Assertions.assertThat(schillok.battleStats!!.battleKp).isEqualTo(26)
+        Assertions.assertThat(schillok.battleStats.battleKp).isEqualTo(26)
         Assertions.assertThat(schillok.kp).isEqualTo(59)
     }
 
@@ -51,8 +51,8 @@ class BattleTests : AnnotationSpec() {
         val battle = Battle(mutableListOf(glurak, schillok))
         battle.start(listOf(4.0, 0.25, 1.0, 1.0))
         Assertions.assertThat(glurak.kp).isEqualTo(78)
-        Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(53)
-        Assertions.assertThat(schillok.battleStats!!.battleKp).isEqualTo(16)
+        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(53)
+        Assertions.assertThat(schillok.battleStats.battleKp).isEqualTo(16)
         Assertions.assertThat(schillok.kp).isEqualTo(59)
     }
 
@@ -74,9 +74,9 @@ class BattleTests : AnnotationSpec() {
         val battle = Battle(mutableListOf(glurak, tauboss))
         battle.start(listOf(1.0, 1.0, 1.0, 1.0))
         Assertions.assertThat(glurak.kp).isEqualTo(78)
-        Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(50)
+        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(50)
         Assertions.assertThat(tauboss.kp).isEqualTo(83)
-        Assertions.assertThat(tauboss.battleStats!!.battleKp).isEqualTo(40)
+        Assertions.assertThat(tauboss.battleStats.battleKp).isEqualTo(40)
     }
 
     @Test
@@ -98,9 +98,9 @@ class BattleTests : AnnotationSpec() {
         val battle = Battle(mutableListOf(glurak, owei))
         battle.start(listOf(2.0, 1.0, 0.5, 1.0))
         Assertions.assertThat(glurak.kp).isEqualTo(78)
-        Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(70)
+        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(70)
         Assertions.assertThat(owei.kp).isEqualTo(60)
-        Assertions.assertThat(owei.battleStats!!.battleKp).isEqualTo(17)
+        Assertions.assertThat(owei.battleStats.battleKp).isEqualTo(17)
     }
 
     @Test
@@ -121,9 +121,9 @@ class BattleTests : AnnotationSpec() {
         val battle = Battle(mutableListOf(glurak, owei))
         battle.start()
         Assertions.assertThat(glurak.kp).isEqualTo(78)
-        Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(70)
+        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(70)
         Assertions.assertThat(owei.kp).isEqualTo(60)
-        Assertions.assertThat(owei.battleStats!!.battleKp).isEqualTo(17)
+        Assertions.assertThat(owei.battleStats.battleKp).isEqualTo(17)
     }
 
     @Test
@@ -146,8 +146,8 @@ class BattleTests : AnnotationSpec() {
         battle.start(listOf(0.0, 0.0, 1.0, 1.0))
         Assertions.assertThat(glurak.kp).isEqualTo(78)
         Assertions.assertThat(rattfratz.kp).isEqualTo(55)
-        Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(46)
-        Assertions.assertThat(rattfratz.battleStats!!.battleKp).isEqualTo(55)
+        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(46)
+        Assertions.assertThat(rattfratz.battleStats.battleKp).isEqualTo(55)
     }
 
     @Test
@@ -156,22 +156,28 @@ class BattleTests : AnnotationSpec() {
         val type2 = Typ("Flug")
         val type3 = Typ("Pflanze")
         val type4 = Typ("Psycho")
-        val attack = Attack("Glut", Typ("Feuer"), 60, 100)
+        val attack = Attack("Glut", Typ("Feuer"), 70, 100)
         val attacks = listOf(attack)
         val glurak = Quantomix("Glurak", type1, type2, 78, 60, 58, 60, 65, 80, attacks)
-        val owei = Quantomix("Owei", type3, type4, 60, 40, 50, 60, 50, 40, attacks)
+        val owei = Quantomix("Owei", type3, type4, 84, 40, 50, 60, 50, 40, attacks)
         val trainer1 = Coach("trainer1", listOf(glurak, owei, glurak, owei, glurak, owei))
-        val statsGlurak = BattleStats(78, 60, 78, 60, 65, 100, owei, attack, trainer1)
-        glurak.battleStats = statsGlurak
+//        val statsGlurak = BattleStats(78, 60, 78, 60, 65, 100, owei, attack, trainer1)
+//        glurak.battleStats = statsGlurak
+        glurak.battleStats.newTarget(owei)
+        glurak.battleStats.newAttack(attack)
+        glurak.battleStats.newCoach(trainer1)
         val trainer2 = Coach("trainer2", listOf(owei, glurak, glurak, owei, glurak, owei))
-        val statsOwei = BattleStats(36, 40, 50, 60, 50, 40, glurak, attack, trainer2)
-        owei.battleStats = statsOwei
+//        val statsOwei = BattleStats(36, 40, 50, 60, 50, 40, glurak, attack, trainer2)
+//        owei.battleStats = statsOwei
+        owei.battleStats.newTarget(glurak)
+        owei.battleStats.newCoach(trainer2)
+        owei.battleStats.newAttack(attack)
         val battle = Battle(mutableListOf(glurak, owei))
-        battle.start(listOf(2.0, 0.5))
+        battle.start(listOf(2.0, 1.0))
         Assertions.assertThat(glurak.kp).isEqualTo(78)
-        Assertions.assertThat(glurak.battleStats!!.battleKp).isEqualTo(78)
-        Assertions.assertThat(owei.kp).isEqualTo(60)
-        Assertions.assertThat(owei.battleStats!!.battleKp).isEqualTo(0)
+        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(78)
+        Assertions.assertThat(owei.kp).isEqualTo(84)
+        Assertions.assertThat(owei.battleStats.battleKp).isEqualTo(0)
         Assertions.assertThat(battle.start(listOf(2.0, 0.5))).isNotEmpty
     }
 
@@ -201,16 +207,64 @@ class BattleTests : AnnotationSpec() {
     fun `Test right effectivity by no second typ`() {
         val attack = Attack("Direkter Treffer", Typ("Geist"), 100, 100)
         val type = Typ("Normal")
-        val quantomix1 = Quantomix("With no 2.Typ", type, null, 100, 100, 100, 100, 100, 100, listOf(attack))
-        val quantomix2 = Quantomix("With no 2.Typ", type, null, 100, 100, 100, 100, 100, 100, listOf(attack))
-        val trainer1 = Coach("Trainer1", listOf(quantomix1, quantomix2, quantomix1, quantomix2, quantomix1, quantomix2))
-        val trainer2 = Coach("Trainer2", listOf(quantomix2, quantomix1, quantomix2, quantomix1, quantomix2, quantomix1))
-        quantomix1.battleStats = BattleStats(100, 50, 100, 100, 100, 100, quantomix2, attack, trainer1)
-        quantomix2.battleStats = BattleStats(100, 50, 100, 100, 100, 100, quantomix1, attack, trainer2)
+        val quantomix1 = Quantomix(
+            "With no 2.Typ",
+            type,
+            null,
+            100,
+            100,
+            100,
+            100,
+            100,
+            100,
+            listOf(attack)
+        )
+        val quantomix2 = Quantomix(
+            "With no 2.Typ",
+            type,
+            null,
+            100,
+            100,
+            100,
+            100,
+            100,
+            100,
+            listOf(attack)
+        )
+        val trainer1 = Coach(
+            "Trainer1",
+            listOf(quantomix1, quantomix2, quantomix1, quantomix2, quantomix1, quantomix2)
+        )
+        val trainer2 = Coach(
+            "Trainer2",
+            listOf(quantomix2, quantomix1, quantomix2, quantomix1, quantomix2, quantomix1)
+        )
+        quantomix1.battleStats = BattleStats(
+            100,
+            50,
+            100,
+            100,
+            100,
+            100,
+            quantomix2,
+            attack,
+            trainer1
+        )
+        quantomix2.battleStats = BattleStats(
+            100,
+            50,
+            100,
+            100,
+            100,
+            100,
+            quantomix1,
+            attack,
+            trainer2
+        )
 
         val battle = Battle(mutableListOf(quantomix1, quantomix2))
         battle.start()
-        Assertions.assertThat(quantomix1.battleStats!!.battleKp).isEqualTo(50)
-        Assertions.assertThat(quantomix2.battleStats!!.battleKp).isEqualTo(50)
+        Assertions.assertThat(quantomix1.battleStats.battleKp).isEqualTo(50)
+        Assertions.assertThat(quantomix2.battleStats.battleKp).isEqualTo(50)
     }
 }
