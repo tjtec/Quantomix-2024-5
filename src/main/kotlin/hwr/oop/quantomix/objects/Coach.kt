@@ -4,10 +4,10 @@ import hwr.oop.quantomix.monster.Quantomix
 
 class Coach (
     val coachName: String,
-    val quantomix1: Quantomix,
-    val quantomix2: Quantomix,
-    val quantomix3: Quantomix,
-    val quantomix4: Quantomix,
-    val quantomix5: Quantomix,
-    val quantomix6: Quantomix
-    )
+    val quantomixTeam: List<Quantomix>
+    ) {
+    init {
+        require(quantomixTeam.isNotEmpty()) { "Ein Coach muss mindestens einen Quantomix besitzen." }
+        require(quantomixTeam.size <= 6) { "Ein Coach darf höchstens 6 Quantomix besitzen, aber es wurden ${quantomixTeam.size} übergeben." }
+    }
+}

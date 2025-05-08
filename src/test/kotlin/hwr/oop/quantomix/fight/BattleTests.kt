@@ -19,8 +19,8 @@ class BattleTests : AnnotationSpec() {
         val attacks = listOf(attack)
         val glurak = Quantomix("Glurak", type1, type2, 78, 84, 78, 109, 85, 100, attacks)
         val schillok = Quantomix("Schillok", type3, null, 59, 63, 80, 65, 80, 58, attacks)
-        val trainer1 = Coach("trainer1", glurak, schillok, glurak, schillok, glurak, schillok)
-        val trainer2 = Coach("trainer2", schillok, glurak, glurak, schillok, glurak, schillok)
+        val trainer1 = Coach("trainer1", listOf(glurak, schillok, glurak, schillok, glurak, schillok))
+        val trainer2 = Coach("trainer2", listOf(schillok, glurak, glurak, schillok, glurak, schillok))
         val statsGlurak = BattleStats(78, 84, 78, 109, 85, 100, schillok, attack, trainer1)
         val statsSchillok = BattleStats(59, 63, 80, 65, 80, 58, glurak, attack, trainer2)
         glurak.battleStats = statsGlurak
@@ -42,8 +42,8 @@ class BattleTests : AnnotationSpec() {
         val attacks = listOf(attack)
         val glurak = Quantomix("Glurak", type1, type2, 78, 84, 78, 109, 85, 100, attacks)
         val schillok = Quantomix("Schillok", type3, null, 59, 63, 80, 65, 80, 58, attacks)
-        val trainer1 = Coach("trainer1", glurak, schillok, glurak, schillok, glurak, schillok)
-        val trainer2 = Coach("trainer2", schillok, glurak, glurak, schillok, glurak, schillok)
+        val trainer1 = Coach("trainer1", listOf(glurak, schillok, glurak, schillok, glurak, schillok))
+        val trainer2 = Coach("trainer2", listOf(schillok, glurak, glurak, schillok, glurak, schillok))
         val statsGlurak = BattleStats(78, 84, 78, 109, 85, 100, schillok, attack, trainer1)
         glurak.battleStats = statsGlurak
         val statsSchillok = BattleStats(59, 63, 80, 65, 80, 58, glurak, attack, trainer2)
@@ -65,8 +65,8 @@ class BattleTests : AnnotationSpec() {
         val attacks = listOf(attack)
         val glurak = Quantomix("Glurak", type1, type2, 78, 84, 78, 109, 85, 100, attacks)
         val tauboss = Quantomix("Tauboss", type3, type2, 83, 80, 75, 70, 70, 101, attacks)
-        val trainer1 = Coach("trainer1", glurak, tauboss, glurak, tauboss, glurak, tauboss)
-        val trainer2 = Coach("trainer2", tauboss, glurak, glurak, tauboss, glurak, tauboss)
+        val trainer1 = Coach("trainer1", listOf(glurak, tauboss, glurak, tauboss, glurak, tauboss))
+        val trainer2 = Coach("trainer2", listOf(tauboss, glurak, glurak, tauboss, glurak, tauboss))
         val statsGlurak = BattleStats(78, 84, 78, 109, 85, 100, tauboss, attack, trainer1)
         glurak.battleStats = statsGlurak
         val statsTauboss = BattleStats(83, 80, 75, 70, 70, 101, glurak, attack, trainer2)
@@ -89,10 +89,10 @@ class BattleTests : AnnotationSpec() {
         val attacks = listOf(attack)
         val glurak = Quantomix("Glurak", type1, type2, 78, 64, 58, 80, 65, 80, attacks)
         val owei = Quantomix("Owei", type3, type4, 60, 40, 80, 60, 45, 40, attacks)
-        val trainer1 = Coach("trainer1", glurak, owei, glurak, owei, glurak, owei)
+        val trainer1 = Coach("trainer1", listOf(glurak, owei, glurak, owei, glurak, owei))
         val statsGlurak = BattleStats(78, 84, 78, 109, 85, 100, owei, attack, trainer1)
         glurak.battleStats = statsGlurak
-        val trainer2 = Coach("trainer2", owei, glurak, glurak, owei, glurak, owei)
+        val trainer2 = Coach("trainer2", listOf(owei, glurak, glurak, owei, glurak, owei))
         val statsOwei = BattleStats(60, 40, 80, 60, 45, 40, glurak, attack, trainer2)
         owei.battleStats = statsOwei
         val battle = Battle(mutableListOf(glurak, owei))
@@ -112,10 +112,10 @@ class BattleTests : AnnotationSpec() {
         val attacks = listOf(attack)
         val glurak = Quantomix("Glurak", type1, type2, 78, 64, 58, 80, 65, 80, attacks)
         val owei = Quantomix("Owei", type3, null, 60, 40, 80, 60, 45, 40, attacks)
-        val trainer1 = Coach("trainer1", glurak, owei, glurak, owei, glurak, owei)
+        val trainer1 = Coach("trainer1", listOf(glurak, owei, glurak, owei, glurak, owei))
         val statsGlurak = BattleStats(78, 84, 78, 109, 85, 100, owei, attack, trainer1)
         glurak.battleStats = statsGlurak
-        val trainer2 = Coach("trainer2", owei, glurak, glurak, owei, glurak, owei)
+        val trainer2 = Coach("trainer2", listOf(owei, glurak, glurak, owei, glurak, owei))
         val statsOwei = BattleStats(60, 40, 80, 60, 45, 40, glurak, attack, trainer2)
         owei.battleStats = statsOwei
         val battle = Battle(mutableListOf(glurak, owei))
@@ -136,10 +136,10 @@ class BattleTests : AnnotationSpec() {
         val attacks = listOf(attack)
         val glurak = Quantomix("Glurak", type1, type2, 78, 84, 78, 109, 85, 100, attacks)
         val rattfratz = Quantomix("Rattfratz", type3, null, 55, 81, 60, 50, 70, 97, attacks)
-        val trainer1 = Coach("trainer1", glurak, rattfratz, glurak, rattfratz, glurak, rattfratz)
+        val trainer1 = Coach("trainer1", listOf(glurak, rattfratz, glurak, rattfratz, glurak, rattfratz))
         val statsGlurak = BattleStats(78, 84, 78, 109, 85, 100, rattfratz, attack, trainer1)
         glurak.battleStats = statsGlurak
-        val trainer2 = Coach("trainer2", rattfratz, glurak, glurak, rattfratz, glurak, rattfratz)
+        val trainer2 = Coach("trainer2", listOf(rattfratz, glurak, glurak, rattfratz, glurak, rattfratz))
         val statsRattfratz = BattleStats(55, 81, 60, 50, 70, 97, glurak, attack, trainer2)
         rattfratz.battleStats = statsRattfratz
         val battle = Battle(mutableListOf(glurak, rattfratz))
@@ -160,10 +160,10 @@ class BattleTests : AnnotationSpec() {
         val attacks = listOf(attack)
         val glurak = Quantomix("Glurak", type1, type2, 78, 60, 58, 60, 65, 80, attacks)
         val owei = Quantomix("Owei", type3, type4, 60, 40, 50, 60, 50, 40, attacks)
-        val trainer1 = Coach("trainer1", glurak, owei, glurak, owei, glurak, owei)
+        val trainer1 = Coach("trainer1", listOf(glurak, owei, glurak, owei, glurak, owei))
         val statsGlurak = BattleStats(78, 60, 78, 60, 65, 100, owei, attack, trainer1)
         glurak.battleStats = statsGlurak
-        val trainer2 = Coach("trainer2", owei, glurak, glurak, owei, glurak, owei)
+        val trainer2 = Coach("trainer2", listOf(owei, glurak, glurak, owei, glurak, owei))
         val statsOwei = BattleStats(36, 40, 50, 60, 50, 40, glurak, attack, trainer2)
         owei.battleStats = statsOwei
         val battle = Battle(mutableListOf(glurak, owei))
@@ -189,7 +189,7 @@ class BattleTests : AnnotationSpec() {
             80,
             listOf(Attack("Glut", Typ("Feuer"), 30, 100))
         )
-        val trainer1 = Coach("Test", quantomix, quantomix, quantomix, quantomix, quantomix, quantomix)
+        val trainer1 = Coach("Test", listOf(quantomix, quantomix, quantomix, quantomix, quantomix, quantomix))
         val battleStatsQuantomix =
             BattleStats(78, 84, 78, 109, 85, 100, quantomix, Attack("Glut", Typ("Feuer"), 30, 100), trainer1)
         quantomix.battleStats = battleStatsQuantomix
@@ -203,8 +203,8 @@ class BattleTests : AnnotationSpec() {
         val type = Typ("Normal")
         val quantomix1 = Quantomix("With no 2.Typ", type, null, 100, 100, 100, 100, 100, 100, listOf(attack))
         val quantomix2 = Quantomix("With no 2.Typ", type, null, 100, 100, 100, 100, 100, 100, listOf(attack))
-        val trainer1 = Coach("Trainer1", quantomix1, quantomix2, quantomix1, quantomix2, quantomix1, quantomix2)
-        val trainer2 = Coach("Trainer2", quantomix2, quantomix1, quantomix2, quantomix1, quantomix2, quantomix1)
+        val trainer1 = Coach("Trainer1", listOf(quantomix1, quantomix2, quantomix1, quantomix2, quantomix1, quantomix2))
+        val trainer2 = Coach("Trainer2", listOf(quantomix2, quantomix1, quantomix2, quantomix1, quantomix2, quantomix1))
         quantomix1.battleStats = BattleStats(100, 50, 100, 100, 100, 100, quantomix2, attack, trainer1)
         quantomix2.battleStats = BattleStats(100, 50, 100, 100, 100, 100, quantomix1, attack, trainer2)
 
