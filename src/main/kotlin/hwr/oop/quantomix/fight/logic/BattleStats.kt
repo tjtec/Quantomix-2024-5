@@ -11,12 +11,12 @@ class BattleStats(
     var battleSpecialAttack: Int,
     var battleSpecialDefense: Int,
     var battleSpeed: Int,
-    var target: Quantomix,
-    var nextAttack: Attack,
-    val trainer: Coach,
+    var target: Quantomix? = null,
+    var nextAttack: Attack? = null,
+    var trainer: Coach? = null,
 ) {
     fun newKp(damage: Int) {
-        if (damage > battleKp) {
+        if (damage >= battleKp) {
             this.battleKp = 0
         } else {
             this.battleKp -= damage
@@ -49,5 +49,8 @@ class BattleStats(
 
     fun newAttack(attack: Attack) {
         this.nextAttack = attack
+    }
+    fun newCoach(coach: Coach) {
+        this.trainer = coach
     }
 }
