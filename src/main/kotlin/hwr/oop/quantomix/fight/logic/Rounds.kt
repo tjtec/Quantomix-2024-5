@@ -5,35 +5,30 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 
 class Rounds(val trainer: List<Coach>) {
-    fun start(): Coach {
+    fun start(numberOfQuantomixPerTrainer: Int = 1): Coach {
         val listOfQuantomixInBattle = mutableListOf<Quantomix>()
         val numberOfPlayers = trainer.size
         for (currentPlayer: Coach in trainer) {
-            val attack = askForAttack(currentPlayer)
-            val target = askForTarget(currentPlayer)
-            val stats = BattleStats(
-                currentPlayer.quantomixTeam[0].kp,
-                currentPlayer.quantomixTeam[0].attack,
-                currentPlayer.quantomixTeam[0].defense,
-                currentPlayer.quantomixTeam[0].specialAttack,
-                currentPlayer.quantomixTeam[0].specialDefense,
-                currentPlayer.quantomixTeam[0].speed,
-                target,
-                attack,
-                currentPlayer
-            )
-            currentPlayer.quantomixTeam[0].battleStats = stats
-            listOfQuantomixInBattle.add(currentPlayer.quantomixTeam[0])
+            for (i in 0 until numberOfQuantomixPerTrainer) {
+                requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newAttack(askForAttack(currentPlayer))
+                requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newTarget(askForTarget(currentPlayer))
+                listOfQuantomixInBattle.add(currentPlayer.quantomixTeam[i])
+
+            }
         }
         val battle = Battle(listOfQuantomixInBattle)
-        val winner = round(battle, listOfQuantomixInBattle, numberOfPlayers)
+        var winner = round(
+            battle, listOfQuantomixInBattle,
+            numberOfPlayers, numberOfQuantomixPerTrainer
+        )
         return trainer[winner]
     }
 
     private fun round(
         battle: Battle,
         listOfPreviusQuantomixInBattle: MutableList<Quantomix>,
-        numberOfPlayers: Int
+        numberOfPlayers: Int,
+        numberOfPlayersPerQuantomix: Int,
     ): Int {
         val QuantomixLeftInBattle = battle.start()
         val numberOfQuantomixPerPlayerLeft = MutableList(numberOfPlayers) { 6 }
@@ -41,6 +36,7 @@ class Rounds(val trainer: List<Coach>) {
         val QuantomixInTheNextRound = mutableListOf<Quantomix>()
         var maximumQuantomixInBattle = listOfPreviusQuantomixInBattle.size
         while (numberOfQuantomixPerPlayerLeft.count { it != 0 } != 1) {
+            var numberOfQuantomixPerPlayerInBattleLeftToCheck = numberOfPlayersPerQuantomix
             if (QuantomixLeftInBattle.size < maximumQuantomixInBattle) {
                 for (currentQuantomix in listOfPreviusQuantomixInBattle) {
                     if (!QuantomixLeftInBattle.contains(currentQuantomix)) {
@@ -55,8 +51,17 @@ class Rounds(val trainer: List<Coach>) {
                         askPlayer(currentQuantomix.battleStats.trainer!!)
                         QuantomixInTheNextRound.add(currentQuantomix)
                     }
-                    indexForNumberOfQuantomixPerPlayerLeft += 1
+                    indexForNumberOfQuantomixPerPlayerLeft += when (numberOfQuantomixPerPlayerInBattleLeftToCheck) {
+                        1 -> 1
+                        else -> 0
+                    }
+                    numberOfQuantomixPerPlayerInBattleLeftToCheck =
+                        when (numberOfQuantomixPerPlayerInBattleLeftToCheck) {
+                            1 -> numberOfPlayersPerQuantomix
+                            else -> numberOfQuantomixPerPlayerInBattleLeftToCheck - 1
+                        }
                 }
+                indexForNumberOfQuantomixPerPlayerLeft = 0
             } else {
                 for (currentQuantomix in listOfPreviusQuantomixInBattle) {
                     askPlayer(currentQuantomix.battleStats.trainer!!)
