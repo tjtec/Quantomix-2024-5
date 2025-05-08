@@ -15,5 +15,12 @@ class Quantomix(
     val specialDefense: Int,
     val speed: Int,
     val attacks: List<Attack>,
-    var battleStats: BattleStats? = null
+    var battleStats: BattleStats = BattleStats(
+        kp,
+        attack,
+        defense,
+        specialAttack,
+        specialDefense,
+        speed
+    )
 )

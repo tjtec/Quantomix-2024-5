@@ -44,7 +44,7 @@ class Rounds(val trainer: List<Coach>) {
             if (QuantomixLeftInBattle.size < maximumQuantomixInBattle) {
                 for (currentQuantomix in listOfPreviusQuantomixInBattle) {
                     if (!QuantomixLeftInBattle.contains(currentQuantomix)) {
-                        val next = nextQuantomix(currentQuantomix.battleStats!!.trainer)
+                        val next = nextQuantomix(currentQuantomix.battleStats.trainer!!)
                         if (next != null) {
                             QuantomixInTheNextRound.add(next)
                             numberOfQuantomixPerPlayerLeft[indexForNumberOfQuantomixPerPlayerLeft] -= 1
@@ -52,14 +52,14 @@ class Rounds(val trainer: List<Coach>) {
                             maximumQuantomixInBattle -= 1
                         }
                     } else {
-                        askPlayer(currentQuantomix.battleStats!!.trainer)
+                        askPlayer(currentQuantomix.battleStats.trainer!!)
                         QuantomixInTheNextRound.add(currentQuantomix)
                     }
                     indexForNumberOfQuantomixPerPlayerLeft += 1
                 }
             } else {
                 for (currentQuantomix in listOfPreviusQuantomixInBattle) {
-                    askPlayer(currentQuantomix.battleStats!!.trainer)
+                    askPlayer(currentQuantomix.battleStats.trainer!!)
                     QuantomixInTheNextRound.add(currentQuantomix)
                 }
                 val nextBattle = Battle(QuantomixInTheNextRound)
@@ -73,11 +73,11 @@ class Rounds(val trainer: List<Coach>) {
         if (!dead) {
             val changedCurrentQuantomix =
                 DoYouWantToChangeTheCurrentQuantomix(player)
-            changedCurrentQuantomix.battleStats!!.newAttack(
-                askForAttack(changedCurrentQuantomix.battleStats!!.trainer)
+            changedCurrentQuantomix.battleStats.newAttack(
+                askForAttack(changedCurrentQuantomix.battleStats.trainer!!)
             )
-            changedCurrentQuantomix.battleStats!!.newTarget(
-                askForTarget(changedCurrentQuantomix.battleStats!!.trainer)
+            changedCurrentQuantomix.battleStats.newTarget(
+                askForTarget(changedCurrentQuantomix.battleStats.trainer!!)
             )
         }
     }
