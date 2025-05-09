@@ -12,4 +12,12 @@ class CsvFileTest : AnnotationSpec() {
         val csvFile = CsvFile.parseCsv(File(testCsvFile))
         assertEquals(2, csvFile.lines.size)
     }
+
+    @Test
+    fun `CSV file test with one Csvline`() {
+        val testCsvFile = "src/test/resources/test.csv"
+        val csvFile = CsvFile.parseCsv(File(testCsvFile))
+        val returnval = csvFile.lines[1].values[1]
+        assertEquals("Feuer", returnval)
+    }
 }
