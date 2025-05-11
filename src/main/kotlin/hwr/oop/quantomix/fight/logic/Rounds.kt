@@ -4,7 +4,7 @@ import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 
-class Rounds(val trainer: List<Coach>) {
+class Rounds(val trainer: List<Coach>, private val attackSelector: AttackSelector) {
     fun start(): Coach {
         val listOfQuantomixInBattle = mutableListOf<Quantomix>()
         val numberOfPlayers = trainer.size
@@ -29,6 +29,16 @@ class Rounds(val trainer: List<Coach>) {
         val winner = round(battle, listOfQuantomixInBattle, numberOfPlayers)
         return trainer[winner]
     }
+    private fun askForAttack(player: Coach): Attack {
+        // Hier rufen wir den AttackSelector auf und brauchen keine zusätzliche Hilfsmethode
+        return attackSelector.selectAttack(player, player.quantomixTeam[0].attacks)
+    }
+    private fun askForTarget(player: Coach): /* hier den Typ einfügen */ Any {
+        // Analog: Implementiere hier die Auswahl des Targets, entweder durch eine ähnliche Strategie wie bei der Attacke
+        TODO("Implementiere die Zielauswahl")
+    }
+
+
 
     private fun round(
         battle: Battle,
@@ -82,21 +92,30 @@ class Rounds(val trainer: List<Coach>) {
         }
     }
 
-    private fun askForAttack(player: Coach): Attack {
-        TODO(
+    //private fun askForAttack(player: Coach): Attack {
+        //TODO(
             "Diese Funktion soll eine andere Funktion aufrufen, welche den " +
                     "Spieler zu dem Angriff befragt und dieses an diese Funktion übergibt. " +
                     "Diese Funktion gibt dann die Attacke zurück"
-        )
-    }
+        //)
+        // Diese Funktion soll letztlich eine Attacke liefern, nachdem der Spieler seine Auswahl getroffen hat.
+            //val activeQuantomix = player.quantomixTeam[0]
+            //return chooseAttackFromPlayer(activeQuantomix.attacks, player)
+        //}
 
-    private fun askForTarget(player: Coach): Quantomix {
-        TODO(
+        // Diese Funktion soll den Spieler fragen, welche Attacke er einsetzen möchte. Hier wird die erste Attacke zurückgegeben
+        //private fun chooseAttackFromPlayer(attacks: List<Attack>, player: Coach): Attack {
+            //return attacks.random()
+        //}
+
+    //private fun askForTarget(player: Coach): Quantomix {
+        //TODO(
             "Diese Funktion soll eine andere Funktion aufrufen, welche den " +
                     "Spieler zum Ziel der Attacke befragt und dieses an diese Funktion übergibt. " +
                     "Diese Funktion gibt dann das Ziel der Attacke  zurück"
-        )
-    }
+        //)
+
+    //}
 
     private fun nextQuantomix(player: Coach): Quantomix? {
         TODO(
@@ -111,3 +130,4 @@ class Rounds(val trainer: List<Coach>) {
         //askPlayer(currentQuantomix.battleStats!!.trainer, true) um die BattleStats entsprechent zu setzen
     }
 }
+
