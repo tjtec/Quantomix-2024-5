@@ -5,12 +5,17 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 
 class Rounds(val trainer: List<Coach>) {
-    fun start(list = null, numberOfQuantomixPerTrainer: Int = 1): Coach {
+    fun start(numberOfQuantomixPerTrainer: Int = 1): Coach {
         val listOfQuantomixInBattle = mutableListOf<Quantomix>()
         val numberOfPlayers = trainer.size
         for (currentPlayer: Coach in trainer) {
             for (i in 0 until numberOfQuantomixPerTrainer) {
-                requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newAttack(askForAttack(liste, currentPlayer, getSelectedAttackName(currentPlayer)))
+                requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newAttack(
+                    askForAttack(
+                        currentPlayer,
+                        getSelectedAttackName(currentPlayer)
+                    )
+                )
                 requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newTarget(askForTarget(currentPlayer))
                 listOfQuantomixInBattle.add(currentPlayer.quantomixTeam[i])
 
@@ -89,17 +94,17 @@ class Rounds(val trainer: List<Coach>) {
 
     // Gibt einen Attackennamen zurück, den jemand (zuvor) ausgewählt hat.
     // Simulation: Wir wählen zufällig einen Namen aus dem aktuellen Quantomix.
-    private fun getSelectedAttackName(player: Coach, liste): String {
+    private fun getSelectedAttackName(player: Coach): String {
         // Nehme das aktive Quantomix des Spielers (hier z. B. das erste im Team)
         val activeQuantomix = player.quantomixTeam[0]
         // Wähle zufällig einen Attackennamen aus der Liste
         return activeQuantomix.attacks.random().attackName
     }
 
-    private fun askForAttack(liste, player: Coach, attackName: String): Attack {
+    private fun askForAttack(player: Coach, attackName: String): Attack {
 
 
-        val attackName = getSelectedAttackName(player, liste)
+        val attackName = getSelectedAttackName(player)
         // Greife auf das aktive Quantomix des Spielers zu.
 
         val activeQuantomix = player.quantomixTeam[0]
