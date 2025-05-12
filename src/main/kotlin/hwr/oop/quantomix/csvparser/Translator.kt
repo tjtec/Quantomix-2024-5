@@ -5,7 +5,7 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 import hwr.oop.quantomix.objects.Typ
 
-class Translator() {
+interface Translator {
     fun translateToAttack(
         name: String,
         type: String,
