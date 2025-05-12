@@ -5,21 +5,21 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 
 class Rounds(val trainer: List<Coach>) {
-    fun start(list = null, numberOfQuantomixPerTrainer: Int = 1): Coach {
+    fun start(mutableListOfAttack: List<Attack>? =null, numberOfQuantomixPerTrainer: Int = 1): Coach {
         val listOfQuantomixInBattle = mutableListOf<Quantomix>()
         val numberOfPlayers = trainer.size
         for (currentPlayer: Coach in trainer) {
             for (i in 0 until numberOfQuantomixPerTrainer) {
-                requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newAttack(askForAttack(liste, currentPlayer, getSelectedAttackName(currentPlayer)))
+                requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newAttack(askForAttack(mutableListOfAttack, currentPlayer))
                 requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newTarget(askForTarget(currentPlayer))
                 listOfQuantomixInBattle.add(currentPlayer.quantomixTeam[i])
 
             }
         }
         val battle = Battle(listOfQuantomixInBattle)
-        var winner = round(
+        val winner = round(
             battle, listOfQuantomixInBattle,
-            numberOfPlayers, numberOfQuantomixPerTrainer
+            numberOfPlayers, numberOfQuantomixPerTrainer, mutableListOfAttack
         )
         return trainer[winner]
     }
@@ -29,6 +29,7 @@ class Rounds(val trainer: List<Coach>) {
         listOfPreviusQuantomixInBattle: MutableList<Quantomix>,
         numberOfPlayers: Int,
         numberOfPlayersPerQuantomix: Int,
+        mutableListOfAttack: List<Attack>?
     ): Int {
         val quantomixLeftInBattle = battle.start()
         val numberOfQuantomixPerPlayerLeft = MutableList(numberOfPlayers) { 6 }
@@ -48,7 +49,7 @@ class Rounds(val trainer: List<Coach>) {
                             maximumQuantomixInBattle -= 1
                         }
                     } else {
-                        askPlayer(currentQuantomix.battleStats.trainer!!)
+                        askPlayer(currentQuantomix.battleStats.trainer!!, mutableListOfAttack)
                         quantomixInTheNextRound.add(currentQuantomix)
                     }
                     indexForNumberOfQuantomixPerPlayerLeft += when (numberOfQuantomixPerPlayerInBattleLeftToCheck) {
@@ -64,7 +65,7 @@ class Rounds(val trainer: List<Coach>) {
                 indexForNumberOfQuantomixPerPlayerLeft = 0
             } else {
                 for (currentQuantomix in listOfPreviusQuantomixInBattle) {
-                    askPlayer(currentQuantomix.battleStats.trainer!!)
+                    askPlayer(currentQuantomix.battleStats.trainer!!, mutableListOfAttack)
                     quantomixInTheNextRound.add(currentQuantomix)
                 }
                 val nextBattle = Battle(quantomixInTheNextRound)
@@ -74,12 +75,12 @@ class Rounds(val trainer: List<Coach>) {
         return numberOfQuantomixPerPlayerLeft.indexOfFirst { it != 0 }
     }
 
-    private fun askPlayer(player: Coach, dead: Boolean = false) {
+    private fun askPlayer(player: Coach, mutableListOfAttack: List<Attack>?,dead: Boolean = false) {
         if (!dead) {
             val changedCurrentQuantomix =
                 doYouWantToChangeTheCurrentQuantomix(player)
             changedCurrentQuantomix.battleStats.newAttack(
-                askForAttack(changedCurrentQuantomix.battleStats.trainer!!, getSelectedAttackName(changedCurrentQuantomix.battleStats.trainer!!))
+                askForAttack(mutableListOfAttack,changedCurrentQuantomix.battleStats.trainer!!)
             )
             changedCurrentQuantomix.battleStats.newTarget(
                 askForTarget(changedCurrentQuantomix.battleStats.trainer!!)
@@ -89,20 +90,19 @@ class Rounds(val trainer: List<Coach>) {
 
     // Gibt einen Attackennamen zurück, den jemand (zuvor) ausgewählt hat.
     // Simulation: Wir wählen zufällig einen Namen aus dem aktuellen Quantomix.
-    private fun getSelectedAttackName(player: Coach, liste): String {
+    private fun getSelectedAttackName(player: Coach, mutableListOfAttack: List<Attack>?): String {
         // Nehme das aktive Quantomix des Spielers (hier z. B. das erste im Team)
         val activeQuantomix = player.quantomixTeam[0]
         // Wähle zufällig einen Attackennamen aus der Liste
         return activeQuantomix.attacks.random().attackName
     }
 
-    private fun askForAttack(liste, player: Coach, attackName: String): Attack {
+    private fun askForAttack(mutableListOfAttack: List<Attack>?, player: Coach): Attack {
 
 
-        val attackName = getSelectedAttackName(player, liste)
+        val attackName = getSelectedAttackName(player, mutableListOfAttack)
         // Greife auf das aktive Quantomix des Spielers zu.
-
-        val activeQuantomix = player.quantomixTeam[0]
+        val activeQuantomix = player.quantomixTeam[0] //Todo: welche Quantomix sollen verwendet werden?
 
         // Suche in der Liste der Attacken des aktiven Quantomix nach einer Attacke,
         // deren Name mit dem übergebenen attackName übereinstimmt (Groß-/Kleinschreibung wird ignoriert).
