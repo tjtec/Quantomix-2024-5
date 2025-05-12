@@ -30,26 +30,26 @@ class Rounds(val trainer: List<Coach>) {
         numberOfPlayers: Int,
         numberOfPlayersPerQuantomix: Int,
     ): Int {
-        val QuantomixLeftInBattle = battle.start()
+        val quantomixLeftInBattle = battle.start()
         val numberOfQuantomixPerPlayerLeft = MutableList(numberOfPlayers) { 6 }
         var indexForNumberOfQuantomixPerPlayerLeft = 0
-        val QuantomixInTheNextRound = mutableListOf<Quantomix>()
+        val quantomixInTheNextRound = mutableListOf<Quantomix>()
         var maximumQuantomixInBattle = listOfPreviusQuantomixInBattle.size
         while (numberOfQuantomixPerPlayerLeft.count { it != 0 } != 1) {
             var numberOfQuantomixPerPlayerInBattleLeftToCheck = numberOfPlayersPerQuantomix
-            if (QuantomixLeftInBattle.size < maximumQuantomixInBattle) {
+            if (quantomixLeftInBattle.size < maximumQuantomixInBattle) {
                 for (currentQuantomix in listOfPreviusQuantomixInBattle) {
-                    if (!QuantomixLeftInBattle.contains(currentQuantomix)) {
+                    if (!quantomixLeftInBattle.contains(currentQuantomix)) {
                         val next = nextQuantomix(currentQuantomix.battleStats.trainer!!)
                         if (next != null) {
-                            QuantomixInTheNextRound.add(next)
+                            quantomixInTheNextRound.add(next)
                             numberOfQuantomixPerPlayerLeft[indexForNumberOfQuantomixPerPlayerLeft] -= 1
                         } else {
                             maximumQuantomixInBattle -= 1
                         }
                     } else {
                         askPlayer(currentQuantomix.battleStats.trainer!!)
-                        QuantomixInTheNextRound.add(currentQuantomix)
+                        quantomixInTheNextRound.add(currentQuantomix)
                     }
                     indexForNumberOfQuantomixPerPlayerLeft += when (numberOfQuantomixPerPlayerInBattleLeftToCheck) {
                         1 -> 1
@@ -65,9 +65,9 @@ class Rounds(val trainer: List<Coach>) {
             } else {
                 for (currentQuantomix in listOfPreviusQuantomixInBattle) {
                     askPlayer(currentQuantomix.battleStats.trainer!!)
-                    QuantomixInTheNextRound.add(currentQuantomix)
+                    quantomixInTheNextRound.add(currentQuantomix)
                 }
-                val nextBattle = Battle(QuantomixInTheNextRound)
+                val nextBattle = Battle(quantomixInTheNextRound)
                 nextBattle.start()
             }
         }
@@ -77,7 +77,7 @@ class Rounds(val trainer: List<Coach>) {
     private fun askPlayer(player: Coach, dead: Boolean = false) {
         if (!dead) {
             val changedCurrentQuantomix =
-                DoYouWantToChangeTheCurrentQuantomix(player)
+                doYouWantToChangeTheCurrentQuantomix(player)
             changedCurrentQuantomix.battleStats.newAttack(
                 askForAttack(changedCurrentQuantomix.battleStats.trainer!!)
             )
@@ -111,7 +111,7 @@ class Rounds(val trainer: List<Coach>) {
         )
     }
 
-    private fun DoYouWantToChangeTheCurrentQuantomix(player: Coach): Quantomix {
+    private fun doYouWantToChangeTheCurrentQuantomix(player: Coach): Quantomix {
         TODO("jeder Spieler wird gefragt, ob er mit dem Eingesetzten Quantomix weiterkämpfen möchte")
         //askPlayer(currentQuantomix.battleStats!!.trainer, true) um die BattleStats entsprechent zu setzen
     }
