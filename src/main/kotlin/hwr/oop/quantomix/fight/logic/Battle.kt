@@ -71,6 +71,10 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
         }
     }
 
+    private fun hits(damageQuote: Int): Boolean {
+        TODO("Sara bitte hinzufügen")
+    }
+
     fun start(effectiv: List<Double>? = null): List<Quantomix> {
         val attackOrder = nextAttacker()
         var indexEffektivitieList = if (effectiv == null) null else 0
@@ -79,23 +83,27 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
             val currentDamageDealer = iterator.next()
             for (currentDamageReceiver in attackOrder) {
                 if (currentDamageDealer.battleStats.target == currentDamageReceiver) {
-                    val power = if (effectiv != null) {
-                        attackPower(
-                            currentDamageDealer,
-                            effectiv[requireNotNull(indexEffektivitieList)],
-                            effectiv[indexEffektivitieList + 1]
-                        )
+                    if (hits(requireNotNull(currentDamageDealer.battleStats.nextAttack).damageQuote)) {
+                        val power = if (effectiv != null) {
+                            attackPower(
+                                currentDamageDealer,
+                                effectiv[requireNotNull(indexEffektivitieList)],
+                                effectiv[indexEffektivitieList + 1]
+                            )
+                        } else {
+                            attackPower(currentDamageDealer)
+                        }
+                        if (power >= currentDamageReceiver.battleStats.battleKp) {
+                            currentDamageReceiver.battleStats.newKp(power)
+                            attackOrder.remove(currentDamageReceiver)
+                        } else {
+                            currentDamageReceiver.battleStats.newKp(power)
+                        }
+                        indexEffektivitieList?.let { indexEffektivitieList++ }
+                        break
                     } else {
-                        attackPower(currentDamageDealer)
+                        TODO("Soll etwas passieren, wenn die Attacke nicht trifft und wenn ja was?")
                     }
-                    if (power >= currentDamageReceiver.battleStats.battleKp) {
-                        currentDamageReceiver.battleStats.newKp(power)
-                        attackOrder.remove(currentDamageReceiver)
-                    } else {
-                        currentDamageReceiver.battleStats.newKp(power)
-                    }
-                    indexEffektivitieList?.let { indexEffektivitieList++ }
-                    break
                 }
             }
         }
