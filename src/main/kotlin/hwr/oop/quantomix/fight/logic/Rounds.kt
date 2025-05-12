@@ -5,7 +5,7 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 
 class Rounds(val trainer: List<Coach>) {
-    fun start(numberOfQuantomixPerTrainer: Int = 1): Coach {
+    fun start(list = null, numberOfQuantomixPerTrainer: Int = 1): Coach {
         val listOfQuantomixInBattle = mutableListOf<Quantomix>()
         val numberOfPlayers = trainer.size
         for (currentPlayer: Coach in trainer) {
@@ -87,12 +87,32 @@ class Rounds(val trainer: List<Coach>) {
         }
     }
 
-    private fun askForAttack(player: Coach): Attack {
-        TODO(
-            "Diese Funktion soll eine andere Funktion aufrufen, welche den " +
-                    "Spieler zu dem Angriff befragt und dieses an diese Funktion übergibt. " +
-                    "Diese Funktion gibt dann die Attacke zurück"
-        )
+    // Gibt einen Attackennamen zurück, den jemand (zuvor) ausgewählt hat.
+    // Simulation: Wir wählen zufällig einen Namen aus dem aktuellen Quantomix.
+    private fun getSelectedAttackName(player: Coach, liste): String {
+        // Nehme das aktive Quantomix des Spielers (hier z. B. das erste im Team)
+        val activeQuantomix = player.quantomixTeam[0]
+        // Wähle zufällig einen Attackennamen aus der Liste
+        return activeQuantomix.attacks.random().attackName
+    }
+
+    private fun askForAttack(liste, player: Coach, attackName: String): Attack {
+
+
+        val attackName = getSelectedAttackName(player)
+        // Greife auf das aktive Quantomix des Spielers zu.
+
+        val activeQuantomix = player.quantomixTeam[0]
+
+        // Suche in der Liste der Attacken des aktiven Quantomix nach einer Attacke,
+        // deren Name mit dem übergebenen attackName übereinstimmt (Groß-/Kleinschreibung wird ignoriert).
+        val selectedAttack = activeQuantomix.attacks.find {
+            it.attackName.equals(attackName, ignoreCase = true)
+        }
+
+        // Wenn eine passende Attacke gefunden wurde, wird sie zurückgegeben.
+        // Andernfalls wird als Fallback die erste Attacke aus der Liste gewählt.
+        return selectedAttack ?: activeQuantomix.attacks.first()
     }
 
     private fun askForTarget(player: Coach): Quantomix {
