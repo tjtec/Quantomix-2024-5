@@ -35,7 +35,7 @@ object GameData {
         val speed = quantomix.speed
         var attacks = ""
         var battleStats = quantomix.battleStats
-        val s = CsvFile.seperator
+        val s = ","
         val si = "|"
         var count = 0
         for (i in quantomix.attacks) {
@@ -46,7 +46,7 @@ object GameData {
             count = count+1
         }
         fun typetostring(type: Typ): String {
-            return "${type.name}"
+            return "${type.name}" //Falls noch mehr Values im Objekt Typ folgen
         }
         typ1 = typetostring(quantomix.typ1)
         typ2 = typetostring(quantomix.typ2!!)

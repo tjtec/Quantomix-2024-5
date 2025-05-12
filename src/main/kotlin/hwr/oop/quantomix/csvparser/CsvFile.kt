@@ -5,8 +5,7 @@ import java.io.File
 class CsvFile (val lines: List<CsvLine>) {
 
     companion object {
-        val seperator = ","
-        fun parseCsv(file: File): CsvFile {
+        fun parseCsv(file: File, seperator: String = ","): CsvFile {
             val lines = mutableListOf<CsvLine>()
             file.forEachLine { line ->
                 val values = line.split(seperator)
