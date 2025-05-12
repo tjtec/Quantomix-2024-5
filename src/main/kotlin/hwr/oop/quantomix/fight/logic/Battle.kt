@@ -8,7 +8,7 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
 
     internal fun nextAttacker(): MutableList<Quantomix> {
         // sorts the Quantomix according to the speed. At the end of this function is the
-        // fasts Quantomix the first in the list.
+        // fast Quantomix the first in the list.
         if (!(ListOfQuantomix.size >= 2)) {
             error("Not enough number of players")
         }
@@ -72,7 +72,12 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
     }
 
     private fun hits(damageQuote: Int): Boolean {
-        TODO("Sara bitte hinzufügen")
+
+        val randomValue = (1..100).random()
+        return when (randomValue <= damageQuote) {
+            true -> true
+            else -> false
+        }
     }
 
     fun start(effectiv: List<Double>? = null): List<Quantomix> {
