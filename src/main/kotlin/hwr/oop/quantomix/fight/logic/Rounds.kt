@@ -88,32 +88,36 @@ class Rounds(val trainer: List<Coach>) {
         }
     }
 
-    // Gibt einen Attackennamen zurück, den jemand (zuvor) ausgewählt hat.
-    // Simulation: Wir wählen zufällig einen Namen aus dem aktuellen Quantomix.
-    private fun getSelectedAttackName(player: Coach, mutableListOfAttack: List<Attack>?): String {
-        // Nehme das aktive Quantomix des Spielers (hier z. B. das erste im Team)
-        val activeQuantomix = player.quantomixTeam[0]
-        // Wähle zufällig einen Attackennamen aus der Liste
-        return activeQuantomix.attacks.random().attackName
+    private fun getSelectedAttack(player: Coach, mutableListOfAttack: List<Attack>? = null): Attack {
+        return when {
+            mutableListOfAttack != null && mutableListOfAttack.isNotEmpty() -> mutableListOfAttack.first()
+            else -> getAttackFromUserInput()
+        }
+    }
+
+    private fun getAttackFromUserInput(): Attack {
+        TODO("die Benutzereingabe der Attacke in der CLI implementieren")
     }
 
     private fun askForAttack(mutableListOfAttack: List<Attack>?, player: Coach): Attack {
 
+        val selectedAttackFromPlayer = getSelectedAttack(player, mutableListOfAttack)
+        // Greift auf das aktive Quantomix des Spielers zu.
+        val activeQuantomix = player.quantomixTeam.firstOrNull() //Todo: welche Quantomix sollen verwendet werden?
+            ?: throw IllegalStateException("Kein aktives Quantomix vorhanden")
 
-        val attackName = getSelectedAttackName(player, mutableListOfAttack)
-        // Greife auf das aktive Quantomix des Spielers zu.
-        val activeQuantomix = player.quantomixTeam[0] //Todo: welche Quantomix sollen verwendet werden?
+        return findAttackByName(activeQuantomix, selectedAttackFromPlayer)
+            ?: throw IllegalStateException("Angriff '${selectedAttackFromPlayer.attackName}' nicht gefunden")
 
-        // Suche in der Liste der Attacken des aktiven Quantomix nach einer Attacke,
-        // deren Name mit dem übergebenen attackName übereinstimmt (Groß-/Kleinschreibung wird ignoriert).
-        val selectedAttack = activeQuantomix.attacks.find {
-            it.attackName.equals(attackName, ignoreCase = true)
         }
-
-        // Wenn eine passende Attacke gefunden wurde, wird sie zurückgegeben.
-        // Andernfalls wird als Fallback die erste Attacke aus der Liste gewählt.
-        return selectedAttack ?: activeQuantomix.attacks.first()
+    private fun findAttackByName(quantomix: Quantomix, desiredAttack: Attack): Attack? {
+        return quantomix.attacks.firstOrNull {
+            it.attackName.equals(desiredAttack.attackName, ignoreCase = true)
+        }
     }
+
+
+
 
     private fun askForTarget(player: Coach): Quantomix {
         TODO(

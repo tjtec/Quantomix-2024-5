@@ -89,7 +89,7 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
             for (currentDamageReceiver in attackOrder) {
                 if (currentDamageDealer.battleStats.target == currentDamageReceiver) {
                     if (hits(requireNotNull(currentDamageDealer.battleStats.nextAttack).damageQuote)) {
-                        val power = if (effectiv != null) {
+                        val power = if (!effectiv.isNullOrEmpty()) {
                             attackPower(
                                 currentDamageDealer,
                                 effectiv[requireNotNull(indexEffektivitieList)],
