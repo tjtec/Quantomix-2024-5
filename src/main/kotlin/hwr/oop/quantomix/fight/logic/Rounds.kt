@@ -103,11 +103,11 @@ class Rounds(val trainer: List<Coach>) {
 
         val selectedAttackFromPlayer = getSelectedAttack(player, mutableListOfAttack)
         // Greift auf das aktive Quantomix des Spielers zu.
-        val activeQuantomix = player.quantomixTeam.firstOrNull() //Todo: welche Quantomix sollen verwendet werden?Das Aktuelle aber wie kommen wir da ran?
-            ?: throw IllegalStateException("Kein aktives Quantomix vorhanden")
+        val activeQuantomix = player.quantomixTeam.first() //Todo: welche Quantomix sollen verwendet werden?Das Aktuelle aber wie kommen wir da ran?
+
 
         return findAttackByName(activeQuantomix, selectedAttackFromPlayer)
-            ?: throw IllegalStateException("Angriff '${selectedAttackFromPlayer.attackName}' nicht gefunden")  //Todo: Muss noch bearbeitet werden.
+            ?: throw IllegalStateException("Angriff '${selectedAttackFromPlayer.attackName}' nicht gefunden")
 
         }
     private fun findAttackByName(quantomix: Quantomix, desiredAttack: Attack): Attack? {
