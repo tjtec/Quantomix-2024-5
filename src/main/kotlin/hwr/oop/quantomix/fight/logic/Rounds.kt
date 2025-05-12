@@ -10,7 +10,7 @@ class Rounds(val trainer: List<Coach>) {
         val numberOfPlayers = trainer.size
         for (currentPlayer: Coach in trainer) {
             for (i in 0 until numberOfQuantomixPerTrainer) {
-                requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newAttack(askForAttack(currentPlayer))
+                requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newAttack(askForAttack(liste, currentPlayer, getSelectedAttackName(currentPlayer)))
                 requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newTarget(askForTarget(currentPlayer))
                 listOfQuantomixInBattle.add(currentPlayer.quantomixTeam[i])
 
@@ -79,7 +79,7 @@ class Rounds(val trainer: List<Coach>) {
             val changedCurrentQuantomix =
                 doYouWantToChangeTheCurrentQuantomix(player)
             changedCurrentQuantomix.battleStats.newAttack(
-                askForAttack(changedCurrentQuantomix.battleStats.trainer!!)
+                askForAttack(changedCurrentQuantomix.battleStats.trainer!!, getSelectedAttackName(changedCurrentQuantomix.battleStats.trainer!!))
             )
             changedCurrentQuantomix.battleStats.newTarget(
                 askForTarget(changedCurrentQuantomix.battleStats.trainer!!)
@@ -99,7 +99,7 @@ class Rounds(val trainer: List<Coach>) {
     private fun askForAttack(liste, player: Coach, attackName: String): Attack {
 
 
-        val attackName = getSelectedAttackName(player)
+        val attackName = getSelectedAttackName(player, liste)
         // Greife auf das aktive Quantomix des Spielers zu.
 
         val activeQuantomix = player.quantomixTeam[0]
@@ -126,13 +126,18 @@ class Rounds(val trainer: List<Coach>) {
     private fun nextQuantomix(player: Coach): Quantomix? {
         TODO(
             "Diese Funktion fragt, welches Quantomix als nächstes eingesetzt werden soll," +
-                    "(dies geschieht wie bei den obrigen Funktionen). Ist kein Quantomix mehr übrig" +
+                    "(dies geschieht wie bei den obigen Funktionen). Ist kein Quantomix mehr übrig" +
                     "soll diese Funktion null zurückgeben. Muss die BattleStats mitsetzen"
         )
     }
 
     private fun doYouWantToChangeTheCurrentQuantomix(player: Coach): Quantomix {
         TODO("jeder Spieler wird gefragt, ob er mit dem Eingesetzten Quantomix weiterkämpfen möchte")
-        //askPlayer(currentQuantomix.battleStats!!.trainer, true) um die BattleStats entsprechent zu setzen
+        //askPlayer(currentQuantomix.battleStats!!.trainer, true) um die BattleStats entsprechend zu setzen
     }
 }
+
+//TODO(
+//"Diese Funktion soll eine andere Funktion aufrufen, welche den " +
+//"Spieler zu dem Angriff befragt und dieses an diese Funktion übergibt. " +
+//"Diese Funktion gibt dann die Attacke zurück" )
