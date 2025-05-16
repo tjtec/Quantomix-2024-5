@@ -5,20 +5,19 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import hwr.oop.quantomix.stats.GameData
 
-class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
+class Battle(private var listOfQuantomix: MutableList<Quantomix>) {
 
     internal fun nextAttacker(): MutableList<Quantomix> {
         // sorts the Quantomix according to the speed. At the end of this function is the
         // fasts Quantomix the first in the list.
-        if (!(ListOfQuantomix.size >= 2)) {
+        if (listOfQuantomix.size < 2) {
             error("Not enough number of players")
         }
-        return ListOfQuantomix.sortedByDescending { it.battleStats.stats.speed }.toMutableList()
+        return listOfQuantomix.sortedByDescending { it.battleStats.stats.speed }.toMutableList()
     }
 
     private fun formulaAttackForce(attackDamage: Int, attackValue: Int, defense: Int, multiFactor: Double): Int {
         val damage = (attackDamage * attackValue * multiFactor) / ((defense / 100 + 1) * 100)
-
         return damage.toInt()
     }
 
@@ -90,18 +89,25 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
             val target = attacker.battleStats.target ?: continue
 
             val power = if (effectiv != null) {
-                attackPower(attacker, effectiv[indexEffectivityList!!], effectiv[indexEffectivityList + 1])
+                attackPower(
+                    attacker,
+                    effectiv[requireNotNull(indexEffectivityList)],
+                    effectiv[indexEffectivityList + 1]
+                )
             } else {
                 attackPower(attacker)
             }
-            println("Vor der Attacke: Quantomix KP = ${target.stats.kp}, BattleStats KP = ${target.battleStats.stats.kp}")
             if (power >= target.battleStats.stats.kp) {
                 target.battleStats.newKp(power)
                 attackOrder.remove(target)
             } else {
                 target.battleStats.newKp(power)
+                if (requireNotNull(attacker.battleStats.nextAttack).buff == true) {
+                    buffsAndDebuffs(requireNotNull(attacker.battleStats.nextAttack), attacker)
+                } else {
+                    buffsAndDebuffs(requireNotNull(attacker.battleStats.nextAttack), target)
+                }
             }
-            println("Nach der Attacke: Quantomix KP = ${target.stats.kp}, BattleStats KP = ${target.battleStats.stats.kp}")
             indexEffectivityList?.let { indexEffectivityList++ }
         }
         return attackOrder

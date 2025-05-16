@@ -57,6 +57,77 @@ class BattleTests : AnnotationSpec() {
     }
 
     @Test
+    fun `BattleTest with other Quantomix and special Attack Type 1`() {
+        val type1 = Typ("Feuer")
+        val type2 = Typ("Flug")
+        val type3 = Typ("Normal")
+        val attack = Attack("Pflücker", Typ("Flug"), 40, 100)
+        val attacks = listOf(attack)
+        val statsGlurak = Stats(78, 84, 78, 109, 85, 100)
+        val statsTauboss = Stats(83, 80, 75, 70, 70, 101)
+        val glurak = Quantomix("Glurak", type1, type2, statsGlurak, attacks)
+        val tauboss = Quantomix("Tauboss", type3, type2, statsTauboss, attacks)
+        glurak.battleStats.nextAttack = attack
+        glurak.battleStats.target = tauboss
+        tauboss.battleStats.nextAttack = attack
+        tauboss.battleStats.target = glurak
+        val battle = Battle(mutableListOf(glurak, tauboss))
+        battle.start(listOf(1.0, 1.0, 1.0, 1.0))
+        Assertions.assertThat(glurak.battleStats.stats.kp).isEqualTo(50)
+        Assertions.assertThat(glurak.stats.kp).isEqualTo(78)
+        Assertions.assertThat(tauboss.battleStats.stats.kp).isEqualTo(40)
+        Assertions.assertThat(tauboss.stats.kp).isEqualTo(83)
+    }
+
+    @Test
+    fun `BattleTest extrem effectiviness and less effectiviness`() {
+        val type1 = Typ("Feuer")
+        val type2 = Typ("Flug")
+        val type3 = Typ("Pflanze")
+        val type4 = Typ("Psycho")
+        val attack = Attack("Glut", Typ("Feuer"), 20, 100)
+        val attacks = listOf(attack)
+        val statsGlurak = Stats(78, 64, 58, 80, 65, 80)
+        val statsOwei = Stats(60, 40, 80, 60, 45, 40)
+        val glurak = Quantomix("Glurak", type1, type2, statsGlurak, attacks)
+        val owei = Quantomix("Owei", type3, type4, statsOwei, attacks)
+        glurak.battleStats.nextAttack = attack
+        glurak.battleStats.target = owei
+        owei.battleStats.nextAttack = attack
+        owei.battleStats.target = glurak
+        val battle = Battle(mutableListOf(glurak, owei))
+        battle.start(listOf(2.0, 1.0, 0.5, 1.0))
+        Assertions.assertThat(glurak.battleStats.stats.kp).isEqualTo(70)
+        Assertions.assertThat(glurak.stats.kp).isEqualTo(78)
+        Assertions.assertThat(owei.battleStats.stats.kp).isEqualTo(28)
+        Assertions.assertThat(owei.stats.kp).isEqualTo(60)
+    }
+
+    @Test
+    fun `BattleTest extrem effectiviness and less effectiviness with data from table`() {
+        val type1 = Typ("Feuer")
+        val type2 = Typ("Flug")
+        val type3 = Typ("Pflanze")
+        val attack = Attack("Glut", Typ("Feuer"), 20, 100)
+        val attacks = listOf(attack)
+        val statsGlurak = Stats(78, 64, 58, 80, 65, 80)
+        val statsOwei = Stats(60, 40, 80, 60, 45, 40)
+        val glurak = Quantomix("Glurak", type1, type2, statsGlurak, attacks)
+        val owei = Quantomix("Owei", type3, null, statsOwei, attacks)
+        glurak.battleStats.nextAttack = attack
+        glurak.battleStats.target = owei
+        owei.battleStats.nextAttack = attack
+        owei.battleStats.target = glurak
+        val battle = Battle(mutableListOf(glurak, owei))
+        battle.start()
+        Assertions.assertThat(glurak.battleStats.stats.kp).isEqualTo(70)
+        Assertions.assertThat(glurak.stats.kp).isEqualTo(78)
+        Assertions.assertThat(owei.battleStats.stats.kp).isEqualTo(28)
+        Assertions.assertThat(owei.stats.kp).isEqualTo(60)
+        Assertions.assertThat(battle.start()).isNotEmpty
+    }
+
+    @Test
     fun `BattleTest not effective`() {
         val type1 = Typ("Feuer")
         val type2 = Typ("Flug")
@@ -132,7 +203,7 @@ class BattleTests : AnnotationSpec() {
     }
 
     @Test
-    fun `Test Attack with damage and the effective the Targets stats are debuffed after attack`() {
+    fun `Test Attack with damage and debuff`() {
         val attack = Attack("Direkter Treffer", Typ("Geist"), 100, 100, false, Stats(0, 10, 5, 15, 8, 20))
         val type = Typ("Normal")
         val statsQuantomix = Stats(100, 100, 100, 100, 100, 100)
@@ -158,5 +229,92 @@ class BattleTests : AnnotationSpec() {
         Assertions.assertThat(quantomix2.battleStats.stats.specialDefense)
             .isEqualTo(quantomix2.stats.specialDefense - 8)
         Assertions.assertThat(quantomix2.battleStats.stats.speed).isEqualTo(quantomix2.stats.speed - 20)
+    }
+
+    @Test
+    fun `Test Debuff without Attackdamage`() {
+        val attack = Attack("Direkter Treffer", Typ("Geist"), 0, 100, false, Stats(0, 10, 5, 15, 8, 20))
+        val type = Typ("Normal")
+        val statsQuantomix = Stats(100, 100, 100, 100, 100, 100)
+        val quantomix1 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
+        val quantomix2 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
+        quantomix1.battleStats.nextAttack = attack
+        quantomix1.battleStats.target = quantomix2
+        quantomix2.battleStats.nextAttack = attack
+        quantomix2.battleStats.target = quantomix1
+        val battle = Battle(mutableListOf(quantomix1, quantomix2))
+        battle.start()
+        Assertions.assertThat(quantomix1.battleStats.stats.kp).isEqualTo(100)
+        Assertions.assertThat(quantomix1.battleStats.stats.attack).isEqualTo(quantomix1.stats.attack - 10)
+        Assertions.assertThat(quantomix1.battleStats.stats.specialAttack).isEqualTo(quantomix1.stats.specialAttack - 15)
+        Assertions.assertThat(quantomix1.battleStats.stats.defense).isEqualTo(quantomix1.stats.defense - 5)
+        Assertions.assertThat(quantomix1.battleStats.stats.specialDefense)
+            .isEqualTo(quantomix1.stats.specialDefense - 8)
+        Assertions.assertThat(quantomix1.battleStats.stats.speed).isEqualTo(quantomix1.stats.speed - 20)
+        Assertions.assertThat(quantomix2.battleStats.stats.kp).isEqualTo(100)
+        Assertions.assertThat(quantomix2.battleStats.stats.attack).isEqualTo(quantomix2.stats.attack - 10)
+        Assertions.assertThat(quantomix2.battleStats.stats.specialAttack).isEqualTo(quantomix2.stats.specialAttack - 15)
+        Assertions.assertThat(quantomix2.battleStats.stats.defense).isEqualTo(quantomix2.stats.defense - 5)
+        Assertions.assertThat(quantomix2.battleStats.stats.specialDefense)
+            .isEqualTo(quantomix2.stats.specialDefense - 8)
+        Assertions.assertThat(quantomix2.battleStats.stats.speed).isEqualTo(quantomix2.stats.speed - 20)
+    }
+
+    @Test
+    fun `Test Buff of the attacker`() {
+        val attack = Attack("Direkter Treffer", Typ("Geist"), 0, 100, true, Stats(0, 10, 5, 15, 8, 20))
+        val type = Typ("Normal")
+        val statsQuantomix = Stats(100, 100, 100, 100, 100, 100)
+        val quantomix1 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
+        val quantomix2 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
+        quantomix1.battleStats.nextAttack = attack
+        quantomix1.battleStats.target = quantomix2
+        quantomix2.battleStats.nextAttack = attack
+        quantomix2.battleStats.target = quantomix1
+        val battle = Battle(mutableListOf(quantomix1, quantomix2))
+        battle.start()
+        Assertions.assertThat(quantomix1.battleStats.stats.kp).isEqualTo(100)
+        Assertions.assertThat(quantomix1.battleStats.stats.attack).isEqualTo(quantomix1.stats.attack + 10)
+        Assertions.assertThat(quantomix1.battleStats.stats.specialAttack).isEqualTo(quantomix1.stats.specialAttack + 15)
+        Assertions.assertThat(quantomix1.battleStats.stats.defense).isEqualTo(quantomix1.stats.defense + 5)
+        Assertions.assertThat(quantomix1.battleStats.stats.specialDefense)
+            .isEqualTo(quantomix1.stats.specialDefense + 8)
+        Assertions.assertThat(quantomix1.battleStats.stats.speed).isEqualTo(quantomix1.stats.speed + 20)
+        Assertions.assertThat(quantomix2.battleStats.stats.kp).isEqualTo(100)
+        Assertions.assertThat(quantomix2.battleStats.stats.attack).isEqualTo(quantomix2.stats.attack + 10)
+        Assertions.assertThat(quantomix2.battleStats.stats.specialAttack).isEqualTo(quantomix2.stats.specialAttack + 15)
+        Assertions.assertThat(quantomix2.battleStats.stats.defense).isEqualTo(quantomix2.stats.defense + 5)
+        Assertions.assertThat(quantomix2.battleStats.stats.specialDefense)
+            .isEqualTo(quantomix2.stats.specialDefense + 8)
+        Assertions.assertThat(quantomix2.battleStats.stats.speed).isEqualTo(quantomix2.stats.speed + 20)
+    }
+
+    @Test
+    fun `Test Attack with damage and buff`() {
+        val attack = Attack("Direkter Treffer", Typ("Geist"), 100, 100, true, Stats(0, 10, 5, 15, 8, 20))
+        val type = Typ("Normal")
+        val statsQuantomix = Stats(100, 100, 100, 100, 100, 100)
+        val quantomix1 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
+        val quantomix2 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
+        quantomix1.battleStats.nextAttack = attack
+        quantomix1.battleStats.target = quantomix2
+        quantomix2.battleStats.nextAttack = attack
+        quantomix2.battleStats.target = quantomix1
+        val battle = Battle(mutableListOf(quantomix1, quantomix2))
+        battle.start()
+        Assertions.assertThat(quantomix1.battleStats.stats.kp).isEqualTo(50)
+        Assertions.assertThat(quantomix1.battleStats.stats.attack).isEqualTo(quantomix1.stats.attack + 10)
+        Assertions.assertThat(quantomix1.battleStats.stats.specialAttack).isEqualTo(quantomix1.stats.specialAttack + 15)
+        Assertions.assertThat(quantomix1.battleStats.stats.defense).isEqualTo(quantomix1.stats.defense + 5)
+        Assertions.assertThat(quantomix1.battleStats.stats.specialDefense)
+            .isEqualTo(quantomix1.stats.specialDefense + 8)
+        Assertions.assertThat(quantomix1.battleStats.stats.speed).isEqualTo(quantomix1.stats.speed + 20)
+        Assertions.assertThat(quantomix2.battleStats.stats.kp).isEqualTo(50)
+        Assertions.assertThat(quantomix2.battleStats.stats.attack).isEqualTo(quantomix2.stats.attack + 10)
+        Assertions.assertThat(quantomix2.battleStats.stats.specialAttack).isEqualTo(quantomix2.stats.specialAttack + 15)
+        Assertions.assertThat(quantomix2.battleStats.stats.defense).isEqualTo(quantomix2.stats.defense + 5)
+        Assertions.assertThat(quantomix2.battleStats.stats.specialDefense)
+            .isEqualTo(quantomix2.stats.specialDefense + 8)
+        Assertions.assertThat(quantomix2.battleStats.stats.speed).isEqualTo(quantomix2.stats.speed + 20)
     }
 }
