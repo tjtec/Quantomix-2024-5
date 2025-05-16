@@ -5,6 +5,7 @@ import hwr.oop.quantomix.objects.Typ
 class Attack (
     val attackName: String,
     val type: Typ,
-    val damage: Int?,
-    val damageQuote: Int?,
+    val damage: Int,
+    val damageQuote: Int,
+    val changeStats: Stats? = null,
 )

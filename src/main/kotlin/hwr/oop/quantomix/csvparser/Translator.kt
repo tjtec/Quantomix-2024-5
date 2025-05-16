@@ -1,6 +1,7 @@
 package hwr.oop.quantomix.csvparser
 
 import hwr.oop.quantomix.fight.objects.Attack
+import hwr.oop.quantomix.fight.objects.Stats
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 import hwr.oop.quantomix.objects.Typ
@@ -27,16 +28,19 @@ class Translator {
         speed: String,
         attacks: List<Attack>
     ): Quantomix {
-        return Quantomix(
-            name,
-            Typ(typ1),
-            Typ(typ2),
+        val stats = Stats(
             kp.toInt(),
             attack.toInt(),
             defense.toInt(),
             specialAttack.toInt(),
             specialDefense.toInt(),
-            speed.toInt(),
+            speed.toInt()
+        )
+        return Quantomix(
+            name,
+            Typ(typ1),
+            Typ(typ2),
+            stats,
             attacks
         )
     }

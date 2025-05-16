@@ -12,12 +12,7 @@ class Rounds(val trainer: List<Coach>) {
             val attack = askForAttack(currentPlayer)
             val target = askForTarget(currentPlayer)
             val stats = BattleStats(
-                currentPlayer.quantomixTeam[0].kp,
-                currentPlayer.quantomixTeam[0].attack,
-                currentPlayer.quantomixTeam[0].defense,
-                currentPlayer.quantomixTeam[0].specialAttack,
-                currentPlayer.quantomixTeam[0].specialDefense,
-                currentPlayer.quantomixTeam[0].speed,
+                currentPlayer.quantomixTeam[0].stats,
                 target,
                 attack,
                 currentPlayer

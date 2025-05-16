@@ -12,7 +12,7 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
         if (!(ListOfQuantomix.size >= 2)) {
             error("Not enough number of players")
         }
-        return ListOfQuantomix.sortedByDescending { it.battleStats.battleSpeed }.toMutableList()
+        return ListOfQuantomix.sortedByDescending { it.battleStats.stats.speed }.toMutableList()
     }
 
     private fun formulaAttackForce(attackDamage: Int, attackValue: Int, defense: Int, multiFactor: Double): Int {
@@ -27,15 +27,15 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
         when (requireNotNull(attack).type.name == nextAttacker.typ1.name || (nextAttacker.typ2 != null && attack.type.name == nextAttacker.typ2.name)) {
             true -> return formulaAttackForce(
                 requireNotNull(attack.damage),
-                nextAttacker.battleStats.battleSpecialAttack,
-                requireNotNull(nextAttacker.battleStats.target).battleStats.battleSpecialDefense,
+                nextAttacker.battleStats.stats.specialAttack,
+                requireNotNull(nextAttacker.battleStats.target).battleStats.stats.specialDefense,
                 formulaEffectivity(damageDealer, effectiv1, effectiv2)
             )
 
             false -> return formulaAttackForce(
                 requireNotNull(attack.damage),
-                nextAttacker.attack,
-                requireNotNull(nextAttacker.battleStats.target).battleStats.battleDefense,
+                nextAttacker.stats.attack,
+                requireNotNull(nextAttacker.battleStats.target).battleStats.stats.defense,
                 effectivity(
                     requireNotNull(damageDealer.battleStats.target).typ1,
                     requireNotNull(damageDealer.battleStats.nextAttack).type,
@@ -73,31 +73,27 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
 
     fun start(effectiv: List<Double>? = null): List<Quantomix> {
         val attackOrder = nextAttacker()
-        var indexEffektivitieList = if (effectiv == null) null else 0
+        var indexEffectivityList = effectiv?.let { 0 }
+
         val iterator = attackOrder.iterator()
         while (iterator.hasNext()) {
-            val currentDamageDealer = iterator.next()
-            for (currentDamageReceiver in attackOrder) {
-                if (currentDamageDealer.battleStats.target == currentDamageReceiver) {
-                    val power = if (effectiv != null) {
-                        attackPower(
-                            currentDamageDealer,
-                            effectiv[requireNotNull(indexEffektivitieList)],
-                            effectiv[indexEffektivitieList + 1]
-                        )
-                    } else {
-                        attackPower(currentDamageDealer)
-                    }
-                    if (power >= currentDamageReceiver.battleStats.battleKp) {
-                        currentDamageReceiver.battleStats.newKp(power)
-                        attackOrder.remove(currentDamageReceiver)
-                    } else {
-                        currentDamageReceiver.battleStats.newKp(power)
-                    }
-                    indexEffektivitieList?.let { indexEffektivitieList++ }
-                    break
-                }
+            val attacker = iterator.next()
+            val target = attacker.battleStats.target ?: continue
+
+            val power = if (effectiv != null) {
+                attackPower(attacker, effectiv[indexEffectivityList!!], effectiv[indexEffectivityList + 1])
+            } else {
+                attackPower(attacker)
             }
+            println("Vor der Attacke: Quantomix KP = ${target.stats.kp}, BattleStats KP = ${target.battleStats.stats.kp}")
+            if (power >= target.battleStats.stats.kp) {
+                target.battleStats.newKp(power)
+                attackOrder.remove(target)
+            } else {
+                target.battleStats.newKp(power)
+            }
+            println("Nach der Attacke: Quantomix KP = ${target.stats.kp}, BattleStats KP = ${target.battleStats.stats.kp}")
+            indexEffectivityList?.let { indexEffectivityList++ }
         }
         return attackOrder
     }
