@@ -116,16 +116,19 @@ class Rounds(val trainer: List<Coach>) {
         }
     }
 
-
-
-
-    private fun askForTarget(player: Coach): Quantomix {
-        TODO(
-            "Diese Funktion soll eine andere Funktion aufrufen, welche den " +
-                    "Spieler zum Ziel der Attacke befragt und dieses an diese Funktion übergibt. " +
-                    "Diese Funktion gibt dann das Ziel der Attacke  zurück"
-        )
+    private fun askForTarget(player: Coach, availableTargets: List<Quantomix>? = null): Quantomix {
+        return when {
+            availableTargets != null && availableTargets.isNotEmpty() -> availableTargets.first()
+            else -> getTargetFromUserInput()
+        }
     }
+
+     fun getTargetFromUserInput(): Quantomix {
+        TODO("Extern: die Benutzereingabe des Ziels in der CLI implementieren")
+    }
+
+
+
 
     private fun nextQuantomix(player: Coach): Quantomix? {
         TODO(
