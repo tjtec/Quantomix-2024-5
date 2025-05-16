@@ -91,6 +91,7 @@ class Rounds(val trainer: List<Coach>) {
     private fun getSelectedAttack(player: Coach, mutableListOfAttack: List<Attack>? = null): Attack {
         return when {
             mutableListOfAttack != null && mutableListOfAttack.isNotEmpty() -> mutableListOfAttack.first()
+            // Hier wird ein Platzhalter aufgerufen, der später durch eine tatsächliche Benutzereingabe ersetzt werden soll.
             else -> getAttackFromUserInput()
         }
     }
@@ -119,6 +120,7 @@ class Rounds(val trainer: List<Coach>) {
     private fun askForTarget(player: Coach, availableTargets: List<Quantomix>? = null): Quantomix {
         return when {
             availableTargets != null && availableTargets.isNotEmpty() -> availableTargets.first()
+            // Hier wird ein Platzhalter aufgerufen, der später durch eine tatsächliche Benutzereingabe ersetzt werden soll.
             else -> getTargetFromUserInput()
         }
     }
@@ -128,14 +130,22 @@ class Rounds(val trainer: List<Coach>) {
     }
 
 
-
-
     private fun nextQuantomix(player: Coach): Quantomix? {
-        TODO(
-            "Diese Funktion fragt, welches Quantomix als nächstes eingesetzt werden soll," +
-                    "(dies geschieht wie bei den obigen Funktionen). Ist kein Quantomix mehr übrig" +
-                    "soll diese Funktion null zurückgeben. Muss die BattleStats mitsetzen"
-        )
+        // Hier werden alle Quantomix gefiltert, die noch einsatzfähig sind.
+        val availableQuantomix = player.quantomixTeam.filter { it.kp > 0 }
+
+        return when {
+            // Hier wird das Pokémon mit den höchsten verbleibenden KP gewählt.
+            availableQuantomix.isNotEmpty() -> availableQuantomix.maxByOrNull { it.kp }
+
+            // Hier wird ein Platzhalter aufgerufen, der später durch eine tatsächliche Benutzereingabe ersetzt werden soll.
+            else -> getNextQuantomixFromUserInput(player)
+        }
+    }
+
+    // Platzhaltermethode für die zukünftige Benutzereingabe
+    fun getNextQuantomixFromUserInput(player: Coach): Quantomix? {
+        TODO("Extern: Implementiere die Benutzerinteraktion (z. B. über die CLI), um das nächste Quantomix auszuwählen")
     }
 
     private fun doYouWantToChangeTheCurrentQuantomix(player: Coach): Quantomix {
@@ -144,7 +154,3 @@ class Rounds(val trainer: List<Coach>) {
     }
 }
 
-//TODO(
-//"Diese Funktion soll eine andere Funktion aufrufen, welche den " +
-//"Spieler zu dem Angriff befragt und dieses an diese Funktion übergibt. " +
-//"Diese Funktion gibt dann die Attacke zurück" )
