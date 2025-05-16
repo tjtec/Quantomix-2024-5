@@ -1,6 +1,5 @@
 package hwr.oop.quantomix.fight.logic
 
-import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import hwr.oop.quantomix.stats.GameData
@@ -16,20 +15,12 @@ class Battle(private var listOfQuantomix: MutableList<Quantomix>) {
         return listOfQuantomix.sortedByDescending { it.battleStats.stats.speed }.toMutableList()
     }
 
-    private fun formulaAttackForce(attackDamage: Int, attackValue: Int, defense: Int, multiFactor: Double): Int {
+    private fun formulaAttackForce(attackDamage: Int, attackValue: Int, defense: Int, multiFactor: Float): Int {
         val damage = (attackDamage * attackValue * multiFactor) / ((defense / 100 + 1) * 100)
         return damage.toInt()
     }
 
-    private fun buffsAndDebuffs(attack: Attack, quantomixWithStatsToChange: Quantomix) {
-        if (attack.buff != null) {
-            if (attack.changeStats != null) {
-                quantomixWithStatsToChange.battleStats.stats.BuffsDebuffs(attack.changeStats, attack.buff)
-            }
-        }
-    }
-
-    private fun attackPower(damageDealer: Quantomix, effectiv1: Double? = null, effectiv2: Double? = null): Int {
+    private fun attackPower(damageDealer: Quantomix, effectiv1: Float? = null, effectiv2: Float? = null): Int {
         val attack = damageDealer.battleStats.nextAttack
         val nextAttacker = damageDealer
         when (requireNotNull(attack).type.name == nextAttacker.typ1.name || (nextAttacker.typ2 != null && attack.type.name == nextAttacker.typ2.name)) {
@@ -53,7 +44,7 @@ class Battle(private var listOfQuantomix: MutableList<Quantomix>) {
         }
     }
 
-    private fun formulaEffectivity(damageDealer: Quantomix, effectiv1: Double?, effectiv2: Double?): Double {
+    private fun formulaEffectivity(damageDealer: Quantomix, effectiv1: Float?, effectiv2: Float?): Float {
         val target = damageDealer.battleStats.target
         val typ2 =
             requireNotNull(target).typ2 ?: Typ("0") // Setzt "0" als Standard, falls kein zweiter Typ vorhanden ist
@@ -62,30 +53,30 @@ class Battle(private var listOfQuantomix: MutableList<Quantomix>) {
         val eff2 = effectivity(typ2, requireNotNull(damageDealer.battleStats.nextAttack).type, effectiv2)
 
         return when {
-            eff1 * eff2 == 1.0 -> 1.0
+            eff1 * eff2 == 1.0f -> 1.0f
             eff1 >= eff2 -> eff1
             else -> eff2
         }
     }
 
-    private fun effectivity(quantomixType: Typ, attackTyp: Typ, effective: Double? = null): Double {
+    private fun effectivity(quantomixType: Typ, attackTyp: Typ, effective: Float? = null): Float {
         if (effective != null) {
             return effective
         } else {
             if (quantomixType.name == "0") {
-                return 1.0
+                return 1.0f
             }
             return GameData.getEffektivitaet(quantomixType.name, attackTyp.name)
         }
     }
 
-    fun start(effectiv: List<Double>? = null): List<Quantomix> {
+    fun start(effectiv: List<Float>? = null): List<Quantomix> {
         val attackOrder = nextAttacker()
         var indexEffectivityList = effectiv?.let { 0 }
 
-        val iterator = attackOrder.iterator()
-        while (iterator.hasNext()) {
-            val attacker = iterator.next()
+        var indexForAttackOrder = 0
+        while (attackOrder.size > indexForAttackOrder) {
+            val attacker = attackOrder[indexForAttackOrder]
             val target = attacker.battleStats.target ?: continue
 
             val power = if (effectiv != null) {
@@ -97,17 +88,16 @@ class Battle(private var listOfQuantomix: MutableList<Quantomix>) {
             } else {
                 attackPower(attacker)
             }
+            requireNotNull(attacker.battleStats.nextAttack).changeStats()
             if (power >= target.battleStats.stats.kp) {
                 target.battleStats.newKp(power)
                 attackOrder.remove(target)
+            } else if (attacker.battleStats.stats.kp == 0) {
+                attackOrder.remove(attacker)
             } else {
                 target.battleStats.newKp(power)
-                if (requireNotNull(attacker.battleStats.nextAttack).buff == true) {
-                    buffsAndDebuffs(requireNotNull(attacker.battleStats.nextAttack), attacker)
-                } else {
-                    buffsAndDebuffs(requireNotNull(attacker.battleStats.nextAttack), target)
-                }
             }
+            indexForAttackOrder += 1
             indexEffectivityList?.let { indexEffectivityList++ }
         }
         return attackOrder

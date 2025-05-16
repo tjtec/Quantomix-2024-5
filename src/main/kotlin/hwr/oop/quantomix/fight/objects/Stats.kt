@@ -21,18 +21,33 @@ class Stats(
 
     fun BuffsDebuffs(stats: Stats, buff: Boolean) {
         if (!buff) {
+            selfDamage(stats)
             newAttackValueDown(stats)
             newDefenseValueDown(stats)
             newSpecialAttackValueDown(stats)
             newSpecialDefenseValueDown(stats)
             newSpeedValueDown(stats)
         } else {
+            heal(stats)
             newAttackValueUp(stats)
             newDefenseValueUp(stats)
             newSpecialAttackValueUp(stats)
             newSpecialDefenseValueUp(stats)
             newSpeedValueUp(stats)
         }
+    }
+
+    private fun selfDamage(stats: Stats) {
+        val solution = this.kp - stats.kp
+        if (solution < 0) {
+            this.kp = 0
+        } else {
+            this.kp = solution
+        }
+    }
+
+    private fun heal(stats: Stats) {
+        this.kp += stats.kp
     }
 
     private fun newAttackValueDown(stats: Stats) {

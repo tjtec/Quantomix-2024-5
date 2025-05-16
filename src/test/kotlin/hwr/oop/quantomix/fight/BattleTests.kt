@@ -2,6 +2,7 @@ package hwr.oop.quantomix.fight
 
 import hwr.oop.quantomix.fight.logic.Battle
 import hwr.oop.quantomix.fight.objects.Attack
+import hwr.oop.quantomix.fight.objects.Effects
 import hwr.oop.quantomix.fight.objects.Stats
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
@@ -25,7 +26,7 @@ class BattleTests : AnnotationSpec() {
         schillok.battleStats.nextAttack = attack
         schillok.battleStats.target = glurak
         val battle = Battle(mutableListOf(glurak, schillok))
-        battle.start(listOf(1.0, 1.0, 1.0, 1.0))
+        battle.start(listOf(1.0f, 1.0f, 1.0f, 1.0f))
         //Assertions.assertThat(glurak.battleStats.stats.kp).isEqualTo(53)
         Assertions.assertThat(glurak.battleStats.stats.kp).isLessThan(glurak.stats.kp)
         Assertions.assertThat(glurak.stats.kp).isEqualTo(78)
@@ -49,7 +50,7 @@ class BattleTests : AnnotationSpec() {
         schillok.battleStats.nextAttack = attack
         schillok.battleStats.target = glurak
         val battle = Battle(mutableListOf(glurak, schillok))
-        battle.start(listOf(4.0, 0.25, 1.0, 1.0))
+        battle.start(listOf(4.0f, 0.25f, 1.0f, 1.0f))
         Assertions.assertThat(glurak.battleStats.stats.kp).isEqualTo(53)
         Assertions.assertThat(glurak.stats.kp).isEqualTo(78)
         Assertions.assertThat(schillok.battleStats.stats.kp).isEqualTo(16)
@@ -72,7 +73,7 @@ class BattleTests : AnnotationSpec() {
         tauboss.battleStats.nextAttack = attack
         tauboss.battleStats.target = glurak
         val battle = Battle(mutableListOf(glurak, tauboss))
-        battle.start(listOf(1.0, 1.0, 1.0, 1.0))
+        battle.start(listOf(1.0f, 1.0f, 1.0f, 1.0f))
         Assertions.assertThat(glurak.battleStats.stats.kp).isEqualTo(50)
         Assertions.assertThat(glurak.stats.kp).isEqualTo(78)
         Assertions.assertThat(tauboss.battleStats.stats.kp).isEqualTo(40)
@@ -96,7 +97,7 @@ class BattleTests : AnnotationSpec() {
         owei.battleStats.nextAttack = attack
         owei.battleStats.target = glurak
         val battle = Battle(mutableListOf(glurak, owei))
-        battle.start(listOf(2.0, 1.0, 0.5, 1.0))
+        battle.start(listOf(2.0f, 1.0f, 0.5f, 1.0f))
         Assertions.assertThat(glurak.battleStats.stats.kp).isEqualTo(70)
         Assertions.assertThat(glurak.stats.kp).isEqualTo(78)
         Assertions.assertThat(owei.battleStats.stats.kp).isEqualTo(28)
@@ -143,7 +144,7 @@ class BattleTests : AnnotationSpec() {
         rattfratz.battleStats.nextAttack = attack
         rattfratz.battleStats.target = glurak
         val battle = Battle(mutableListOf(glurak, rattfratz))
-        battle.start(listOf(0.0, 0.0, 1.0, 1.0))
+        battle.start(listOf(0.0f, 0.0f, 1.0f, 1.0f))
         Assertions.assertThat(glurak.battleStats.stats.kp).isEqualTo(46)
         Assertions.assertThat(glurak.stats.kp).isEqualTo(78)
         Assertions.assertThat(rattfratz.battleStats.stats.kp).isEqualTo(55)
@@ -167,7 +168,7 @@ class BattleTests : AnnotationSpec() {
         owei.battleStats.nextAttack = attack
         owei.battleStats.target = glurak
         val battle = Battle(mutableListOf(glurak, owei))
-        battle.start(listOf(2.0, 1.0))
+        battle.start(listOf(2.0f, 1.0f))
         Assertions.assertThat(glurak.battleStats.stats.kp).isEqualTo(78)
         Assertions.assertThat(glurak.stats.kp).isEqualTo(78)
         Assertions.assertThat(owei.battleStats.stats.kp).isEqualTo(0)
@@ -204,14 +205,19 @@ class BattleTests : AnnotationSpec() {
 
     @Test
     fun `Test Attack with damage and debuff`() {
-        val attack = Attack("Direkter Treffer", Typ("Geist"), 100, 100, false, Stats(0, 10, 5, 15, 8, 20))
+        val attack1 =
+            Attack("Direkter Treffer", Typ("Geist"), 100, 100)
+        val attack2 =
+            Attack("Direkter Treffer", Typ("Geist"), 100, 100)
         val type = Typ("Normal")
         val statsQuantomix = Stats(100, 100, 100, 100, 100, 100)
-        val quantomix1 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
-        val quantomix2 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
-        quantomix1.battleStats.nextAttack = attack
+        val quantomix1 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack1))
+        val quantomix2 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack2))
+        attack1.effects = mutableListOf(Effects(false, Stats(0, 10, 5, 15, 8, 20), quantomix2))
+        attack2.effects = mutableListOf(Effects(false, Stats(0, 10, 5, 15, 8, 20), quantomix1))
+        quantomix1.battleStats.nextAttack = attack1
         quantomix1.battleStats.target = quantomix2
-        quantomix2.battleStats.nextAttack = attack
+        quantomix2.battleStats.nextAttack = attack2
         quantomix2.battleStats.target = quantomix1
         val battle = Battle(mutableListOf(quantomix1, quantomix2))
         battle.start()
@@ -233,14 +239,17 @@ class BattleTests : AnnotationSpec() {
 
     @Test
     fun `Test Debuff without Attackdamage`() {
-        val attack = Attack("Direkter Treffer", Typ("Geist"), 0, 100, false, Stats(0, 10, 5, 15, 8, 20))
+        val attack1 = Attack("Direkter Treffer", Typ("Geist"), 0, 100)
+        val attack2 = Attack("Direkter Treffer", Typ("Geist"), 0, 100)
         val type = Typ("Normal")
         val statsQuantomix = Stats(100, 100, 100, 100, 100, 100)
-        val quantomix1 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
-        val quantomix2 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
-        quantomix1.battleStats.nextAttack = attack
+        val quantomix1 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack1))
+        val quantomix2 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack2))
+        attack1.effects = mutableListOf(Effects(false, Stats(0, 10, 5, 15, 8, 20), quantomix2))
+        attack2.effects = mutableListOf(Effects(false, Stats(0, 10, 5, 15, 8, 20), quantomix1))
+        quantomix1.battleStats.nextAttack = attack1
         quantomix1.battleStats.target = quantomix2
-        quantomix2.battleStats.nextAttack = attack
+        quantomix2.battleStats.nextAttack = attack2
         quantomix2.battleStats.target = quantomix1
         val battle = Battle(mutableListOf(quantomix1, quantomix2))
         battle.start()
@@ -262,14 +271,17 @@ class BattleTests : AnnotationSpec() {
 
     @Test
     fun `Test Buff of the attacker`() {
-        val attack = Attack("Direkter Treffer", Typ("Geist"), 0, 100, true, Stats(0, 10, 5, 15, 8, 20))
+        val attack1 = Attack("Direkter Treffer", Typ("Geist"), 0, 100)
+        val attack2 = Attack("Direkter Treffer", Typ("Geist"), 0, 100)
         val type = Typ("Normal")
         val statsQuantomix = Stats(100, 100, 100, 100, 100, 100)
-        val quantomix1 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
-        val quantomix2 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
-        quantomix1.battleStats.nextAttack = attack
+        val quantomix1 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack1))
+        val quantomix2 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack2))
+        attack1.effects = mutableListOf(Effects(true, Stats(0, 10, 5, 15, 8, 20), quantomix2))
+        attack2.effects = mutableListOf(Effects(true, Stats(0, 10, 5, 15, 8, 20), quantomix1))
+        quantomix1.battleStats.nextAttack = attack1
         quantomix1.battleStats.target = quantomix2
-        quantomix2.battleStats.nextAttack = attack
+        quantomix2.battleStats.nextAttack = attack2
         quantomix2.battleStats.target = quantomix1
         val battle = Battle(mutableListOf(quantomix1, quantomix2))
         battle.start()
@@ -291,14 +303,17 @@ class BattleTests : AnnotationSpec() {
 
     @Test
     fun `Test Attack with damage and buff`() {
-        val attack = Attack("Direkter Treffer", Typ("Geist"), 100, 100, true, Stats(0, 10, 5, 15, 8, 20))
+        val attack1 = Attack("Direkter Treffer", Typ("Geist"), 100, 100)
+        val attack2 = Attack("Direkter Treffer", Typ("Geist"), 100, 100)
         val type = Typ("Normal")
         val statsQuantomix = Stats(100, 100, 100, 100, 100, 100)
-        val quantomix1 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
-        val quantomix2 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
-        quantomix1.battleStats.nextAttack = attack
+        val quantomix1 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack1))
+        val quantomix2 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack2))
+        attack1.effects = mutableListOf(Effects(true, Stats(0, 10, 5, 15, 8, 20), quantomix2))
+        attack2.effects = mutableListOf(Effects(true, Stats(0, 10, 5, 15, 8, 20), quantomix1))
+        quantomix1.battleStats.nextAttack = attack1
         quantomix1.battleStats.target = quantomix2
-        quantomix2.battleStats.nextAttack = attack
+        quantomix2.battleStats.nextAttack = attack2
         quantomix2.battleStats.target = quantomix1
         val battle = Battle(mutableListOf(quantomix1, quantomix2))
         battle.start()
@@ -316,5 +331,66 @@ class BattleTests : AnnotationSpec() {
         Assertions.assertThat(quantomix2.battleStats.stats.specialDefense)
             .isEqualTo(quantomix2.stats.specialDefense + 8)
         Assertions.assertThat(quantomix2.battleStats.stats.speed).isEqualTo(quantomix2.stats.speed + 20)
+    }
+
+    @Test
+    fun `Test Attack and attacker is dead`() {
+        val attack1 = Attack("Direkter Treffer", Typ("Geist"), 100, 100)
+        val attack2 = Attack("Direkter Treffer", Typ("Geist"), 100, 100)
+        val type = Typ("Normal")
+        val statsQuantomix1 = Stats(100, 100, 100, 100, 100, 99)
+        val statsQuantomix2 = Stats(100, 100, 100, 100, 100, 100)
+        val quantomix1 = Quantomix("With no 2.Typ", type, null, statsQuantomix1, listOf(attack1))
+        val quantomix2 = Quantomix("With no 2.Typ", type, null, statsQuantomix2, listOf(attack2))
+        attack1.effects = mutableListOf(Effects(false, Stats(100, 0, 0, 0, 0, 0), quantomix2))
+        attack2.effects = mutableListOf(Effects(false, Stats(100, 0, 0, 0, 0, 0), quantomix1))
+        quantomix1.battleStats.nextAttack = attack1
+        quantomix1.battleStats.target = quantomix2
+        quantomix2.battleStats.nextAttack = attack2
+        quantomix2.battleStats.target = quantomix1
+        val battle = Battle(mutableListOf(quantomix1, quantomix2))
+        battle.start()
+        Assertions.assertThat(quantomix1.battleStats.stats.kp).isEqualTo(0)
+        Assertions.assertThat(quantomix2.battleStats.stats.kp).isEqualTo(100)
+    }
+
+    @Test
+    fun `Test with Attack with selfdamage & heal and buff & debuff`() {
+        val type = Typ("Normal")
+        val statsQuantomix1 = Stats(100, 100, 100, 100, 100, 99)
+        val statsQuantomix2 = Stats(100, 100, 100, 100, 100, 100)
+        val attack1 = Attack("Selfdamage & buff", Typ("Geist"), 50, 100)
+        val attack2 = Attack("Heal and Debuff", Typ("Geist"), 100, 100)
+        val quantomix1 = Quantomix("Heal", type, null, statsQuantomix1, listOf(attack1))
+        val quantomix2 = Quantomix("Self damage", type, null, statsQuantomix2, listOf(attack2))
+        val effects1 = Effects(true, Stats(25, 0, 10, 0, 20, 0), quantomix1)
+        val effects111 = Effects(false, Stats(0, 0, 0, 20, 0, 25), quantomix1)
+        val effects22 = Effects(false, Stats(0, 10, 0, 0, 0, 0), quantomix1)
+        val effects2 = Effects(false, Stats(25, 0, 10, 0, 0, 0), quantomix2)
+        val effects11 = Effects(true, Stats(0, 10, 0, 0, 8, 0), quantomix2)
+        val effects222 = Effects(true, Stats(0, 0, 0, 20, 0, 25), quantomix2)
+        attack1.effects = mutableListOf(effects1, effects11, effects111)
+        attack2.effects = mutableListOf(effects2, effects22, effects222)
+        quantomix1.battleStats.nextAttack = attack1
+        quantomix1.battleStats.target = quantomix2
+        quantomix2.battleStats.nextAttack = attack2
+        quantomix2.battleStats.target = quantomix1
+        val battle = Battle(mutableListOf(quantomix1, quantomix2))
+        battle.start()
+        Assertions.assertThat(quantomix1.battleStats.stats.kp).isEqualTo(75)
+        Assertions.assertThat(quantomix1.battleStats.stats.attack).isEqualTo(quantomix1.stats.attack - 10)
+        Assertions.assertThat(quantomix1.battleStats.stats.specialAttack).isEqualTo(quantomix1.stats.specialAttack - 20)
+        Assertions.assertThat(quantomix1.battleStats.stats.defense).isEqualTo(quantomix1.stats.defense + 10)
+        Assertions.assertThat(quantomix1.battleStats.stats.specialDefense)
+            .isEqualTo(quantomix1.stats.specialDefense + 20)
+        Assertions.assertThat(quantomix1.battleStats.stats.speed).isEqualTo(quantomix1.stats.speed - 25)
+        Assertions.assertThat(quantomix2.battleStats.stats.kp).isEqualTo(25)
+        Assertions.assertThat(quantomix2.battleStats.stats.attack).isEqualTo(quantomix2.stats.attack + 10)
+        Assertions.assertThat(quantomix2.battleStats.stats.specialAttack).isEqualTo(quantomix2.stats.specialAttack + 20)
+        Assertions.assertThat(quantomix2.battleStats.stats.defense).isEqualTo(quantomix2.stats.defense - 10)
+        Assertions.assertThat(quantomix2.battleStats.stats.specialDefense)
+            .isEqualTo(quantomix2.stats.specialDefense + 8)
+        Assertions.assertThat(quantomix2.battleStats.stats.speed).isEqualTo(quantomix2.stats.speed + 25)
+
     }
 }
