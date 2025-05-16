@@ -148,9 +148,53 @@ class Rounds(val trainer: List<Coach>) {
         TODO("Extern: Implementiere die Benutzerinteraktion (z. B. über die CLI), um das nächste Quantomix auszuwählen")
     }
 
+
     private fun doYouWantToChangeTheCurrentQuantomix(player: Coach): Quantomix {
-        TODO("jeder Spieler wird gefragt, ob er mit dem Eingesetzten Quantomix weiterkämpfen möchte")
-        //askPlayer(currentQuantomix.battleStats!!.trainer, true) um die BattleStats entsprechend zu setzen
+        val active = player.quantomixTeam.first()
+
+
+        // Falls der aktive Quantomix bereits ausgeschieden ist, muss gewechselt werden.
+        // Andernfalls wird eine Entscheidung durch den User getroffen – aktuell als Platzhalter durch eine separate Funktion.
+        val shouldSwitch = when {
+            active.kp <= 0 -> true
+            else -> getSwitchDecisionFromUserInput(player)
+        }
+
+        return if (!shouldSwitch) {
+            active
+        } else {
+                // ermittelt alle Alternativen, die nicht das aktive Quantomix sind und noch KP > 0 haben.
+                val alternatives = player.quantomixTeam.filter { it != active && it.kp > 0 }
+                // Wenn keine Alternative verfügbar ist, bleibt der aktive Quantomix erhalten.
+                val selected = if (alternatives.isEmpty()) {
+                    active
+                } else { getNextQuantomixFromUserInput(player) ?: active
+                }
+
+                // Aktualisiere für das ausgewählte Quantomix die BattleStats,
+                // damit die Kampfwerte (KP, Angriff, Verteidigung etc.) den Basiswerten entsprechen.
+                selected.battleStats = BattleStats(
+                    battleKp = selected.kp,
+                    battleAttack = selected.attack,
+                    battleDefense = selected.defense,
+                    battleSpecialAttack = selected.specialAttack,
+                    battleSpecialDefense = selected.specialDefense,
+                    battleSpeed = selected.speed,
+                    target = selected,         // Hier als Dummy-Ziel; später kann eine zielgerichtetere Logik folgen.
+                    nextAttack = selected.attacks.first(), // Dummy-Angriff als Platzhalter.
+                    trainer = player
+                )
+                selected
+            }
+        }
+    private fun getSwitchDecisionFromUserInput(player: Coach): Boolean {
+        TODO("Platzhalter: Hier soll später die Entscheidung (true/false) per Benutzereingabe abgefragt werden")
+
     }
+
 }
+
+
+
+
 
