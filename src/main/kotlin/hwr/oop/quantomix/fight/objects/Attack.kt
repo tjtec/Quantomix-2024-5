@@ -7,5 +7,6 @@ class Attack (
     val type: Typ,
     val damage: Int,
     val damageQuote: Int,
+    val buff: Boolean? = null,
     val changeStats: Stats? = null,
 )

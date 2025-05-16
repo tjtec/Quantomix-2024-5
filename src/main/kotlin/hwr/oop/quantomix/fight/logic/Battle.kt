@@ -1,5 +1,6 @@
 package hwr.oop.quantomix.fight.logic
 
+import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import hwr.oop.quantomix.stats.GameData
@@ -17,11 +18,19 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
 
     private fun formulaAttackForce(attackDamage: Int, attackValue: Int, defense: Int, multiFactor: Double): Int {
         val damage = (attackDamage * attackValue * multiFactor) / ((defense / 100 + 1) * 100)
+
         return damage.toInt()
     }
 
+    private fun buffsAndDebuffs(attack: Attack, quantomixWithStatsToChange: Quantomix) {
+        if (attack.buff != null) {
+            if (attack.changeStats != null) {
+                quantomixWithStatsToChange.battleStats.stats.BuffsDebuffs(attack.changeStats, attack.buff)
+            }
+        }
+    }
+
     private fun attackPower(damageDealer: Quantomix, effectiv1: Double? = null, effectiv2: Double? = null): Int {
-        //ToDo: Attacken ohne Schaden miteinbeziehen?
         val attack = damageDealer.battleStats.nextAttack
         val nextAttacker = damageDealer
         when (requireNotNull(attack).type.name == nextAttacker.typ1.name || (nextAttacker.typ2 != null && attack.type.name == nextAttacker.typ2.name)) {

@@ -130,4 +130,33 @@ class BattleTests : AnnotationSpec() {
         Assertions.assertThat(quantomix1.battleStats.stats.kp).isEqualTo(50)
         Assertions.assertThat(quantomix2.battleStats.stats.kp).isEqualTo(50)
     }
+
+    @Test
+    fun `Test Attack with damage and the effective the Targets stats are debuffed after attack`() {
+        val attack = Attack("Direkter Treffer", Typ("Geist"), 100, 100, false, Stats(0, 10, 5, 15, 8, 20))
+        val type = Typ("Normal")
+        val statsQuantomix = Stats(100, 100, 100, 100, 100, 100)
+        val quantomix1 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
+        val quantomix2 = Quantomix("With no 2.Typ", type, null, statsQuantomix, listOf(attack))
+        quantomix1.battleStats.nextAttack = attack
+        quantomix1.battleStats.target = quantomix2
+        quantomix2.battleStats.nextAttack = attack
+        quantomix2.battleStats.target = quantomix1
+        val battle = Battle(mutableListOf(quantomix1, quantomix2))
+        battle.start()
+        Assertions.assertThat(quantomix1.battleStats.stats.kp).isEqualTo(50)
+        Assertions.assertThat(quantomix1.battleStats.stats.attack).isEqualTo(quantomix1.stats.attack - 10)
+        Assertions.assertThat(quantomix1.battleStats.stats.specialAttack).isEqualTo(quantomix1.stats.specialAttack - 15)
+        Assertions.assertThat(quantomix1.battleStats.stats.defense).isEqualTo(quantomix1.stats.defense - 5)
+        Assertions.assertThat(quantomix1.battleStats.stats.specialDefense)
+            .isEqualTo(quantomix1.stats.specialDefense - 8)
+        Assertions.assertThat(quantomix1.battleStats.stats.speed).isEqualTo(quantomix1.stats.speed - 20)
+        Assertions.assertThat(quantomix2.battleStats.stats.kp).isEqualTo(50)
+        Assertions.assertThat(quantomix2.battleStats.stats.attack).isEqualTo(quantomix2.stats.attack - 10)
+        Assertions.assertThat(quantomix2.battleStats.stats.specialAttack).isEqualTo(quantomix2.stats.specialAttack - 15)
+        Assertions.assertThat(quantomix2.battleStats.stats.defense).isEqualTo(quantomix2.stats.defense - 5)
+        Assertions.assertThat(quantomix2.battleStats.stats.specialDefense)
+            .isEqualTo(quantomix2.stats.specialDefense - 8)
+        Assertions.assertThat(quantomix2.battleStats.stats.speed).isEqualTo(quantomix2.stats.speed - 20)
+    }
 }
