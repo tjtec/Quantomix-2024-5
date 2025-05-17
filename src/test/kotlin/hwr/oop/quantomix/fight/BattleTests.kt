@@ -4,6 +4,7 @@ import hwr.oop.quantomix.fight.logic.Battle
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.Effects
 import hwr.oop.quantomix.fight.objects.Stats
+import hwr.oop.quantomix.fight.objects.Status
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
@@ -27,7 +28,7 @@ class BattleTests : AnnotationSpec() {
         schillok.battleStats.target = glurak
         val battle = Battle(mutableListOf(glurak, schillok))
         battle.start(listOf(1.0f, 1.0f, 1.0f, 1.0f))
-        //Assertions.assertThat(glurak.battleStats.stats.kp).isEqualTo(53)
+        Assertions.assertThat(glurak.battleStats.stats.kp).isEqualTo(53)
         Assertions.assertThat(glurak.battleStats.stats.kp).isLessThan(glurak.stats.kp)
         Assertions.assertThat(glurak.stats.kp).isEqualTo(78)
         Assertions.assertThat(schillok.battleStats.stats.kp).isEqualTo(26)
@@ -371,7 +372,7 @@ class BattleTests : AnnotationSpec() {
         val effects222 = Effects(true, Stats(0, 0, 0, 20, 0, 25), quantomix2)
         attack1.effects = mutableListOf(effects1, effects11, effects111)
         attack2.effects = mutableListOf(effects2, effects22, effects222)
-        attack2.noDamage = true
+        attack2.status = Status(true)
         quantomix1.battleStats.nextAttack = attack1
         quantomix1.battleStats.target = quantomix2
         quantomix2.battleStats.nextAttack = attack2

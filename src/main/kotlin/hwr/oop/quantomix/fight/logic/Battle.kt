@@ -87,7 +87,7 @@ class Battle(private var listOfQuantomix: MutableList<Quantomix>) {
             attackPower(attacker)
         }
         requireNotNull(attacker.battleStats.nextAttack).changeStats(attacker.battleStats)
-        if (!target.battleStats.noDamage) {
+        if (!target.battleStats.status.noDamage) {
             if (power >= target.battleStats.stats.kp) {
                 target.battleStats.newKp(power)
                 attackOrder.remove(target)
