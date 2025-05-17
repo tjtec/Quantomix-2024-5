@@ -12,7 +12,7 @@ import org.assertj.core.api.Assertions
 
 class RoundsTest: AnnotationSpec() {
 
-    /* @Test
+    @Test
      fun `Rounds with two trainers`() {
          val feuer= Typ("Feuer")
          val geist = Typ("Geist")
@@ -76,5 +76,5 @@ class RoundsTest: AnnotationSpec() {
         val winner= Rounds(listOf(trainer1, trainer2, trainer3, trainer4)).start(3)
         Assertions.assertThat(winner).isEqualTo(trainer1)
     }
-    */
+
 }
