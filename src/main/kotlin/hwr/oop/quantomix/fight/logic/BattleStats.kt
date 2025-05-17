@@ -10,6 +10,7 @@ class BattleStats(
     var target: Quantomix? = null,
     var nextAttack: Attack? = null,
     var trainer: Coach? = null,
+    var noDamage: Boolean = false,
 ) {
     fun newKp(damage: Int) {
         stats.kp = maxOf(0, stats.kp - damage)

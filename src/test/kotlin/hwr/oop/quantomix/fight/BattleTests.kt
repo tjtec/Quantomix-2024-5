@@ -355,11 +355,11 @@ class BattleTests : AnnotationSpec() {
     }
 
     @Test
-    fun `Test with Attack with selfdamage & heal and buff & debuff`() {
+    fun `Test with Attack with selfdamage & heal and buff & debuff and no damage`() {
         val type = Typ("Normal")
         val statsQuantomix1 = Stats(100, 100, 100, 100, 100, 99)
         val statsQuantomix2 = Stats(100, 100, 100, 100, 100, 100)
-        val attack1 = Attack("Selfdamage & buff", Typ("Geist"), 50, 100)
+        val attack1 = Attack("Selfdamage & buff", Typ("Geist"), 100, 100)
         val attack2 = Attack("Heal and Debuff", Typ("Geist"), 100, 100)
         val quantomix1 = Quantomix("Heal", type, null, statsQuantomix1, listOf(attack1))
         val quantomix2 = Quantomix("Self damage", type, null, statsQuantomix2, listOf(attack2))
@@ -371,6 +371,7 @@ class BattleTests : AnnotationSpec() {
         val effects222 = Effects(true, Stats(0, 0, 0, 20, 0, 25), quantomix2)
         attack1.effects = mutableListOf(effects1, effects11, effects111)
         attack2.effects = mutableListOf(effects2, effects22, effects222)
+        attack2.noDamage = true
         quantomix1.battleStats.nextAttack = attack1
         quantomix1.battleStats.target = quantomix2
         quantomix2.battleStats.nextAttack = attack2
@@ -384,7 +385,7 @@ class BattleTests : AnnotationSpec() {
         Assertions.assertThat(quantomix1.battleStats.stats.specialDefense)
             .isEqualTo(quantomix1.stats.specialDefense + 20)
         Assertions.assertThat(quantomix1.battleStats.stats.speed).isEqualTo(quantomix1.stats.speed - 25)
-        Assertions.assertThat(quantomix2.battleStats.stats.kp).isEqualTo(25)
+        Assertions.assertThat(quantomix2.battleStats.stats.kp).isEqualTo(75)
         Assertions.assertThat(quantomix2.battleStats.stats.attack).isEqualTo(quantomix2.stats.attack + 10)
         Assertions.assertThat(quantomix2.battleStats.stats.specialAttack).isEqualTo(quantomix2.stats.specialAttack + 20)
         Assertions.assertThat(quantomix2.battleStats.stats.defense).isEqualTo(quantomix2.stats.defense - 10)

@@ -70,25 +70,24 @@ class Battle(private var listOfQuantomix: MutableList<Quantomix>) {
         }
     }
 
-    fun start(effectiv: List<Float>? = null): List<Quantomix> {
-        val attackOrder = nextAttacker()
-        var indexEffectivityList = effectiv?.let { 0 }
-
-        var indexForAttackOrder = 0
-        while (attackOrder.size > indexForAttackOrder) {
-            val attacker = attackOrder[indexForAttackOrder]
-            val target = attacker.battleStats.target ?: continue
-
-            val power = if (effectiv != null) {
-                attackPower(
-                    attacker,
-                    effectiv[requireNotNull(indexEffectivityList)],
-                    effectiv[indexEffectivityList + 1]
-                )
-            } else {
-                attackPower(attacker)
-            }
-            requireNotNull(attacker.battleStats.nextAttack).changeStats()
+    private fun attack(
+        attacker: Quantomix,
+        target: Quantomix,
+        attackOrder: MutableList<Quantomix>,
+        effectiv: List<Float>?,
+        indexEffectivityList: Int?
+    ) {
+        val power = if (effectiv != null) {
+            attackPower(
+                attacker,
+                effectiv[requireNotNull(indexEffectivityList)],
+                effectiv[indexEffectivityList + 1]
+            )
+        } else {
+            attackPower(attacker)
+        }
+        requireNotNull(attacker.battleStats.nextAttack).changeStats(attacker.battleStats)
+        if (!target.battleStats.noDamage) {
             if (power >= target.battleStats.stats.kp) {
                 target.battleStats.newKp(power)
                 attackOrder.remove(target)
@@ -97,6 +96,18 @@ class Battle(private var listOfQuantomix: MutableList<Quantomix>) {
             } else {
                 target.battleStats.newKp(power)
             }
+        }
+    }
+
+    fun start(effectiv: List<Float>? = null): List<Quantomix> {
+        val attackOrder = nextAttacker()
+        var indexEffectivityList = effectiv?.let { 0 }
+
+        var indexForAttackOrder = 0
+        while (attackOrder.size > indexForAttackOrder) {
+            val attacker = attackOrder[indexForAttackOrder]
+            val target = attacker.battleStats.target ?: continue
+            attack(attacker, target, attackOrder, effectiv, indexEffectivityList)
             indexForAttackOrder += 1
             indexEffectivityList?.let { indexEffectivityList++ }
         }
