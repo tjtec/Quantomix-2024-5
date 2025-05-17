@@ -7,9 +7,9 @@ class Attack(
     val attackName: String,
     val type: Typ,
     val damage: Int,
-    val damageQuote: Int,
+    var damageQuote: Int,
     var effects: MutableList<Effects>? = null,
-    var noDamage: Boolean = false,
+    var status: Status? = null,
 ) {
     fun changeStats(battleStatsAttacker: BattleStats) {
         var alreadyChangedEffects = 0
@@ -17,8 +17,8 @@ class Attack(
             requireNotNull(effects)[alreadyChangedEffects].buffsAndDebuffs()
             alreadyChangedEffects += 1
         }
-        if (noDamage) {
-            battleStatsAttacker.noDamage = true
+        if (status != null) {
+            status!!.stickToTarget(battleStatsAttacker)
         }
     }
 }
