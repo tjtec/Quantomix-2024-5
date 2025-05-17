@@ -394,4 +394,5 @@ class BattleTests : AnnotationSpec() {
         Assertions.assertThat(quantomix2.battleStats.stats.speed).isEqualTo(quantomix2.stats.speed + 25)
 
     }
+
 }
