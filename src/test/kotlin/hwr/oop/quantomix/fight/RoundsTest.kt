@@ -1,11 +1,11 @@
 package hwr.oop.quantomix.fight
 
-import io.kotest.core.spec.style.AnnotationSpec
 import hwr.oop.quantomix.fight.logic.Rounds
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 import hwr.oop.quantomix.objects.Typ
+import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions
 
 class RoundsTest: AnnotationSpec() {
@@ -26,6 +26,7 @@ class RoundsTest: AnnotationSpec() {
          val trainer2= Coach("Lilly", listOf(quantomix2, quantomix2, quantomix2, quantomix2, quantomix2, quantomix2))
          val winner= Rounds(listOf(trainer1, trainer2)).start(1, mutableListofAttacks, mutableListofQuantomix)
          Assertions.assertThat(winner).isEqualTo(trainer1)
+        //ToDo:Warum laufen wir in eine Endlosschleife
      }
 
     @Test

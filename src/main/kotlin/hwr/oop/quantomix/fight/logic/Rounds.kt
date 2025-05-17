@@ -20,6 +20,7 @@ class Rounds(val trainer: List<Coach>) {
             for (i in 0 until numberOfQuantomixPerTrainer) {
                 requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newAttack(askForAttack(currentPlayer))
                 requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newTarget(askForTarget(currentPlayer))
+                requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newCoach(currentPlayer)
                 listOfQuantomixInBattle.add(currentPlayer.quantomixTeam[i])
 
             }
@@ -34,53 +35,82 @@ class Rounds(val trainer: List<Coach>) {
 
     private fun round(
         battle: Battle,
-        listOfPreviusQuantomixInBattle: MutableList<Quantomix>,
+        previousQuantomix: MutableList<Quantomix>,
         numberOfPlayers: Int,
-        numberOfPlayersPerQuantomix: Int,
-
+        numberOfPlayersPerQuantomix: Int
     ): Int {
-        val quantomixLeftInBattle = battle.start()
-        val numberOfQuantomixPerPlayerLeft = MutableList(numberOfPlayers) { 6 }
-        var indexForNumberOfQuantomixPerPlayerLeft = 0
-        val quantomixInTheNextRound = mutableListOf<Quantomix>()
-        var maximumQuantomixInBattle = listOfPreviusQuantomixInBattle.size
-        while (numberOfQuantomixPerPlayerLeft.count { it != 0 } != 1) {
-            var numberOfQuantomixPerPlayerInBattleLeftToCheck = numberOfPlayersPerQuantomix
-            if (quantomixLeftInBattle.size < maximumQuantomixInBattle) {
-                for (currentQuantomix in listOfPreviusQuantomixInBattle) {
-                    if (!quantomixLeftInBattle.contains(currentQuantomix)) {
-                        val next = nextQuantomix(currentQuantomix.battleStats.trainer!!)
-                        if (next != null) {
-                            quantomixInTheNextRound.add(next)
-                            numberOfQuantomixPerPlayerLeft[indexForNumberOfQuantomixPerPlayerLeft] -= 1
-                        } else {
-                            maximumQuantomixInBattle -= 1
-                        }
-                    } else {
-                        askPlayer(currentQuantomix.battleStats.trainer!!)
-                        quantomixInTheNextRound.add(currentQuantomix)
-                    }
-                    indexForNumberOfQuantomixPerPlayerLeft += when (numberOfQuantomixPerPlayerInBattleLeftToCheck) {
-                        1 -> 1
-                        else -> 0
-                    }
-                    numberOfQuantomixPerPlayerInBattleLeftToCheck =
-                        when (numberOfQuantomixPerPlayerInBattleLeftToCheck) {
-                            1 -> numberOfPlayersPerQuantomix
-                            else -> numberOfQuantomixPerPlayerInBattleLeftToCheck - 1
-                        }
-                }
-                indexForNumberOfQuantomixPerPlayerLeft = 0
+        val remainingPerPlayer = MutableList(numberOfPlayers) { 6 }
+        var maxQuantomixInBattle = previousQuantomix.size
+
+        while (remainingPerPlayer.count { it != 0 } != 1) {
+            val activeQuantomix = battle.start()
+            val nextRound: List<Quantomix>
+            if (activeQuantomix.size < maxQuantomixInBattle) {
+                val result = processRoundWithReplacement(
+                    previousQuantomix,
+                    activeQuantomix,
+                    remainingPerPlayer,
+                    numberOfPlayersPerQuantomix,
+                    maxQuantomixInBattle
+                )
+                nextRound = result.first
+                maxQuantomixInBattle = result.second
             } else {
-                for (currentQuantomix in listOfPreviusQuantomixInBattle) {
-                    askPlayer(currentQuantomix.battleStats.trainer!!)
-                    quantomixInTheNextRound.add(currentQuantomix)
+                // ... ansonsten alle Quantomix übernehmen und erneut einen neuen Battle starten.
+                nextRound = processRoundWithoutReplacement(previousQuantomix)
+                Battle(nextRound as MutableList<Quantomix>).start()
+            }
+
+            // Aktualisiere die Liste für die nächste Runde.
+            previousQuantomix.clear()
+            previousQuantomix.addAll(nextRound)
+        }
+        // Gib den Index des Spielers zurück, der noch Quantomix übrig hat.
+        return remainingPerPlayer.indexOfFirst { it != 0 }
+    }
+
+    private fun processRoundWithReplacement(
+        previousQuantomix: List<Quantomix>,
+        activeQuantomix: List<Quantomix>,
+        remainingPerPlayer: MutableList<Int>,
+        numberOfPlayersPerQuantomix: Int,
+        maxQuantomixInBattle: Int
+    ): Pair<List<Quantomix>, Int> {
+        val nextRound = mutableListOf<Quantomix>()
+        var updatedMaxQuantomix = maxQuantomixInBattle
+        var playerIndex = 0
+        var moveCount = 0
+
+        for (quantomix in previousQuantomix) {
+            if (!activeQuantomix.contains(quantomix)) {
+                val replacement = nextQuantomix(quantomix.battleStats.trainer!!)
+                if (replacement != null) {
+                    nextRound.add(replacement)
+                    remainingPerPlayer[playerIndex]--
+                } else {
+                    updatedMaxQuantomix--
                 }
-                val nextBattle = Battle(quantomixInTheNextRound)
-                nextBattle.start()
+            } else {
+                askPlayer(quantomix.battleStats.trainer!!)
+                nextRound.add(quantomix)
+            }
+
+            moveCount++
+            if (moveCount == numberOfPlayersPerQuantomix) {
+                playerIndex++
+                moveCount = 0
             }
         }
-        return numberOfQuantomixPerPlayerLeft.indexOfFirst { it != 0 }
+        return Pair(nextRound, updatedMaxQuantomix)
+    }
+
+    private fun processRoundWithoutReplacement(previousQuantomix: List<Quantomix>): List<Quantomix> {
+        val nextRound = mutableListOf<Quantomix>()
+        for (quantomix in previousQuantomix) {
+            askPlayer(quantomix.battleStats.trainer!!)
+            nextRound.add(quantomix)
+        }
+        return nextRound
     }
 
     private fun askPlayer(player: Coach, dead: Boolean = false) {

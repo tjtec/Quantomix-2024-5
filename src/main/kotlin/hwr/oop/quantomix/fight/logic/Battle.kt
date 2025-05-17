@@ -82,29 +82,30 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
 
     fun start(effectiv: List<Double>? = null): List<Quantomix> {
         val attackOrder = nextAttacker()
-        var indexEffektivitieList = if (effectiv == null) null else 0
-        val iterator = attackOrder.iterator()
-        while (iterator.hasNext()) {
-            val currentDamageDealer = iterator.next()
-            for (currentDamageReceiver in attackOrder) {
+        var indexEffektivList = if (effectiv == null) null else 0
+        for (currentDamageDealer in attackOrder.toList()) {
+            for (currentDamageReceiver in attackOrder.toList()) {
                 if (currentDamageDealer.battleStats.target == currentDamageReceiver) {
                     if (hits(requireNotNull(currentDamageDealer.battleStats.nextAttack).damageQuote)) {
                         val power = if (!effectiv.isNullOrEmpty()) {
                             attackPower(
                                 currentDamageDealer,
-                                effectiv[requireNotNull(indexEffektivitieList)],
-                                effectiv[indexEffektivitieList + 1]
+                                effectiv[requireNotNull(indexEffektivList)],
+                                effectiv[indexEffektivList + 1]
                             )
                         } else {
                             attackPower(currentDamageDealer)
                         }
+
                         if (power >= currentDamageReceiver.battleStats.battleKp) {
                             currentDamageReceiver.battleStats.newKp(power)
                             attackOrder.remove(currentDamageReceiver)
                         } else {
                             currentDamageReceiver.battleStats.newKp(power)
                         }
-                        indexEffektivitieList?.let { indexEffektivitieList++ }
+                        if (indexEffektivList != null) {
+                            indexEffektivList++
+                        }
                         break
                     } else {
                         TODO("Soll etwas passieren, wenn die Attacke nicht trifft und wenn ja was?")
@@ -114,4 +115,5 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
         }
         return attackOrder
     }
+
 }
