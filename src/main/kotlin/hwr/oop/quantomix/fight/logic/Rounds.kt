@@ -5,74 +5,118 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 
 class Rounds(val trainer: List<Coach>) {
-    fun start(): Coach {
+    var mutableListOfAttack: List<Attack>? = null
+    var mutableListOfQuantomix: List<Quantomix>? = null
+    fun start(
+        numberOfQuantomixPerTrainer: Int = 1,
+        mutableListOfAttack1: List<Attack>? = null,
+        mutableListOfQuantomix1: List<Quantomix>? = null
+    ): Coach {
+        mutableListOfAttack = mutableListOfAttack1
+        mutableListOfQuantomix = mutableListOfQuantomix1
         val listOfQuantomixInBattle = mutableListOf<Quantomix>()
         val numberOfPlayers = trainer.size
         for (currentPlayer: Coach in trainer) {
-            val attack = askForAttack(currentPlayer)
-            val target = askForTarget(currentPlayer)
-            val stats = BattleStats(
-                currentPlayer.quantomixTeam[0].kp,
-                currentPlayer.quantomixTeam[0].attack,
-                currentPlayer.quantomixTeam[0].defense,
-                currentPlayer.quantomixTeam[0].specialAttack,
-                currentPlayer.quantomixTeam[0].specialDefense,
-                currentPlayer.quantomixTeam[0].speed,
-                target,
-                attack,
-                currentPlayer
-            )
-            currentPlayer.quantomixTeam[0].battleStats = stats
-            listOfQuantomixInBattle.add(currentPlayer.quantomixTeam[0])
+            for (i in 0 until numberOfQuantomixPerTrainer) {
+                requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newAttack(askForAttack(currentPlayer))
+                requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newTarget(askForTarget(currentPlayer))
+                requireNotNull(currentPlayer.quantomixTeam[i].battleStats).newCoach(currentPlayer)
+                listOfQuantomixInBattle.add(currentPlayer.quantomixTeam[i])
+
+            }
         }
         val battle = Battle(listOfQuantomixInBattle)
-        val winner = round(battle, listOfQuantomixInBattle, numberOfPlayers)
+        val winner = round(
+            battle, listOfQuantomixInBattle,
+            numberOfPlayers, numberOfQuantomixPerTrainer
+        )
         return trainer[winner]
     }
 
     private fun round(
         battle: Battle,
-        listOfPreviusQuantomixInBattle: MutableList<Quantomix>,
-        numberOfPlayers: Int
+        previousQuantomix: MutableList<Quantomix>,
+        numberOfPlayers: Int,
+        numberOfPlayersPerQuantomix: Int
     ): Int {
-        val QuantomixLeftInBattle = battle.start()
-        val numberOfQuantomixPerPlayerLeft = MutableList(numberOfPlayers) { 6 }
-        var indexForNumberOfQuantomixPerPlayerLeft = 0
-        val QuantomixInTheNextRound = mutableListOf<Quantomix>()
-        var maximumQuantomixInBattle = listOfPreviusQuantomixInBattle.size
-        while (numberOfQuantomixPerPlayerLeft.count { it != 0 } != 1) {
-            if (QuantomixLeftInBattle.size < maximumQuantomixInBattle) {
-                for (currentQuantomix in listOfPreviusQuantomixInBattle) {
-                    if (!QuantomixLeftInBattle.contains(currentQuantomix)) {
-                        val next = nextQuantomix(currentQuantomix.battleStats.trainer!!)
-                        if (next != null) {
-                            QuantomixInTheNextRound.add(next)
-                            numberOfQuantomixPerPlayerLeft[indexForNumberOfQuantomixPerPlayerLeft] -= 1
-                        } else {
-                            maximumQuantomixInBattle -= 1
-                        }
-                    } else {
-                        askPlayer(currentQuantomix.battleStats.trainer!!)
-                        QuantomixInTheNextRound.add(currentQuantomix)
-                    }
-                    indexForNumberOfQuantomixPerPlayerLeft += 1
+        val remainingPerPlayer = MutableList(numberOfPlayers) { 6 }
+        var maxQuantomixInBattle = previousQuantomix.size
+
+        while (remainingPerPlayer.count { it != 0 } != 1) {
+            val activeQuantomix = battle.start()
+            val nextRound: List<Quantomix>
+            if (activeQuantomix.size < maxQuantomixInBattle) {
+                val result = processRoundWithReplacement(
+                    previousQuantomix,
+                    activeQuantomix,
+                    remainingPerPlayer,
+                    numberOfPlayersPerQuantomix,
+                    maxQuantomixInBattle
+                )
+                nextRound = result.first
+                maxQuantomixInBattle = result.second
+            } else {
+                // ... ansonsten alle Quantomix übernehmen und erneut einen neuen Battle starten.
+                nextRound = processRoundWithoutReplacement(previousQuantomix)
+                Battle(nextRound as MutableList<Quantomix>).start()
+            }
+
+            // Aktualisiere die Liste für die nächste Runde.
+            previousQuantomix.clear()
+            previousQuantomix.addAll(nextRound)
+        }
+        // Gib den Index des Spielers zurück, der noch Quantomix übrig hat.
+        return remainingPerPlayer.indexOfFirst { it != 0 }
+    }
+
+    private fun processRoundWithReplacement(
+        previousQuantomix: List<Quantomix>,
+        activeQuantomix: List<Quantomix>,
+        remainingPerPlayer: MutableList<Int>,
+        numberOfPlayersPerQuantomix: Int,
+        maxQuantomixInBattle: Int
+    ): Pair<List<Quantomix>, Int> {
+        val nextRound = mutableListOf<Quantomix>()
+        var updatedMaxQuantomix = maxQuantomixInBattle
+        var playerIndex = 0
+        var moveCount = 0
+
+        for (quantomix in previousQuantomix) {
+            if (!activeQuantomix.contains(quantomix)) {
+                val replacement = nextQuantomix(quantomix.battleStats.trainer!!)
+                if (replacement != null) {
+                    nextRound.add(replacement)
+                    remainingPerPlayer[playerIndex]--
+                } else {
+                    updatedMaxQuantomix--
                 }
             } else {
-                for (currentQuantomix in listOfPreviusQuantomixInBattle) {
-                    askPlayer(currentQuantomix.battleStats.trainer!!)
-                    QuantomixInTheNextRound.add(currentQuantomix)
-                }
-                val nextBattle = Battle(QuantomixInTheNextRound)
-                nextBattle.start()
+                askPlayer(quantomix.battleStats.trainer!!)
+                nextRound.add(quantomix)
+            }
+
+            moveCount++
+            if (moveCount == numberOfPlayersPerQuantomix) {
+                playerIndex++
+                moveCount = 0
             }
         }
-        return numberOfQuantomixPerPlayerLeft.indexOfFirst { it != 0 }
+        return Pair(nextRound, updatedMaxQuantomix)
+    }
+
+    private fun processRoundWithoutReplacement(previousQuantomix: List<Quantomix>): List<Quantomix> {
+        val nextRound = mutableListOf<Quantomix>()
+        for (quantomix in previousQuantomix) {
+            askPlayer(quantomix.battleStats.trainer!!)
+            nextRound.add(quantomix)
+        }
+        return nextRound
     }
 
     private fun askPlayer(player: Coach, dead: Boolean = false) {
         if (!dead) {
             val changedCurrentQuantomix =
-                DoYouWantToChangeTheCurrentQuantomix(player)
+                doYouWantToChangeTheCurrentQuantomix(player)
             changedCurrentQuantomix.battleStats.newAttack(
                 askForAttack(changedCurrentQuantomix.battleStats.trainer!!)
             )
@@ -82,32 +126,111 @@ class Rounds(val trainer: List<Coach>) {
         }
     }
 
-    private fun askForAttack(player: Coach): Attack {
-        TODO(
-            "Diese Funktion soll eine andere Funktion aufrufen, welche den " +
-                    "Spieler zu dem Angriff befragt und dieses an diese Funktion übergibt. " +
-                    "Diese Funktion gibt dann die Attacke zurück"
-        )
+    private fun getSelectedAttack(player: Coach): Attack {
+        if (mutableListOfAttack != null && mutableListOfAttack!!.isNotEmpty()) {
+            val attack = mutableListOfAttack!!.first()
+            mutableListOfAttack = mutableListOfAttack!!.drop(1)
+            return attack
+        }
+        // Hier wird ein Platzhalter aufgerufen, der später durch eine tatsächliche Benutzereingabe ersetzt werden soll.
+        else {
+            return mutableListOfAttack!!.first()//ToDo: getAttackFromUserInput() (sehe unten)
+        }
     }
 
     private fun askForTarget(player: Coach): Quantomix {
-        TODO(
-            "Diese Funktion soll eine andere Funktion aufrufen, welche den " +
-                    "Spieler zum Ziel der Attacke befragt und dieses an diese Funktion übergibt. " +
-                    "Diese Funktion gibt dann das Ziel der Attacke  zurück"
-        )
+        if (mutableListOfQuantomix != null && mutableListOfQuantomix!!.isNotEmpty()) {
+            val target = mutableListOfQuantomix!!.first()
+            mutableListOfQuantomix = mutableListOfQuantomix!!.drop(1)
+            return target
+        }
+        // Hier wird ein Platzhalter aufgerufen, der später durch eine tatsächliche Benutzereingabe ersetzt werden soll.
+        else {
+            return mutableListOfQuantomix!!.first()//ToDo:getTargetFromUserInput()
+        }
     }
+
+    /*private fun getAttackFromUserInput(): Attack {
+        //ToDo:("Extern: die Benutzereingabe der Attacke in der CLI implementieren, prüfen ob die attacke möglich (in Quantomix Attackenliste) steht")
+    }*/
+
+    /*fun getTargetFromUserInput(): Quantomix {
+        //ToDo: ("Extern: die Benutzereingabe des Ziels in der CLI implementieren")
+    }*/
+
+    private fun askForAttack(player: Coach): Attack {
+
+        val selectedAttackFromPlayer = getSelectedAttack(player)
+        // Greift auf das aktive Quantomix des Spielers zu.
+        val activeQuantomix =
+            player.quantomixTeam.first() //Todo: welche Quantomix sollen verwendet werden?Das Aktuelle aber wie kommen wir da ran?
+
+
+        return findAttackByName(activeQuantomix, selectedAttackFromPlayer)
+            ?: throw IllegalStateException("Angriff '${selectedAttackFromPlayer.attackName}' nicht gefunden")
+
+    }
+
+    private fun findAttackByName(quantomix: Quantomix, desiredAttack: Attack): Attack? {
+        return quantomix.attacks.firstOrNull {
+            it.attackName.equals(desiredAttack.attackName, ignoreCase = true)
+        }
+    }
+
 
     private fun nextQuantomix(player: Coach): Quantomix? {
-        TODO(
-            "Diese Funktion fragt, welches Quantomix als nächstes eingesetzt werden soll," +
-                    "(dies geschieht wie bei den obrigen Funktionen). Ist kein Quantomix mehr übrig" +
-                    "soll diese Funktion null zurückgeben. Muss die BattleStats mitsetzen"
-        )
+        // Hier werden alle Quantomix gefiltert, die noch einsatzfähig sind.
+        val availableQuantomix = player.quantomixTeam.filter { it.kp > 0 }
+
+        return if (availableQuantomix.isNotEmpty()) {
+            // Hier wird das Pokémon mit den höchsten verbleibenden KP gewählt.
+            mutableListOfQuantomix!!.maxByOrNull { it.kp }
+        } else {
+            mutableListOfQuantomix!!.maxByOrNull { it.kp }//ToDo: getNextQuantomixFromUserInput(player)
+        }
     }
 
-    private fun DoYouWantToChangeTheCurrentQuantomix(player: Coach): Quantomix {
-        TODO("jeder Spieler wird gefragt, ob er mit dem Eingesetzten Quantomix weiterkämpfen möchte")
-        //askPlayer(currentQuantomix.battleStats!!.trainer, true) um die BattleStats entsprechent zu setzen
+
+    /*fun getNextQuantomixFromUserInput(player: Coach): Quantomix? {
+        //ToDo:("Extern: Implementiere die Benutzerinteraktion (z. B. über die CLI), um das nächste Quantomix auszuwählen")
+    }*/
+
+
+    private fun doYouWantToChangeTheCurrentQuantomix(player: Coach): Quantomix {
+        val active = player.quantomixTeam.first()
+
+
+        // Falls der aktive Quantomix bereits ausgeschieden ist, muss gewechselt werden.
+        // Andernfalls wird eine Entscheidung durch den User getroffen – aktuell als Platzhalter durch eine separate Funktion.
+        val shouldSwitch = when {
+            active.kp <= 0 -> true
+            else -> true //Todo: getSwitchDecisionFromUserInput(player)
+        }
+
+        return if (!shouldSwitch) {
+            active
+        } else {
+            // ermittelt alle Alternativen, die nicht das aktive Quantomix sind und noch KP > 0 haben.
+            val alternatives = player.quantomixTeam.filter { it != active && it.kp > 0 }
+            // Wenn keine Alternative verfügbar ist, bleibt der aktive Quantomix erhalten.
+            val selected = if (alternatives.isEmpty()) {
+                active
+            } else {
+                active
+                //Todo: getNextQuantomixFromUserInput(player) ?:
+            }
+            selected.battleStats.trainer = player
+            selected
+        }
     }
+
+    /*private fun getSwitchDecisionFromUserInput(player: Coach): Boolean {
+        //ToDo:("Platzhalter: Hier soll später die Entscheidung (true/false) per Benutzereingabe abgefragt werden")
+    }*/
+
 }
+
+
+
+
+
