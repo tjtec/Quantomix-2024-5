@@ -5,7 +5,7 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 
 class Rounds(val trainer: List<Coach>) {
-    fun start(numberOfQuantomixPerTrainer: Int = 1, mutableListOfAttack: List<Attack>? =null, ): Coach {
+    fun start(numberOfQuantomixPerTrainer: Int = 1, mutableListOfAttack: List<Attack>? =null): Coach {
         val listOfQuantomixInBattle = mutableListOf<Quantomix>()
         val numberOfPlayers = trainer.size
         for (currentPlayer: Coach in trainer) {
