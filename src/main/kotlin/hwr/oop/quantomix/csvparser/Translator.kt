@@ -13,7 +13,7 @@ class Translator {
         damage: String,
         damageQuote: String,
     ): Attack {
-        return Attack(name, Typ(type), damage.toInt(), damageQuote.toInt())
+        return Attack(name, Typ(type), damage.toInt(), damageQuote.toInt(), effects = mutableListOf())
     }
 
     fun translateToQuantomix(

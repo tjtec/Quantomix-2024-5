@@ -1,13 +1,24 @@
 package hwr.oop.quantomix.fight.objects
 
-import hwr.oop.quantomix.monster.Quantomix
+import hwr.oop.quantomix.fight.logic.BattleStats
 
 class Effects(
-    val buff: Boolean,
-    val changeStats: Stats,
-    val targetOfChangeStats: Quantomix,
+    private val buff: Boolean,
+    private val changeStats: Stats,
+    private val targetOfChangeStats: BattleStats,
 ) {
     fun buffsAndDebuffs() {
-        targetOfChangeStats.battleStats.stats.BuffsDebuffs(changeStats, buff)
+        targetOfChangeStats.changeStats().BuffsDebuffs(changeStats, buff)
     }
+}
+
+enum class Status {
+    NoDamage,
+    Poisoning,
+    StrongPoisoning,
+    Combustion,
+    Paralysis,
+    Sleep,
+    Confusion,
+    Freeze;
 }

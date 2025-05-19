@@ -11,6 +11,9 @@ class Quantomix(
     val typ2: Typ?,
     val stats: Stats,
     val attacks: List<Attack>,
-    var battleStats: BattleStats = BattleStats(stats.deepCopy())
-)
+) {
+    fun newBattleStats(): BattleStats {
+        return BattleStats(this, stats.deepCopy())
+    }
+}
 

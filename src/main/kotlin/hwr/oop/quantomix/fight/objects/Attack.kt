@@ -1,24 +1,27 @@
 package hwr.oop.quantomix.fight.objects
 
 import hwr.oop.quantomix.fight.logic.BattleStats
+import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 
-class Attack(
+data class Attack(
     val attackName: String,
     val type: Typ,
     val damage: Int,
-    var damageQuote: Int,
-    var effects: MutableList<Effects>? = null,
-    var status: Status? = null,
-) {
+    val damageQuote: Int,
+    val effects: MutableList<Effects>,
+    private val status: Status? = null
+)
+
+class BattleAttack(attack: Attack, target: Quantomix) {
     fun changeStats(battleStatsAttacker: BattleStats) {
         var alreadyChangedEffects = 0
-        while (!(effects.isNullOrEmpty()) && requireNotNull(effects).size > alreadyChangedEffects) {
+        while (!(effects.isEmpty()) && requireNotNull(effects).size > alreadyChangedEffects) {
             requireNotNull(effects)[alreadyChangedEffects].buffsAndDebuffs()
             alreadyChangedEffects += 1
         }
         if (status != null) {
-            status!!.stickToTarget(battleStatsAttacker.target!!.battleStats)
+            battleStatsAttacker.getTarget()!!.battleStats.changeStatus(status)
         }
     }
 }

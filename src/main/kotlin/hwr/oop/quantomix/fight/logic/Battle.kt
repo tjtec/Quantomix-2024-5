@@ -12,7 +12,7 @@ class Battle(private var listOfQuantomix: MutableList<Quantomix>) {
         if (listOfQuantomix.size < 2) {
             error("Not enough number of players")
         }
-        return listOfQuantomix.sortedByDescending { it.battleStats.stats.speed }.toMutableList()
+        return listOfQuantomix.sortedByDescending { it.stats.getSpeed() }.toMutableList()
     }
 
     private fun formulaAttackForce(attackDamage: Int, attackValue: Int, defense: Int, multiFactor: Float): Int {

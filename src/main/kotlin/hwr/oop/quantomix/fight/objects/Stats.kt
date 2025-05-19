@@ -1,12 +1,12 @@
 package hwr.oop.quantomix.fight.objects
 
 class Stats(
-    var kp: Int,
-    var attack: Int,
-    var defense: Int,
-    var specialAttack: Int,
-    var specialDefense: Int,
-    var speed: Int,
+    private var kp: Int,
+    private var attack: Int,
+    private var defense: Int,
+    private var specialAttack: Int,
+    private var specialDefense: Int,
+    private var speed: Int,
 ) {
     fun deepCopy(
         kp: Int = this.kp,
@@ -18,6 +18,10 @@ class Stats(
     ) = Stats(
         kp, attack, defense, specialAttack, specialDefense, speed
     )
+
+    fun newKp(damage: Int) {
+        this.kp = maxOf(0, this.kp - damage)
+    }
 
     fun BuffsDebuffs(stats: Stats, buff: Boolean) {
         if (!buff) {
@@ -89,4 +93,7 @@ class Stats(
     private fun newSpeedValueUp(stats: Stats) {
         this.speed += stats.speed
     }
+
+    fun getKp(): Int = this.kp
+    fun getSpeed(): Int = this.speed
 }
