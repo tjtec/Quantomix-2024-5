@@ -4,15 +4,15 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import hwr.oop.quantomix.stats.GameData
 
-class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
+class Battle(private var listOfQuantomix: MutableList<Quantomix>) {
 
     internal fun nextAttacker(): MutableList<Quantomix> {
         // sorts the Quantomix according to the speed. At the end of this function is the
         // fasts Quantomix the first in the list.
-        if (!(ListOfQuantomix.size >= 2)) {
+        if (!(listOfQuantomix.size >= 2)) {
             error("Not enough number of players")
         }
-        return ListOfQuantomix.sortedByDescending { it.battleStats.battleSpeed }.toMutableList()
+        return listOfQuantomix.sortedByDescending { it.battleStats.battleSpeed }.toMutableList()
     }
 
     private fun formulaAttackForce(attackDamage: Int, attackValue: Int, defense: Int, multiFactor: Double): Int {
@@ -26,10 +26,10 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
         val nextAttacker = damageDealer
         when (requireNotNull(attack).type.name == nextAttacker.typ1.name || (nextAttacker.typ2 != null && attack.type.name == nextAttacker.typ2.name)) {
             true -> return formulaAttackForce(
-                requireNotNull(attack.damage),
-                nextAttacker.battleStats.battleSpecialAttack,
-                requireNotNull(nextAttacker.battleStats.target).battleStats.battleSpecialDefense,
-                formulaEffectivity(damageDealer, effectiv1, effectiv2)
+                attackDamage = requireNotNull(value = attack.damage),
+                attackValue = nextAttacker.battleStats.battleSpecialAttack,
+                defense = requireNotNull(nextAttacker.battleStats.target).battleStats.battleSpecialDefense,
+                multiFactor = formulaEffectivity(damageDealer, effectiv1, effectiv2)
             )
 
             false -> return formulaAttackForce(

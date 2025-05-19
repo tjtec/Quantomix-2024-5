@@ -5,14 +5,22 @@ import hwr.oop.quantomix.fight.logic.BattleStats
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
+import hwr.oop.quantomix.objects.EnumType
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 
 class BattleTests : AnnotationSpec() {
+
+    @BeforeEach
+    fun Quantomixzz(){
+        val glurak = Quantomix("Glurak", type1, type2, 78, 84, 78, 109, 85, 100, attacks)
+    }
     @Test
     fun `BattleTest with normal Attack`() {
-        val type1 = Typ("Feuer")
+        val type0 = Typ("Feuer")
+        val type1 = EnumType.normal
         val type2 = Typ("Flug")
         val type3 = Typ("Wasser")
         val attack = Attack("tackle", Typ("normal"), 40, 100)
@@ -27,10 +35,10 @@ class BattleTests : AnnotationSpec() {
         schillok.battleStats = statsSchillok
         val battle = Battle(mutableListOf(glurak, schillok))
         battle.start(listOf(1.0, 1.0, 1.0, 1.0))
-        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(53)
-        Assertions.assertThat(glurak.kp).isEqualTo(78)
-        Assertions.assertThat(schillok.battleStats.battleKp).isEqualTo(26)
-        Assertions.assertThat(schillok.kp).isEqualTo(59)
+        assertThat(glurak.battleStats.battleKp).isEqualTo(53)
+        assertThat(glurak.kp).isEqualTo(78)
+        assertThat(schillok.battleStats.battleKp).isEqualTo(26)
+        assertThat(schillok.kp).isEqualTo(59)
     }
 
     @Test
@@ -50,10 +58,10 @@ class BattleTests : AnnotationSpec() {
         schillok.battleStats = statsSchillok
         val battle = Battle(mutableListOf(glurak, schillok))
         battle.start(listOf(4.0, 0.25, 1.0, 1.0))
-        Assertions.assertThat(glurak.kp).isEqualTo(78)
-        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(53)
-        Assertions.assertThat(schillok.battleStats.battleKp).isEqualTo(16)
-        Assertions.assertThat(schillok.kp).isEqualTo(59)
+        assertThat(glurak.kp).isEqualTo(78)
+        assertThat(glurak.battleStats.battleKp).isEqualTo(53)
+        assertThat(schillok.battleStats.battleKp).isEqualTo(16)
+        assertThat(schillok.kp).isEqualTo(59)
     }
 
     @Test
@@ -73,10 +81,10 @@ class BattleTests : AnnotationSpec() {
         tauboss.battleStats = statsTauboss
         val battle = Battle(mutableListOf(glurak, tauboss))
         battle.start(listOf(1.0, 1.0, 1.0, 1.0))
-        Assertions.assertThat(glurak.kp).isEqualTo(78)
-        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(50)
-        Assertions.assertThat(tauboss.kp).isEqualTo(83)
-        Assertions.assertThat(tauboss.battleStats.battleKp).isEqualTo(40)
+        assertThat(glurak.kp).isEqualTo(78)
+        assertThat(glurak.battleStats.battleKp).isEqualTo(50)
+        assertThat(tauboss.kp).isEqualTo(83)
+        assertThat(tauboss.battleStats.battleKp).isEqualTo(40)
     }
 
     @Test
@@ -97,10 +105,10 @@ class BattleTests : AnnotationSpec() {
         owei.battleStats = statsOwei
         val battle = Battle(mutableListOf(glurak, owei))
         battle.start(listOf(2.0, 1.0, 0.5, 1.0))
-        Assertions.assertThat(glurak.kp).isEqualTo(78)
-        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(70)
-        Assertions.assertThat(owei.kp).isEqualTo(60)
-        Assertions.assertThat(owei.battleStats.battleKp).isEqualTo(17)
+        assertThat(glurak.kp).isEqualTo(78)
+        assertThat(glurak.battleStats.battleKp).isEqualTo(70)
+        assertThat(owei.kp).isEqualTo(60)
+        assertThat(owei.battleStats.battleKp).isEqualTo(17)
     }
 
     @Test
@@ -120,10 +128,10 @@ class BattleTests : AnnotationSpec() {
         owei.battleStats = statsOwei
         val battle = Battle(mutableListOf(glurak, owei))
         battle.start()
-        Assertions.assertThat(glurak.kp).isEqualTo(78)
-        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(70)
-        Assertions.assertThat(owei.kp).isEqualTo(60)
-        Assertions.assertThat(owei.battleStats.battleKp).isEqualTo(17)
+        assertThat(glurak.kp).isEqualTo(78)
+        assertThat(glurak.battleStats.battleKp).isEqualTo(70)
+        assertThat(owei.kp).isEqualTo(60)
+        assertThat(owei.battleStats.battleKp).isEqualTo(17)
     }
 
     @Test
@@ -144,10 +152,10 @@ class BattleTests : AnnotationSpec() {
         rattfratz.battleStats = statsRattfratz
         val battle = Battle(mutableListOf(glurak, rattfratz))
         battle.start(listOf(0.0, 0.0, 1.0, 1.0))
-        Assertions.assertThat(glurak.kp).isEqualTo(78)
-        Assertions.assertThat(rattfratz.kp).isEqualTo(55)
-        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(46)
-        Assertions.assertThat(rattfratz.battleStats.battleKp).isEqualTo(55)
+        assertThat(glurak.kp).isEqualTo(78)
+        assertThat(rattfratz.kp).isEqualTo(55)
+        assertThat(glurak.battleStats.battleKp).isEqualTo(46)
+        assertThat(rattfratz.battleStats.battleKp).isEqualTo(55)
     }
 
     @Test
@@ -170,11 +178,11 @@ class BattleTests : AnnotationSpec() {
         owei.battleStats.newAttack(attack)
         val battle = Battle(mutableListOf(glurak, owei))
         battle.start(listOf(2.0, 1.0))
-        Assertions.assertThat(glurak.kp).isEqualTo(78)
-        Assertions.assertThat(glurak.battleStats.battleKp).isEqualTo(78)
-        Assertions.assertThat(owei.kp).isEqualTo(84)
-        Assertions.assertThat(owei.battleStats.battleKp).isEqualTo(0)
-        Assertions.assertThat(battle.start(listOf(2.0, 0.5))).isNotEmpty
+        assertThat(glurak.kp).isEqualTo(78)
+        assertThat(glurak.battleStats.battleKp).isEqualTo(78)
+        assertThat(owei.kp).isEqualTo(84)
+        assertThat(owei.battleStats.battleKp).isEqualTo(0)
+        assertThat(battle.start(listOf(2.0, 0.5))).isNotEmpty
     }
 
     @Test
@@ -260,7 +268,7 @@ class BattleTests : AnnotationSpec() {
 
         val battle = Battle(mutableListOf(quantomix1, quantomix2))
         battle.start()
-        Assertions.assertThat(quantomix1.battleStats.battleKp).isEqualTo(50)
-        Assertions.assertThat(quantomix2.battleStats.battleKp).isEqualTo(50)
+        assertThat(quantomix1.battleStats.battleKp).isEqualTo(50)
+        assertThat(quantomix2.battleStats.battleKp).isEqualTo(50)
     }
 }
