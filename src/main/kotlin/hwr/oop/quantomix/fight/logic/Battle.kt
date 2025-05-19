@@ -97,7 +97,7 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
                             attackPower(currentDamageDealer)
                         }
 
-                        if (power >= currentDamageReceiver.battleStats.battleKp) {
+                        if (power >= currentDamageReceiver.battleStats.battleKp || currentDamageReceiver.battleStats.battleKp == 0) {
                             currentDamageReceiver.battleStats.newKp(power)
                             attackOrder.remove(currentDamageReceiver)
                         } else {

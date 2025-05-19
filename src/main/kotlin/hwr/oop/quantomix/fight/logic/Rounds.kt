@@ -6,13 +6,16 @@ import hwr.oop.quantomix.objects.Coach
 
 class Rounds(val trainer: List<Coach>) {
     var mutableListOfAttack: List<Attack>? = null
+    var mutableListOfTargets: List<Quantomix>? = null
     var mutableListOfQuantomix: List<Quantomix>? = null
     fun start(
         numberOfQuantomixPerTrainer: Int = 1,
         mutableListOfAttack1: List<Attack>? = null,
-        mutableListOfQuantomix1: List<Quantomix>? = null
+        mutableListOfTarget1: List<Quantomix>? = null,
+        mutableListOfQuantomix1: List<Quantomix>? = null,
     ): Coach {
         mutableListOfAttack = mutableListOfAttack1
+        mutableListOfTargets = mutableListOfTarget1
         mutableListOfQuantomix = mutableListOfQuantomix1
         val listOfQuantomixInBattle = mutableListOf<Quantomix>()
         val numberOfPlayers = trainer.size
@@ -139,14 +142,14 @@ class Rounds(val trainer: List<Coach>) {
     }
 
     private fun askForTarget(player: Coach): Quantomix {
-        if (mutableListOfQuantomix != null && mutableListOfQuantomix!!.isNotEmpty()) {
-            val target = mutableListOfQuantomix!!.first()
-            mutableListOfQuantomix = mutableListOfQuantomix!!.drop(1)
+        if (mutableListOfTargets != null && mutableListOfTargets!!.isNotEmpty()) {
+            val target = mutableListOfTargets!!.first()
+            mutableListOfTargets = mutableListOfTargets?.drop(1)
             return target
         }
         // Hier wird ein Platzhalter aufgerufen, der später durch eine tatsächliche Benutzereingabe ersetzt werden soll.
         else {
-            return mutableListOfQuantomix!!.first()//ToDo:getTargetFromUserInput()
+            return mutableListOfTargets!!.first()//ToDo:getTargetFromUserInput()
         }
     }
 
@@ -182,11 +185,19 @@ class Rounds(val trainer: List<Coach>) {
         // Hier werden alle Quantomix gefiltert, die noch einsatzfähig sind.
         val availableQuantomix = player.quantomixTeam.filter { it.kp > 0 }
 
-        return if (availableQuantomix.isNotEmpty()) {
+        if (availableQuantomix.isNotEmpty()) {
             // Hier wird das Pokémon mit den höchsten verbleibenden KP gewählt.
-            mutableListOfQuantomix!!.maxByOrNull { it.kp }
+            if (!mutableListOfQuantomix.isNullOrEmpty()) {
+                val nextQuantomix = mutableListOfQuantomix!!.first()
+                nextQuantomix.battleStats.target = askForTarget(nextQuantomix.battleStats.trainer!!)
+                nextQuantomix.battleStats.nextAttack = askForAttack(nextQuantomix.battleStats.trainer!!)
+                mutableListOfQuantomix = mutableListOfQuantomix!!.drop(1)
+                return nextQuantomix
+            } else {
+                return mutableListOfTargets!!.maxByOrNull { it.kp }//ToDo: getNextQuantomixFromUserInput(player)
+            }
         } else {
-            mutableListOfQuantomix!!.maxByOrNull { it.kp }//ToDo: getNextQuantomixFromUserInput(player)
+            return null
         }
     }
 
