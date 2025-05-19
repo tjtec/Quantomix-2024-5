@@ -12,6 +12,7 @@ class BattleStats(
     var nextAttack: Attack? = null,
     var trainer: Coach? = null,
     var status: Status? = null,
+    //ToDo: variablen private machen
 ) {
     fun newKp(damage: Int) {
         stats.kp = maxOf(0, stats.kp - damage)
