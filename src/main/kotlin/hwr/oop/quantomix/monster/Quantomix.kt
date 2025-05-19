@@ -6,12 +6,31 @@ import hwr.oop.quantomix.fight.objects.Stats
 import hwr.oop.quantomix.objects.Typ
 
 class Quantomix(
-    val quantomixName: String,
-    val typ1: Typ,
-    val typ2: Typ?,
-    val stats: Stats,
-    val attacks: List<Attack>,
+    private val quantomixName: String,
+    private val typ1: Typ,
+    private val typ2: Typ?,
+    private val stats: Stats,
+    private val attacks: List<Attack>,
 ) {
+    fun getStats(): Stats {
+        return stats
+    }
+
+    fun getQuantomixName(): String {
+        return quantomixName
+    }
+
+    fun getType1(): Typ {
+        return typ1
+    }
+
+    fun getType2(): Typ? {
+        return typ2
+    }
+
+    fun getAttacks(): List<Attack> {
+        return attacks
+    }
     fun newBattleStats(): BattleStats {
         return BattleStats(this, stats.deepCopy())
     }

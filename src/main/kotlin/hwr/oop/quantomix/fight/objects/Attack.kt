@@ -1,27 +1,54 @@
 package hwr.oop.quantomix.fight.objects
 
 import hwr.oop.quantomix.fight.logic.BattleStats
-import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 
 data class Attack(
-    val attackName: String,
-    val type: Typ,
-    val damage: Int,
-    val damageQuote: Int,
-    val effects: MutableList<Effects>,
+    private val attackName: String,
+    private val type: Typ,
+    private val damage: Int,
+    private val damageQuote: Int,
+    private val effects: MutableList<Effects>,
     private val status: Status? = null
-)
+) {
+    fun getType(): Typ {
+        return this.type
+    }
 
-class BattleAttack(attack: Attack, target: Quantomix) {
-    fun changeStats(battleStatsAttacker: BattleStats) {
+    fun getDamage(): Int {
+        return this.damage
+    }
+
+    fun getDamageQuote(): Int {
+        return this.damageQuote
+    }
+
+    fun getEffects(): MutableList<Effects> {
+        return this.effects
+    }
+
+    fun getOneEffect(index: Int): Effects {
+        return this.effects[index]
+    }
+
+    fun getStatus(): Status? {
+        return this.status
+    }
+
+    fun changeStats(target: BattleStats) {
         var alreadyChangedEffects = 0
-        while (!(effects.isEmpty()) && requireNotNull(effects).size > alreadyChangedEffects) {
-            requireNotNull(effects)[alreadyChangedEffects].buffsAndDebuffs()
+        while (!(this.getEffects().isEmpty()) && this.getEffects().size > alreadyChangedEffects) {
+            this.getEffects()[alreadyChangedEffects].buffsAndDebuffs()
             alreadyChangedEffects += 1
         }
+        val status = this.getStatus()
         if (status != null) {
-            battleStatsAttacker.getTarget()!!.battleStats.changeStatus(status)
+            target.changeStatus(status)
         }
     }
+}
+
+class BattleAttack(val attack: Attack, val target: BattleStats) {
+    //ToDo: ist unnötig, dass Ziel kann auch erst im Battle mitgeliefert werden
+
 }
