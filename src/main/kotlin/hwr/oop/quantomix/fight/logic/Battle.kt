@@ -8,7 +8,7 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
 
     internal fun nextAttacker(): MutableList<Quantomix> {
         // sorts the Quantomix according to the speed. At the end of this function is the
-        // fasts Quantomix the first in the list.
+        // fast Quantomix the first in the list.
         if (!(ListOfQuantomix.size >= 2)) {
             error("Not enough number of players")
         }
@@ -71,34 +71,49 @@ class Battle(private var ListOfQuantomix: MutableList<Quantomix>) {
         }
     }
 
+    private fun hits(damageQuote: Int): Boolean {
+
+        val randomValue = (1..100).random()
+        return when (randomValue <= damageQuote) {
+            true -> true
+            else -> false
+        }
+    }
+
     fun start(effectiv: List<Double>? = null): List<Quantomix> {
         val attackOrder = nextAttacker()
-        var indexEffektivitieList = if (effectiv == null) null else 0
-        val iterator = attackOrder.iterator()
-        while (iterator.hasNext()) {
-            val currentDamageDealer = iterator.next()
-            for (currentDamageReceiver in attackOrder) {
+        var indexEffektivList = if (effectiv == null) null else 0
+        for (currentDamageDealer in attackOrder.toList()) {
+            for (currentDamageReceiver in attackOrder.toList()) {
                 if (currentDamageDealer.battleStats.target == currentDamageReceiver) {
-                    val power = if (effectiv != null) {
-                        attackPower(
-                            currentDamageDealer,
-                            effectiv[requireNotNull(indexEffektivitieList)],
-                            effectiv[indexEffektivitieList + 1]
-                        )
+                    if (hits(requireNotNull(currentDamageDealer.battleStats.nextAttack).damageQuote)) {
+                        val power = if (!effectiv.isNullOrEmpty()) {
+                            attackPower(
+                                currentDamageDealer,
+                                effectiv[requireNotNull(indexEffektivList)],
+                                effectiv[indexEffektivList + 1]
+                            )
+                        } else {
+                            attackPower(currentDamageDealer)
+                        }
+
+                        if (power >= currentDamageReceiver.battleStats.battleKp || currentDamageReceiver.battleStats.battleKp == 0) {
+                            currentDamageReceiver.battleStats.newKp(power)
+                            attackOrder.remove(currentDamageReceiver)
+                        } else {
+                            currentDamageReceiver.battleStats.newKp(power)
+                        }
+                        if (indexEffektivList != null) {
+                            indexEffektivList++
+                        }
+                        break
                     } else {
-                        attackPower(currentDamageDealer)
+                        TODO("Soll etwas passieren, wenn die Attacke nicht trifft und wenn ja was?")
                     }
-                    if (power >= currentDamageReceiver.battleStats.battleKp) {
-                        currentDamageReceiver.battleStats.newKp(power)
-                        attackOrder.remove(currentDamageReceiver)
-                    } else {
-                        currentDamageReceiver.battleStats.newKp(power)
-                    }
-                    indexEffektivitieList?.let { indexEffektivitieList++ }
-                    break
                 }
             }
         }
         return attackOrder
     }
+
 }

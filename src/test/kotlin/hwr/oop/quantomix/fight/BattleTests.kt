@@ -128,7 +128,6 @@ class BattleTests : AnnotationSpec() {
 
     @Test
     fun `Batteltest not effectiv`() {
-        //ToDo:Umschreiben für BattleTest und nextAttacker bekommt weniger als 2 quantomix
         val type1 = Typ("Feuer")
         val type2 = Typ("Flug")
         val type3 = Typ("Normal")
