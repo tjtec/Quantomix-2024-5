@@ -7,21 +7,32 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 
 class BattleStats(
-    var stats: Stats,
-    var target: Quantomix? = null,
-    var nextAttack: Attack? = null,
-    var trainer: Coach? = null,
-    var status: Status? = null,
-    //ToDo: variablen private machen
+    private val stats: Stats,
+    private var target: Quantomix? = null,
+    private var nextAttack: Attack? = null,
+    private var trainer: Coach? = null,
+    private var status: Status?,
 ) {
     fun newKp(damage: Int) {
-        stats.kp = maxOf(0, stats.kp - damage)
+        this.stats.newKp(damage)
     }
 
-    fun statusEffects(alreadyPassedRounds: Int) {
-        if (status != null) {
-            status!!.effectsOfStatus(this, alreadyPassedRounds)
+    fun getStats(): Stats {
+        this.stats
+    }
+
+    fun getTarget(): Quantomix? {
+        return target
+    }
+
+    fun changeStatus(newStatus: Status) {
+        if (this.status == null) {
+            this.status = newStatus
         }
+    }
+
+    fun changeStats(): Stats {
+        return this.stats
     }
 
     fun newTarget(target: Quantomix) {
