@@ -9,13 +9,15 @@ class StatsTest : AnnotationSpec() {
     @Test
     fun `stats and battleStats not equals`() {
         val statsQuantomix = Stats(100, 100, 100, 100, 100, 100)
-        val type = Typ("Normal")
-        val attack = Attack("Direkter Treffer", Typ("Geist"), 100, 100, effects = mutableListOf())
+        val type = Typ.Normal
+        val attack = Attack("Direkter Treffer", Typ.Geist, 100, 100, effects = mutableListOf())
         val quantomix1 = Quantomix("Test", type, null, statsQuantomix, listOf(attack))
-        Assertions.assertThat(quantomix1.battleStats.getStats().getKp()).isEqualTo(quantomix1.stats.getKp())
-        quantomix1.battleStats.newKp(20)
-        Assertions.assertThat(quantomix1.battleStats.getStats().getKp()).isNotEqualTo(quantomix1.stats.getKp())
-        Assertions.assertThat(quantomix1.battleStats.getStats().getKp()).isEqualTo(80)
-        Assertions.assertThat(quantomix1.stats.getKp()).isEqualTo(100)
+        val battleStatsQuantomix1 = quantomix1.newBattleStats()
+        Assertions.assertThat(battleStatsQuantomix1.getStats().getKp()).isEqualTo(quantomix1.getStats().getKp())
+        battleStatsQuantomix1.newKp(30)
+        Assertions.assertThat(battleStatsQuantomix1.getStats().getKp()).isNotEqualTo(quantomix1.getStats().getKp())
+        Assertions.assertThat(battleStatsQuantomix1.getStats().getKp()).isEqualTo(80)
+        Assertions.assertThat(quantomix1.getStats().getKp()).isEqualTo(100)
+        Assertions.assertThat(battleStatsQuantomix1.getQuantomix()).isEqualTo(quantomix1)
     }
 }

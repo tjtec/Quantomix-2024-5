@@ -1,7 +1,5 @@
 package hwr.oop.quantomix.fight.objects
 
-import hwr.oop.quantomix.fight.logic.BattleStats
-
 class Effects(
     private val buff: Boolean,
     private val changeStats: Stats,

@@ -1,6 +1,5 @@
 package hwr.oop.quantomix.fight.objects
 
-import hwr.oop.quantomix.fight.logic.BattleStats
 import hwr.oop.quantomix.objects.Typ
 
 data class Attack(
@@ -8,6 +7,7 @@ data class Attack(
     private val type: Typ,
     private val damage: Int,
     private val damageQuote: Int,
+    private val specialAttack: Boolean,
     private val effects: MutableList<Effects>,
     private val status: Status? = null
 ) {
@@ -17,6 +17,10 @@ data class Attack(
 
     fun getDamage(): Int {
         return this.damage
+    }
+
+    fun getSpecialAttack(): Boolean {
+        return this.specialAttack
     }
 
     fun getDamageQuote(): Int {

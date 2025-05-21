@@ -1,7 +1,5 @@
-package hwr.oop.quantomix.fight.logic
+package hwr.oop.quantomix.fight.objects
 
-import hwr.oop.quantomix.fight.objects.Stats
-import hwr.oop.quantomix.fight.objects.Status
 import hwr.oop.quantomix.monster.Quantomix
 
 class BattleStats(
@@ -25,6 +23,10 @@ class BattleStats(
 
     fun changeStats(): Stats {
         return this.stats
+    }
+
+    fun getQuantomix(): Quantomix {
+        return quantomix
     }
 
 }

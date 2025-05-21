@@ -96,4 +96,8 @@ class Stats(
 
     fun getKp(): Int = this.kp
     fun getSpeed(): Int = this.speed
+    fun getAttack(): Int = this.attack
+    fun getDefense(): Int = this.defense
+    fun getSpecialAttack(): Int = this.specialAttack
+    fun getSpecialDefense(): Int = this.specialDefense
 }

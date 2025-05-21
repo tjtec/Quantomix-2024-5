@@ -1,6 +1,6 @@
 package hwr.oop.quantomix.fight.objects
 //
-//import hwr.oop.quantomix.fight.logic.BattleStats
+//import hwr.oop.quantomix.fight.objects.BattleStats
 //
 //class Status(
 //    var noDamage: Boolean = false,
