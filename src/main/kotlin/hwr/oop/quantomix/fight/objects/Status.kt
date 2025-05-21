@@ -1,4 +1,15 @@
 package hwr.oop.quantomix.fight.objects
+
+enum class Status {
+    NoDamage,
+    Poison,
+    StrongPoison,
+    Combustion,
+    Paralysis,
+    Sleep,
+    Confusion,
+    Freeze
+}
 //
 //import hwr.oop.quantomix.fight.objects.BattleStats
 //

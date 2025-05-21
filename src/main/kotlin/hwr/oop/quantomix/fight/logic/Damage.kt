@@ -2,6 +2,7 @@ package hwr.oop.quantomix.fight.logic
 
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
+import hwr.oop.quantomix.fight.objects.Status
 
 class Damage(private val battleStats: BattleStats, private val attack: Attack, battleStatsTarget: BattleStats) {
     init {
@@ -27,6 +28,24 @@ class Damage(private val battleStats: BattleStats, private val attack: Attack, b
         // den Angreifer?
         //ToDo:Einfügen der Buff und Debuff Möglichkeit
     }
+
+    private fun statusEffect(): Int {
+        val status = attack.getStatus()
+        return if (status != null) {
+            when (status) {
+                Status.NoDamage -> 0
+                Status.Poison -> 1 / 16
+                Status.StrongPoison -> 1 / 16 //ToDo:Pro Runde multiplizierender Schaden
+                Status.Combustion -> 1 / 8
+                Status.Sleep -> 0
+                Status.Freeze -> 0
+                else -> 1
+            }
+        } else {
+            1
+        }
+    }
+
 
     private fun formulaAttackForce(attackDamage: Int, attackValue: Int, defense: Int, multiFactor: Float): Int {
         val damage = (attackDamage * attackValue * multiFactor) / ((defense / 100 + 1) * 100)

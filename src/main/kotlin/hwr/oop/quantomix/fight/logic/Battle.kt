@@ -63,7 +63,22 @@ class Battle(private var battleStats: BattleStats, private val attack: Attack) {
      */
     //ToDo: Wo muss die Verbindung von den BattleStats hin? BattleStats sind mit Quantomix verbunden,
     // aber von Quantomix aus gibt es keine Verbindung dahin muss das so, oder ist das anders Lösbar?
-    fun start(aktiveQuantomixBattleStats: BattleStats, attack: Attack, target: BattleStats) {
+    private fun hits(attack: Attack): Boolean {
 
+        val randomValue = (1..100).random()
+        return when (randomValue <= attack.getDamageQuote()) {
+            true -> true
+            else -> false
+        }
+    }
+
+    fun start(aktiveQuantomixBattleStats: BattleStats, attack: Attack, target: BattleStats) {
+        if (hits(attack)) {
+            Damage(
+                battleStats = aktiveQuantomixBattleStats,
+                attack = attack,
+                battleStatsTarget = target
+            )
+        }
     }
 }
