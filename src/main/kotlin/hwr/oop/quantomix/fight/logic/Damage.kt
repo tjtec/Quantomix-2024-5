@@ -52,7 +52,7 @@ class Damage(private val battleStats: BattleStats, private val attack: Attack, b
         return damage.toInt()
     }
 
-    //Float oder Double? (Vielleicht gute Frage an die Dozenten
+    //TODO: Float oder Double? (Vielleicht gute Frage an die Dozenten
     private fun effectivity(): Float {
         val effectivity1 = battleStats.getQuantomix().getType1().getEffectivity(attack)
         val type2 = battleStats.getQuantomix().getType2()
