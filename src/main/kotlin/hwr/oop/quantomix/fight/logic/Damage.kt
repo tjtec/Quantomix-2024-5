@@ -3,6 +3,15 @@ package hwr.oop.quantomix.fight.logic
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.fight.objects.Status
+import hwr.oop.quantomix.monster.Quantomix
+
+interface DamageStrategy {
+    fun Damage(
+        attackingMonster: Quantomix,
+        defendingMonster: Quantomix,
+        attack: Attack,
+    ): Int
+}
 
 class Damage(private val battleStats: BattleStats, private val attack: Attack, battleStatsTarget: BattleStats) {
     init {

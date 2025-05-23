@@ -10,7 +10,7 @@ class Effects(
     }
 }
 
-enum class Status {
+/*enum class Status {
     NoDamage,
     Poisoning,
     StrongPoisoning,
@@ -19,4 +19,4 @@ enum class Status {
     Sleep,
     Confusion,
     Freeze;
-}
+}*/
