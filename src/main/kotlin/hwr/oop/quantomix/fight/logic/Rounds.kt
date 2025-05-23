@@ -5,6 +5,7 @@ import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 
+//ToDo: mehr als ein Quantomix implementieren
 
 class Rounds(private val trainer1: Coach, private val trainer2: Coach) {
     private val chosenAttacksMap = mutableMapOf<Quantomix, Attack>()
