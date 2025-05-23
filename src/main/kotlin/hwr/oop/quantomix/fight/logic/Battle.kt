@@ -3,7 +3,16 @@ package hwr.oop.quantomix.fight.logic
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
 
-class Battle(private var battleStats: BattleStats, private val attack: Attack) {
+interface Battle {
+    fun simpleBattle(
+        aktiveQuantomixBattleStats: BattleStats,
+        attack: Attack,
+        target: BattleStats,
+        attackStrategy: DamageStrategy,
+        ):Boolean
+}
+
+class SimpleBattle: Battle {
     // muss in Rounds ausgelagert werden
     /*
     internal fun nextAttacker(): MutableList<Quantomix> {
@@ -63,22 +72,20 @@ class Battle(private var battleStats: BattleStats, private val attack: Attack) {
      */
     //ToDo: Wo muss die Verbindung von den BattleStats hin? BattleStats sind mit Quantomix verbunden,
     // aber von Quantomix aus gibt es keine Verbindung dahin muss das so, oder ist das anders Lösbar?
-    private fun hits(attack: Attack): Boolean {
 
+    override fun simpleBattle (aktiveQuantomixBattleStats: BattleStats, attack: Attack, target: BattleStats, strategy: DamageStrategy):Boolean {
+        if (hits(attack)) {
+            val damage=strategy.damageFunction(aktiveQuantomixBattleStats, target, attack)
+            target.getStats().newKp(damage)
+        }
+        return hits(attack)
+    }
+
+    private fun hits(attack: Attack): Boolean {
         val randomValue = (1..100).random()
         return when (randomValue <= attack.getDamageQuote()) {
             true -> true
             else -> false
-        }
-    }
-
-    fun start(aktiveQuantomixBattleStats: BattleStats, attack: Attack, target: BattleStats) {
-        if (hits(attack)) {
-            Damage(
-                battleStats = aktiveQuantomixBattleStats,
-                attack = attack,
-                battleStatsTarget = target
-            )
         }
     }
 }

@@ -3,7 +3,9 @@ package hwr.oop.quantomix.fight
 import io.kotest.core.spec.style.AnnotationSpec
 
 class RoundsTest: AnnotationSpec() {
-    /*
+
+        @BeforeEach
+
         @Test
         fun `Rounds with two trainers`() {
             val feuer= Typ("Feuer")
@@ -67,5 +69,5 @@ class RoundsTest: AnnotationSpec() {
             val winner= Rounds(listOf(trainer1, trainer2, trainer3, trainer4)).start(3)
             Assertions.assertThat(winner).isEqualTo(trainer1)
         }
-        */
+
 }

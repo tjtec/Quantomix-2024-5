@@ -10,4 +10,8 @@ class Coach (
         require(quantomixTeam.isNotEmpty()) { "Ein Coach muss mindestens einen Quantomix besitzen." }
         require(quantomixTeam.size <= 6) { "Ein Coach darf höchstens 6 Quantomix besitzen, aber es wurden ${quantomixTeam.size} übergeben." }
     }
+
+    fun getFirstQuantomix(): Quantomix {
+        return quantomixTeam[0]
+    }
 }

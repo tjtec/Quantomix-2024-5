@@ -3,86 +3,82 @@ package hwr.oop.quantomix.fight.logic
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.fight.objects.Status
-import hwr.oop.quantomix.monster.Quantomix
 
 interface DamageStrategy {
     fun damageFunction(
-        battleStats1: BattleStats,
-        battleStats2: BattleStats,
-        attack: Attack,
+        attacker: BattleStats,
+        target: BattleStats,
+        attack: Attack
     ): Int
 }
 
-class Damage: DamageStrategy {
-    private var battleStats : BattleStats? = null
-    private var attack : Attack? = null
-    private var battleStatsTarget: BattleStats? = null
-    override fun damageFunction(battleStats1: BattleStats, attack1: Attack, battleStatsTarget1: BattleStats) : Int {
-        val effectivity = effectivity()
-        battleStats = battleStats1
-        attack = attack1
-        battleStatsTarget = battleStatsTarget1
-        if (attack!!.getSpecialAttack() ) {
+class StandardDamageStrategy : DamageStrategy {
+    private lateinit var attacker: BattleStats
+    private lateinit var target: BattleStats
+    private lateinit var currentAttack: Attack
+
+    override fun damageFunction(
+        attacker: BattleStats,
+        target: BattleStats,
+        attack: Attack
+    ): Int {
+        this.attacker = attacker
+        this.target = target
+        this.currentAttack = attack
+
+        return calculateDamage()
+    }
+
+    private fun calculateDamage(): Int {
+        val effectivityMultiplier = calculateEffectivity()
+        val statusMultiplier = calculateStatusEffect()
+
+        return if (currentAttack.getSpecialAttack()) {
             formulaAttackForce(
-                attackDamage = attack!!.getDamage(),
-                attackValue = battleStats!!.getStats().getSpecialAttack(),
-                defense = battleStats!!.getStats().getSpecialDefense(),
-                multiFactor = effectivity,
+                attackDamage = currentAttack.getDamage(),
+                attackValue = attacker.getStats().getSpecialAttack(),
+                defense = target.getStats().getSpecialDefense(),
+                multiFactor = effectivityMultiplier * statusMultiplier
             )
         } else {
             formulaAttackForce(
-                attackDamage = attack!!.getDamage(),
-                attackValue = battleStats!!.getStats().getAttack(),
-                defense = battleStatsTarget!!.getStats().getDefense(),
-                multiFactor = effectivity
+                attackDamage = currentAttack.getDamage(),
+                attackValue = attacker.getStats().getAttack(),
+                defense = target.getStats().getDefense(),
+                multiFactor = effectivityMultiplier * statusMultiplier
             )
-
         }
-        //ToDo: Sollen für eine Attacke nur Buff oder Debuff möglich sein? Wie verhält es sich mit den
-        // Buffs und Debuffs, sind Debuffs immer auf das Ziel der Attacke bezogen und Buffs immer auf
-        // den Angreifer?
-        //ToDo:Einfügen der Buff und Debuff Möglichkeit
     }
 
-    private fun statusEffect(): Int {
-        val status = attack!!.getStatus()
-        return if (status != null) {
-            when (status) {
-                Status.NoDamage -> 0
-                Status.Poison -> 1 / 16
-                Status.StrongPoison -> 1 / 16 //ToDo:Pro Runde multiplizierender Schaden
-                Status.Combustion -> 1 / 8
-                Status.Sleep -> 0
-                Status.Freeze -> 0
-                else -> 1
-            }
+    private fun calculateStatusEffect(): Float {
+        return when (currentAttack.getStatus()) {
+            Status.NoDamage -> 0f
+            Status.Poison -> 0.0625f    // 1/16
+            Status.StrongPoison -> 0.0625f
+            Status.Combustion -> 0.125f  // 1/8
+            Status.Sleep -> 0f
+            Status.Freeze -> 0f
+            null -> 1f
+            else -> 1f
+        }
+    }
+
+    private fun calculateEffectivity(): Float {
+        val effectivity1 = attacker.getQuantomix().getType1().getEffectivity(currentAttack)
+        val type2 = attacker.getQuantomix().getType2()
+
+        return if (type2 == null) {
+            effectivity1
         } else {
-            1
+            val effectivity2 = type2.getEffectivity(currentAttack)
+            maxOf(effectivity1, effectivity2)
         }
     }
 
-
-    private fun formulaAttackForce(attackDamage: Int, attackValue: Int, defense: Int, multiFactor: Float): Int {
-        val damage = (attackDamage * attackValue * multiFactor) / ((defense / 100 + 1) * 100)
-        return damage.toInt()
-    }
-
-    //TODO: Float oder Double? (Vielleicht gute Frage an die Dozenten
-    private fun effectivity(): Float {
-        val effectivity1 = battleStats!!.getQuantomix().getType1().getEffectivity(attack!!)
-        val type2 = battleStats!!.getQuantomix().getType2()
-        val effectivity2 = when (type2 != null) {
-            true -> type2.getEffectivity(attack!!)
-            false -> null
-        }
-        return when (effectivity2 == null) {
-            true -> effectivity1
-            false -> when (effectivity1 >= effectivity2) {
-                true -> effectivity1
-                false -> effectivity2
-            }
-        }
-    }
-
-
+    private fun formulaAttackForce(
+        attackDamage: Int,
+        attackValue: Int,
+        defense: Int,
+        multiFactor: Float
+    ): Int = ((attackDamage * attackValue * multiFactor) / ((defense / 100 + 1) * 100)).toInt()
 }
