@@ -6,28 +6,34 @@ import hwr.oop.quantomix.fight.objects.Status
 import hwr.oop.quantomix.monster.Quantomix
 
 interface DamageStrategy {
-    fun Damage(
-        attackingMonster: Quantomix,
-        defendingMonster: Quantomix,
+    fun damageFunction(
+        battleStats1: BattleStats,
+        battleStats2: BattleStats,
         attack: Attack,
     ): Int
 }
 
-class Damage(private val battleStats: BattleStats, private val attack: Attack, battleStatsTarget: BattleStats) {
-    init {
+class Damage: DamageStrategy {
+    private var battleStats : BattleStats? = null
+    private var attack : Attack? = null
+    private var battleStatsTarget: BattleStats? = null
+    override fun damageFunction(battleStats1: BattleStats, attack1: Attack, battleStatsTarget1: BattleStats) : Int {
         val effectivity = effectivity()
-        if (attack.getSpecialAttack()) {
+        battleStats = battleStats1
+        attack = attack1
+        battleStatsTarget = battleStatsTarget1
+        if (attack!!.getSpecialAttack() ) {
             formulaAttackForce(
-                attackDamage = attack.getDamage(),
-                attackValue = battleStats.getStats().getSpecialAttack(),
-                defense = battleStats.getStats().getSpecialDefense(),
+                attackDamage = attack!!.getDamage(),
+                attackValue = battleStats!!.getStats().getSpecialAttack(),
+                defense = battleStats!!.getStats().getSpecialDefense(),
                 multiFactor = effectivity,
             )
         } else {
             formulaAttackForce(
-                attackDamage = attack.getDamage(),
-                attackValue = battleStats.getStats().getAttack(),
-                defense = battleStatsTarget.getStats().getDefense(),
+                attackDamage = attack!!.getDamage(),
+                attackValue = battleStats!!.getStats().getAttack(),
+                defense = battleStatsTarget!!.getStats().getDefense(),
                 multiFactor = effectivity
             )
 
@@ -39,7 +45,7 @@ class Damage(private val battleStats: BattleStats, private val attack: Attack, b
     }
 
     private fun statusEffect(): Int {
-        val status = attack.getStatus()
+        val status = attack!!.getStatus()
         return if (status != null) {
             when (status) {
                 Status.NoDamage -> 0
@@ -63,10 +69,10 @@ class Damage(private val battleStats: BattleStats, private val attack: Attack, b
 
     //TODO: Float oder Double? (Vielleicht gute Frage an die Dozenten
     private fun effectivity(): Float {
-        val effectivity1 = battleStats.getQuantomix().getType1().getEffectivity(attack)
-        val type2 = battleStats.getQuantomix().getType2()
+        val effectivity1 = battleStats!!.getQuantomix().getType1().getEffectivity(attack!!)
+        val type2 = battleStats!!.getQuantomix().getType2()
         val effectivity2 = when (type2 != null) {
-            true -> type2.getEffectivity(attack)
+            true -> type2.getEffectivity(attack!!)
             false -> null
         }
         return when (effectivity2 == null) {
@@ -77,4 +83,6 @@ class Damage(private val battleStats: BattleStats, private val attack: Attack, b
             }
         }
     }
+
+
 }
