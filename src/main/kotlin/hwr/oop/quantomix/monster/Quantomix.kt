@@ -12,6 +12,9 @@ class Quantomix(
     private val stats: Stats,
     private val attacks: List<Attack>,
 ) {
+    fun hasAttack (attack:Attack): Boolean  {
+        return attack in attacks
+    }
     fun getStats(): Stats {
         return stats
     }
