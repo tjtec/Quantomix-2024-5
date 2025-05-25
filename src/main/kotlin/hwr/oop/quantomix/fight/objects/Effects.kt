@@ -10,13 +10,13 @@ class Effects(
     }
 }
 
-enum class Status {
-    NoDamage,
-    Poisoning,
-    StrongPoisoning,
-    Combustion,
-    Paralysis,
-    Sleep,
-    Confusion,
-    Freeze;
-}
+//enum class Status {
+//    NoDamage,
+//    Poisoning,
+//    StrongPoisoning,
+//    Combustion,
+//    Paralysis,
+//    Sleep,
+//    Confusion,
+//    Freeze;
+//}
