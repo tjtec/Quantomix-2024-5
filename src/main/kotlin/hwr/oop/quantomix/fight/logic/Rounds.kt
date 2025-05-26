@@ -12,6 +12,7 @@ class Rounds(private val trainer1: Coach, private val trainer2: Coach) {
     private val chosenAttacksMap = mutableMapOf<Quantomix, Attack>()
     private val damageFunction: DamageStrategy = StandardDamageStrategy()
     private val battle: Battle = SimpleBattle()
+    private val saveMethode: Save = CSVSave()
 
     private val quantomixAndBattleStatsMap = mutableMapOf<Quantomix, BattleStats>()
 
@@ -41,9 +42,6 @@ class Rounds(private val trainer1: Coach, private val trainer2: Coach) {
         if (attackingTrainer == trainer1) activeQuantomixTrainer1 else activeQuantomixTrainer2
 
 
-
-
-
     private fun simulateBattle() {
         val quantomixInOrderOfAttack = quantomixBySpeed()
 
@@ -53,11 +51,12 @@ class Rounds(private val trainer1: Coach, private val trainer2: Coach) {
             val battleStats = getBattleStatsForCombatants(attacker, defender)
 
             battle.simpleBattle(
-                battleStats.first,
-                chosenAttacksMap.getValue(attacker),
-                battleStats.second,
-                damageFunction
+                attacker = battleStats.first,
+                attack = chosenAttacksMap.getValue(attacker),
+                target = battleStats.second,
+                damageStrategie = damageFunction
             )
+            saveMethode.save(trainer1, trainer2, quantomixAndBattleStatsMap)
         }
         chosenAttacksMap.clear()
     }
@@ -70,12 +69,13 @@ class Rounds(private val trainer1: Coach, private val trainer2: Coach) {
     }
 
     private fun quantomixBySpeed(): List<Quantomix> {
-        val activeQuantomix1=quantomixAndBattleStatsMap.get(activeQuantomixTrainer1)
-        val activeQuantomix2=quantomixAndBattleStatsMap.get(activeQuantomixTrainer2)
-        val listOfBattleStats= listOf(activeQuantomix1, activeQuantomix2).sortedByDescending { it.getStats().getSpeed() }
-        val listOfQuantomixSorted=mutableListOf<Quantomix>()
+        val activeQuantomix1 = quantomixAndBattleStatsMap.get(activeQuantomixTrainer1)
+        val activeQuantomix2 = quantomixAndBattleStatsMap.get(activeQuantomixTrainer2)
+        val listOfBattleStats =
+            listOf(activeQuantomix1, activeQuantomix2).sortedByDescending { it.getStats().getSpeed() }
+        val listOfQuantomixSorted = mutableListOf<Quantomix>()
         //ToDo:Schleife fertigmachen
-        for (Int i=0; i < listOfBattleStats.size; i++){
+        for (Int i = 0; i < listOfBattleStats.size; i++){
 
         }
     }
