@@ -11,7 +11,7 @@ class QuantomixTest: AnnotationSpec() {
     fun `Quantomix test`() {
         //val type1= Typ("hello")
         //val type2= Typ("world")
-        val attack = Attack("attack", Typ.Normal, 40, 100, mutableListOf())
+        val attack = Attack("attack", Typ.Normal, 40, 100, specialAttack= false, mutableListOf())
         val attacks = listOf(attack)
         val stats = Stats(200, 100, 30, 70, 35, 88)
         val quantomix = Quantomix("Test", Typ.Pflanze, Typ.Psycho, stats, attacks)

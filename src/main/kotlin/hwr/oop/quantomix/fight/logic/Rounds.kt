@@ -6,6 +6,7 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 
 //ToDo: mehr als ein Quantomix implementieren
+//ToDo: Exeption schreiben Attacke ist nicht in der Liste möglicher auswählbarer Attacken (vielleicht auch erst ins CLI)
 
 class Rounds(private val trainer1: Coach, private val trainer2: Coach) {
     private val chosenAttacksMap = mutableMapOf<Quantomix, Attack>()

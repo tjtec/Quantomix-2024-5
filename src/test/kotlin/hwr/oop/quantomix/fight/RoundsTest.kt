@@ -7,6 +7,11 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
+import hwr.oop.quantomix.fight.logic.Rounds
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertEquals
+
 
 class RoundsTest : AnnotationSpec() {
     @BeforeEach
@@ -16,29 +21,33 @@ class RoundsTest : AnnotationSpec() {
             type = Typ.Geist,
             damage = 30,
             damageQuote = 100,
-            specialAttack = true ,
-            effects = mutableListOf< Effects>())
+            specialAttack = true,
+            effects = mutableListOf()
+        )
         val tackle = Attack(
             attackName = "Tackle",
             type = Typ.Normal,
             damage = 40,
             damageQuote = 100,
             specialAttack = false,
-            effects =mutableListOf<Effects>() )
+            effects = mutableListOf()
+        )
         val eissturm = Attack(
             attackName = "Eissturm",
             type = Typ.Eis,
             damage = 30,
             damageQuote = 100,
             specialAttack = false,
-            effects = mutableListOf<Effects>())
+            effects = mutableListOf()
+        )
         val funkensprung = Attack(
             attackName = "funkensprung",
             type = Typ.Elektro,
             damage = 60,
             damageQuote = 100,
             specialAttack = true,
-            effects = mutableListOf<Effects>())
+            effects = mutableListOf()
+        )
         return listOf(fluch, tackle, eissturm, funkensprung)
     }
 
@@ -62,7 +71,7 @@ class RoundsTest : AnnotationSpec() {
     }
 
     @BeforeEach
-    fun TestQuantomix2(): Quantomix {
+    fun testQuantomix2(): Quantomix {
         val testQuantomix2 = Quantomix(
             quantomixName = "Quantomix2",
             typ1 = Typ.Eis,
@@ -79,75 +88,117 @@ class RoundsTest : AnnotationSpec() {
         )
         return testQuantomix2
     }
-    @Test
-    fun `Rounds with two trainers`(){
 
+    @BeforeEach
+    fun TestCoach1(): Coach {
+        val testCoach1 = Coach(
+            coachName = "Pepe",
+            quantomixTeam = listOf(
+                testQuantomix1(),
+                testQuantomix2(),
+                testQuantomix1(),
+                testQuantomix2(),
+                testQuantomix1(),
+                testQuantomix2()
+            )
+        )
+        return testCoach1
     }
 
-    /*@Test
+    @BeforeEach
+    fun TestCoach2(): Coach {
+        val testCoach2 = Coach(
+            coachName = "Lilly",
+            quantomixTeam = listOf(
+                testQuantomix2(),
+                testQuantomix1(),
+                testQuantomix2(),
+                testQuantomix1(),
+                testQuantomix2(),
+                testQuantomix2()
+            )
+        )
+        return testCoach2
+    }
+
+    private fun performRound(
+        rounds: Rounds,
+        coach1: Coach,
+        coach2: Coach,
+        attackIndexCoach1: Int,
+        attackIndexCoach2: Int
+    ) {
+        val attacks = testAttacks()
+        rounds.choseAttack(coach1, attacks[attackIndexCoach1])
+        rounds.choseAttack(coach2, attacks[attackIndexCoach2])
+    }
+
+    @Test
     fun `Rounds with two trainers`() {
-        val feuer = Typ("Feuer")
-        val geist = Typ("Geist")
-        val Fluch = Attack("Fluch", Typ("Geist"), 30, 100)
-        val Tackle = Attack("Tackle", Typ("Normal"), 40, 100)
-        val Glut = Attack("Glut", Typ("Feuer"), 30, 100)
-        val Spukball = Attack("Spukball", Typ("Geist"), 60, 100)
-        val quantomix = Quantomix("Test", feuer, geist, 60, 60, 60, 60, 60, 60, listOf(Tackle, Glut, Spukball, Fluch))
-        val quantomix2 = Quantomix("Test", feuer, geist, 50, 50, 50, 50, 50, 50, listOf(Tackle, Glut, Spukball, Fluch))
-        val trainer1 = Coach("Pepe", listOf(quantomix))
-        val trainer2 = Coach("Lilly", listOf(quantomix2))
-        val winner = Rounds(listOf(trainer1, trainer2)).start()
-        Assertions.assertThat(winner).isEqualTo(trainer1)
+        val coach1 = TestCoach1()
+        val coach2 = TestCoach2()
+        val rounds = Rounds(coach1, coach2)
+        val attacks = testAttacks()
+
+        assertDoesNotThrow {
+            rounds.choseAttack(coach1, attacks[0])
+            rounds.choseAttack(coach2, attacks[1])
+        }
+
+        assertDoesNotThrow {
+            rounds.choseAttack(coach1, attacks[2])
+            rounds.choseAttack(coach2, attacks[3])
+        }
     }
 
     @Test
-    fun `Players have more than one Quantomix in Battle`() {
-        val feuer = Typ("Feuer")
-        val geist = Typ("Geist")
-        val Fluch = Attack("Fluch", Typ("Geist"), 30, 100)
-        val Tackle = Attack("Tackle", Typ("Normal"), 40, 100)
-        val Glut = Attack("Glut", Typ("Feuer"), 30, 100)
-        val Spukball = Attack("Spukball", Typ("Geist"), 60, 100)
-        val quantomix = Quantomix("Test", feuer, geist, 60, 60, 60, 60, 60, 60, listOf(Tackle, Glut, Spukball, Fluch))
-        val quantomix2 = Quantomix("Test", feuer, geist, 50, 50, 50, 50, 50, 50, listOf(Tackle, Glut, Spukball, Fluch))
-        val trainer1 = Coach("Pepe", listOf(quantomix, quantomix2))
-        val trainer2 = Coach("Lilly", listOf(quantomix2, quantomix))
-        val winner = Rounds(listOf(trainer1, trainer2)).start(2)
-        Assertions.assertThat(winner).isEqualTo(trainer1)
+    fun `choosing attack twice for same trainer throws exception`() {
+        val coach1 = TestCoach1()
+        val coach2 = TestCoach2()
+        val rounds = Rounds(coach1, coach2)
+        val attacks = testAttacks()
+
+        rounds.choseAttack(coach1, attacks[0])
+        val exception = assertThrows(IllegalArgumentException::class.java) {
+            rounds.choseAttack(coach1, attacks[1])
+        }
+        assertEquals("Attacking trainer has already chosen an attack", exception.message)
     }
 
     @Test
-    fun `More than two Players`() {
-        val feuer = Typ("Feuer")
-        val geist = Typ("Geist")
-        val Fluch = Attack("Fluch", Typ("Geist"), 30, 100)
-        val Tackle = Attack("Tackle", Typ("Normal"), 40, 100)
-        val Glut = Attack("Glut", Typ("Feuer"), 30, 100)
-        val Spukball = Attack("Spukball", Typ("Geist"), 60, 100)
-        val quantomix = Quantomix("Test", feuer, geist, 60, 60, 60, 60, 60, 60, listOf(Tackle, Glut, Spukball, Fluch))
-        val quantomix2 = Quantomix("Test", feuer, geist, 50, 50, 50, 50, 50, 50, listOf(Tackle, Glut, Spukball, Fluch))
-        val trainer1 = Coach("Pepe", listOf(quantomix, quantomix2))
-        val trainer2 = Coach("Lilly", listOf(quantomix2, quantomix))
-        val trainer3 = Coach("Gladio", listOf(quantomix, quantomix))
-        val winner = Rounds(listOf(trainer1, trainer2, trainer3)).start()
-        Assertions.assertThat(winner).isEqualTo(trainer1)
+    fun `choosing an attack not possessed by Quantomix throws exception`() {
+        val coach1 = TestCoach1()
+        val coach2 = TestCoach2()
+        val rounds = Rounds(coach1, coach2)
+
+        // Erzeuge einen Angriff, den der aktive Quantomix nicht besitzt.
+        val invalidAttack = Attack(
+            attackName = "Unsichtbarer Schlag",
+            type = Typ.Normal,
+            damage = 50,
+            damageQuote = 100,
+            specialAttack = false,
+            effects = mutableListOf()
+        )
+        val exception = assertThrows(IllegalArgumentException::class.java) {
+            rounds.choseAttack(coach1, invalidAttack)
+        }
+        assertEquals("Attacking Quantomix does not have the attack", exception.message)
     }
 
-    fun `More than two Players and more than one Quantomix in Battle`() {
-        val feuer = Typ("Feuer")
-        val geist = Typ("Geist")
-        val Fluch = Attack("Fluch", Typ("Geist"), 30, 100)
-        val Tackle = Attack("Tackle", Typ("Normal"), 40, 100)
-        val Glut = Attack("Glut", Typ("Feuer"), 30, 100)
-        val Spukball = Attack("Spukball", Typ("Geist"), 60, 100)
-        val quantomix = Quantomix("Test", feuer, geist, 60, 60, 60, 60, 60, 60, listOf(Tackle, Glut, Spukball, Fluch))
-        val quantomix2 = Quantomix("Test", feuer, geist, 50, 50, 50, 50, 50, 50, listOf(Tackle, Glut, Spukball, Fluch))
-        val trainer1 = Coach("Pepe", listOf(quantomix, quantomix2, quantomix))
-        val trainer2 = Coach("Lilly", listOf(quantomix2, quantomix, quantomix2))
-        val trainer3 = Coach("Gladio", listOf(quantomix, quantomix, quantomix2))
-        val trainer4 = Coach("Flora", listOf(quantomix2, quantomix2, quantomix))
-        val winner = Rounds(listOf(trainer1, trainer2, trainer3, trainer4)).start(3)
-        Assertions.assertThat(winner).isEqualTo(trainer1)
-    }*/
+    @Test
+    fun `simulate multiple rounds without exceptions`() {
+        val coach1 = TestCoach1()
+        val coach2 = TestCoach2()
+        val rounds = Rounds(coach1, coach2)
 
+        // Simuliere mehrere Runden mithilfe der Helper-Funktion
+        for (round in 0 until 3) {
+            val attackIndexCoach1 = round % testAttacks().size
+            val attackIndexCoach2 = (round + 1) % testAttacks().size
+            assertDoesNotThrow {
+                performRound(rounds, coach1, coach2, attackIndexCoach1, attackIndexCoach2)
+            }
+        }
+    }
 }

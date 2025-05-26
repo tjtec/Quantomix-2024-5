@@ -22,11 +22,16 @@ class StandardDamageStrategy : DamageStrategy {
         target: BattleStats,
         attack: Attack
     ): Int {
-        this.attacker = attacker
-        this.target = target
-        this.currentAttack = attack
+        if (attacker.getStats().getKp() == 0){
+            throw
+        }
+        else {
+            this.attacker = attacker
+            this.target = target
+            this.currentAttack = attack
 
-        return calculateDamage()
+            return calculateDamage()
+        }
     }
 
     private fun calculateDamage(): Int {

@@ -12,9 +12,10 @@ class Translator {
         type: String,
         damage: String,
         damageQuote: String,
+        specialAttack: String,
     ): Attack {
         val getTyp = Typ.Normal
-        return Attack(name, getTyp.getFromString(type), damage.toInt(), damageQuote.toInt(), effects = mutableListOf())
+        return Attack(name, getTyp.getFromString(type), damage.toInt(), damageQuote.toInt(), effects = mutableListOf(), specialAttack = specialAttack.toBoolean())
     }
 
     fun translateToQuantomix(
