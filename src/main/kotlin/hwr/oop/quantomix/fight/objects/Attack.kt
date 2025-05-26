@@ -39,10 +39,13 @@ data class Attack(
         return this.status
     }
 
-    fun changeStats(target: BattleStats) {
+    fun changeStats(attacker: BattleStats, target: BattleStats) {
         var alreadyChangedEffects = 0
         while (!(this.getEffects().isEmpty()) && this.getEffects().size > alreadyChangedEffects) {
-            this.getEffects()[alreadyChangedEffects].buffsAndDebuffs()
+            if (this.getEffects()[alreadyChangedEffects].getSelf()) {
+                this.getEffects()[alreadyChangedEffects].buffsAndDebuffs(attacker)
+            }
+            this.getEffects()[alreadyChangedEffects].buffsAndDebuffs(target)
             alreadyChangedEffects += 1
         }
         val status = this.getStatus()
@@ -50,9 +53,4 @@ data class Attack(
             target.changeStatus(status)
         }
     }
-}
-
-class BattleAttack(val attack: Attack, val target: BattleStats) {
-    //ToDo: ist unnötig, dass Ziel kann auch erst im Battle mitgeliefert werden
-
 }
