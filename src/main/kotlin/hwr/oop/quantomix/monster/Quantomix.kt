@@ -37,5 +37,9 @@ class Quantomix(
     fun newBattleStats(): BattleStats {
         return BattleStats(this, stats.deepCopy())
     }
+
+    fun newKp(damage: Int){
+        this.stats.newKp(damage)
+    }
 }
 

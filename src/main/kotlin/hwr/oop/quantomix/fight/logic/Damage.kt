@@ -3,6 +3,7 @@ package hwr.oop.quantomix.fight.logic
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.fight.objects.Status
+import hwr.oop.quantomix.DeadQuantomixException
 
 interface DamageStrategy {
     fun damageFunction(
@@ -23,7 +24,7 @@ class StandardDamageStrategy : DamageStrategy {
         attack: Attack
     ): Int {
         if (attacker.getStats().getKp() == 0){
-            throw
+            throw DeadQuantomixException("The Quantomix which would attack next is already dead!")
         }
         else {
             this.attacker = attacker

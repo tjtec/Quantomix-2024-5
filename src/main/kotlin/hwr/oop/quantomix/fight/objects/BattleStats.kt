@@ -28,5 +28,10 @@ class BattleStats(
     fun getQuantomix(): Quantomix {
         return quantomix
     }
-
+    fun isAlive():Boolean{
+        return when(this.stats.getKp()){
+            0->false
+            else -> true
+        }
+    }
 }

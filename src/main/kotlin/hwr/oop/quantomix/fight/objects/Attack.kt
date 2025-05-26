@@ -31,10 +31,6 @@ data class Attack(
         return this.effects
     }
 
-    fun getOneEffect(index: Int): Effects {
-        return this.effects[index]
-    }
-
     fun getStatus(): Status? {
         return this.status
     }
@@ -51,6 +47,13 @@ data class Attack(
         val status = this.getStatus()
         if (status != null) {
             target.changeStatus(status)
+        }
+    }
+    fun hits(): Boolean {
+        val randomValue = (1..100).random()
+        return when (randomValue <= this.getDamageQuote()) {
+            true -> true
+            else -> false
         }
     }
 }

@@ -9,29 +9,21 @@ interface Battle {
         attack: Attack,
         target: BattleStats,
         attackStrategy: DamageStrategy,
-        ):Boolean
+    ): Boolean
 }
 
-class SimpleBattle: Battle {
+class SimpleBattle : Battle {
     override fun simpleBattle(
         aktiveQuantomixBattleStats: BattleStats,
         attack: Attack,
         target: BattleStats,
         attackStrategy: DamageStrategy
     ): Boolean {
-        if (hits(attack)) {
+        if (attack.hits()) {
             val damage = attackStrategy.damageFunction(aktiveQuantomixBattleStats, target, attack)
-            target.getStats().newKp(damage)
+            target.newKp(damage)
             attack.changeStats(aktiveQuantomixBattleStats, target)
         }
-        return hits(attack)
-    }
-
-    private fun hits(attack: Attack): Boolean {
-        val randomValue = (1..100).random()
-        return when (randomValue <= attack.getDamageQuote()) {
-            true -> true
-            else -> false
-        }
+        return target.isAlive()
     }
 }

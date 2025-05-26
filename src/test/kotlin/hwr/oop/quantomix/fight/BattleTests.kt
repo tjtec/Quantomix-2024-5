@@ -1,5 +1,6 @@
 package hwr.oop.quantomix.fight
 
+import hwr.oop.quantomix.DeadQuantomixException
 import hwr.oop.quantomix.fight.logic.Battle
 import hwr.oop.quantomix.fight.logic.DamageStrategy
 import hwr.oop.quantomix.fight.logic.StandardDamageStrategy
@@ -10,6 +11,7 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
 
 class BattleTests : AnnotationSpec() {
     @BeforeEach
@@ -62,6 +64,19 @@ class BattleTests : AnnotationSpec() {
             attackName = "Glut",
             type = Typ.Feuer,
             damage = 40,
+            damageQuote = 100,
+            specialAttack = false,
+            effects = mutableListOf(),
+            status = null
+        )
+        return glut
+    }
+    @BeforeEach
+    fun feuerball(): Attack{
+        val glut = Attack(
+            attackName = "Feuerball",
+            type = Typ.Feuer,
+            damage = 100,
             damageQuote = 100,
             specialAttack = false,
             effects = mutableListOf(),
@@ -152,7 +167,7 @@ class BattleTests : AnnotationSpec() {
             target = schillokBattleStats,
             attackStrategy = damageStrategy(),
         )
-        assertThat(solution).isEqualTo(true)
+        assertThat(solution).isEqualTo(false)
         assertThat(schillokBattleStats.getStats().getKp()).isLessThan(schillok().getStats().getKp())
         assertThat(schillokBattleStats.getStats().getKp()).isEqualTo(26)
         assertThat(schillok().getStats().getKp()).isEqualTo(59)
@@ -171,7 +186,7 @@ class BattleTests : AnnotationSpec() {
             target = schillokBattleStats,
             attackStrategy = damageStrategy(),
         )
-        assertThat(solution).isEqualTo(true)
+        assertThat(solution).isEqualTo(false)
         assertThat(schillokBattleStats.getStats().getKp()).isLessThan(schillok().getStats().getKp())
         assertThat(schillok.getStats().getKp()).isEqualTo(59)
         assertThat(schillokBattleStats.getStats().getKp()).isEqualTo(16)
@@ -200,7 +215,7 @@ class BattleTests : AnnotationSpec() {
             target = oweiBattleStats,
             attackStrategy = damageStrategy(),
         )
-        assertThat(solution).isEqualTo(true)
+        assertThat(solution).isEqualTo(false)
         assertThat(oweiBattleStats.getStats().getKp()).isLessThan(schillok().getStats().getKp())
         assertThat(owei.getStats().getKp()).isEqualTo(60)
         assertThat(oweiBattleStats.getStats().getKp()).isEqualTo(17)
@@ -229,7 +244,7 @@ class BattleTests : AnnotationSpec() {
             target = rattzfatzBattleStats,
             attackStrategy = damageStrategy()
         )
-        assertThat(solution).isEqualTo(true)
+        assertThat(solution).isEqualTo(false)
         assertThat(glurakBattleStats.getStats().getKp()).isEqualTo(glurak.getStats().getKp())
         assertThat(rattzfatzBattleStats.getStats().getKp()).isEqualTo(owei().getStats().getKp())
     }
@@ -242,7 +257,7 @@ class BattleTests : AnnotationSpec() {
         val battle:Battle=SimpleBattle()
         val solution=battle.simpleBattle(
             aktiveQuantomixBattleStats = glurakBattleStats,
-            attack = glut(),
+            attack = feuerball(),
             target = oweiBattleStats,
             attackStrategy = damageStrategy()
         )
@@ -252,5 +267,28 @@ class BattleTests : AnnotationSpec() {
         assertThat(oweiBattleStats.getStats().getKp()).isEqualTo(0)
         assertThat(owei.getStats().getKp()).isEqualTo(84)
     }
-    //ToDo: Wenn ein totes Quantomix angreift muss eine Exeption fliegen
+    @Test
+    fun `BattleTest dead Quantomix want to attack`() {
+        val glurak=glurak()
+        val owei=owei()
+        val oweiBattleStats= owei.newBattleStats()
+        val glurakBattleStats= glurak.newBattleStats()
+        val battle:Battle=SimpleBattle()
+       battle.simpleBattle(
+            aktiveQuantomixBattleStats = glurakBattleStats,
+            attack = glut(),
+            target = oweiBattleStats,
+            attackStrategy = damageStrategy()
+        )
+        try {
+            val solution=battle.simpleBattle(
+                aktiveQuantomixBattleStats = glurakBattleStats,
+                attack = glut(),
+                target = oweiBattleStats,
+                attackStrategy = damageStrategy()
+            )
+        }catch (e: DeadQuantomixException){
+            assertEquals("The Quantomix which would attack next is already dead!", e.message)
+        }
+    }
 }

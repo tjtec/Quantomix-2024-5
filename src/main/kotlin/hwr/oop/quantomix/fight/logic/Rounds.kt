@@ -11,9 +11,9 @@ import hwr.oop.quantomix.objects.Coach
 class Rounds(private val trainer1: Coach, private val trainer2: Coach) {
     private val chosenAttacksMap = mutableMapOf<Quantomix, Attack>()
     private val damageFunction: DamageStrategy = StandardDamageStrategy()
-    private val battle:Battle=SimpleBattle()
+    private val battle: Battle = SimpleBattle()
 
-    private val quantomixAndBattleStatsMap= mutableMapOf<Quantomix, BattleStats>()
+    private val quantomixAndBattleStatsMap = mutableMapOf<Quantomix, BattleStats>()
 
 
     private val activeQuantomixTrainer1 = trainer1.getFirstQuantomix()
@@ -40,8 +40,12 @@ class Rounds(private val trainer1: Coach, private val trainer2: Coach) {
     private fun attackingQuantomix(attackingTrainer: Coach) =
         if (attackingTrainer == trainer1) activeQuantomixTrainer1 else activeQuantomixTrainer2
 
+
+
+
+
     private fun simulateBattle() {
-        val quantomixInOrderOfAttack = quantomixsBySpeed()
+        val quantomixInOrderOfAttack = quantomixBySpeed()
 
         for (attacker in quantomixInOrderOfAttack) {
             val defender = otherQuantomix(attacker)
@@ -65,13 +69,20 @@ class Rounds(private val trainer1: Coach, private val trainer2: Coach) {
         return Pair(attackerStats, defenderStats)
     }
 
-    private fun quantomixsBySpeed(): List<Quantomix> {
-        return listOf(activeQuantomixTrainer1, activeQuantomixTrainer2)
-            .sortedByDescending { it.getStats().getSpeed() }
+    private fun quantomixBySpeed(): List<Quantomix> {
+        val activeQuantomix1=quantomixAndBattleStatsMap.get(activeQuantomixTrainer1)
+        val activeQuantomix2=quantomixAndBattleStatsMap.get(activeQuantomixTrainer2)
+        val listOfBattleStats= listOf(activeQuantomix1, activeQuantomix2).sortedByDescending { it.getStats().getSpeed() }
+        val listOfQuantomixSorted=mutableListOf<Quantomix>()
+        //ToDo:Schleife fertigmachen
+        for (Int i=0; i < listOfBattleStats.size; i++){
+
+        }
     }
 
-        private fun otherQuantomix(quantomix: Quantomix) =
-            if (quantomix == activeQuantomixTrainer1) activeQuantomixTrainer2 else activeQuantomixTrainer1
+    private fun otherQuantomix(quantomix: Quantomix) =
+        if (quantomix == activeQuantomixTrainer1) activeQuantomixTrainer2 else activeQuantomixTrainer1
+
 
 //        private fun defendingQuantomix(attacking: Coach) =
 //            if (attacking == trainer2) activeQuantomixTrainer2 else activeQuantomixTrainer1
