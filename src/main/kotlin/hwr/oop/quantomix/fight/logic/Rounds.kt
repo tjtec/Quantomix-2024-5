@@ -1,5 +1,9 @@
 package hwr.oop.quantomix.fight.logic
 
+import hwr.oop.quantomix.Memory.CSVLoad
+import hwr.oop.quantomix.Memory.CSVSave
+import hwr.oop.quantomix.Memory.Load
+import hwr.oop.quantomix.Memory.Save
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.monster.Quantomix
@@ -8,13 +12,14 @@ import hwr.oop.quantomix.objects.Coach
 //ToDo: mehr als ein Quantomix implementieren
 //ToDo: Exeption schreiben Attacke ist nicht in der Liste möglicher auswählbarer Attacken (vielleicht auch erst ins CLI)
 
-class Rounds(private val trainer1: Coach, private val trainer2: Coach) {
-    private val chosenAttacksMap = mutableMapOf<Quantomix, Attack>()
+class Rounds(private var trainer1: Coach, private var trainer2: Coach) {
+    private val chosenAttacksMap = MutableMap<Quantomix, Attack>()
     private val damageFunction: DamageStrategy = StandardDamageStrategy()
     private val battle: Battle = SimpleBattle()
     private val saveMethode: Save = CSVSave()
+    private val loadMethode: Load = CSVLoad()
 
-    private val quantomixAndBattleStatsMap = mutableMapOf<Quantomix, BattleStats>()
+    private var quantomixAndBattleStatsMap = mutableMapOf<Quantomix, BattleStats>()
 
 
     private val activeQuantomixTrainer1 = trainer1.getFirstQuantomix()
@@ -73,7 +78,7 @@ class Rounds(private val trainer1: Coach, private val trainer2: Coach) {
         val activeQuantomix2 = quantomixAndBattleStatsMap.get(activeQuantomixTrainer2)
         val listOfBattleStats =
             listOf(activeQuantomix1, activeQuantomix2).sortedByDescending { it.getStats().getSpeed() }
-        val listOfQuantomixSorted = mutableListOf<Quantomix>()
+        mutableListOf<Quantomix>()
         //ToDo:Schleife fertigmachen
         for (Int i = 0; i < listOfBattleStats.size; i++){
 
@@ -86,4 +91,11 @@ class Rounds(private val trainer1: Coach, private val trainer2: Coach) {
 
 //        private fun defendingQuantomix(attacking: Coach) =
 //            if (attacking == trainer2) activeQuantomixTrainer2 else activeQuantomixTrainer1
+
+    private fun loadRound() {
+        val loadHelper = loadMethode.getHelper()
+        quantomixAndBattleStatsMap = loadHelper.quantomixAndBattleStatsMap
+        trainer1 = loadHelper.trainer1
+        trainer2 = loadHelper.trainer2
+    }
 }

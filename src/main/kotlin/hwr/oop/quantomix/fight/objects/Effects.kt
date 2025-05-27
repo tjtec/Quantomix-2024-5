@@ -7,10 +7,17 @@ class Effects(
     private val self: Boolean,
 ) {
     fun buffsAndDebuffs(targetOfChangeStats: BattleStats) {
-        targetOfChangeStats.changeStats().BuffsDebuffs(changeStats, buff)
+        targetOfChangeStats.changeStats().buffsDebuffs(changeStats, buff)
     }
 
+    fun isSelfDebuff(): Boolean {
+        return !buff && self
+    }
     fun getSelf(): Boolean = self
+
+    fun upDateEffect(newStats: Stats) {
+        this.changeStats.fueseToStats(newStats)
+    }
 }
 
 /*enum class Status {
