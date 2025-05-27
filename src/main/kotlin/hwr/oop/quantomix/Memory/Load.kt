@@ -1,7 +1,5 @@
 package hwr.oop.quantomix.Memory
 
-import hwr.oop.quantomix.csvparser.Translator
-
 interface Load {
     fun createHelper(): SaveHelper
     fun getHelper(): SaveHelper
@@ -12,9 +10,12 @@ class CSVLoad : Load {
 
     override fun createHelper(
     ): SaveHelper {
-        val translator = Translator()
-        val saveHelper = SaveHelper(translator.translateToCoach(), trainer2, quantomixAndBattleStatsMap)
-        return saveHelper
+        TODO(
+            "hier ist die gewünschte Vorbereitung" +
+                    " val translator = Translator()\n" +
+                    "        val saveHelper = SaveHelper(translator.translateToCoach(), trainer2, quantomixAndBattleStatsMap)\n" +
+                    "        return saveHelper"
+        )
     }
 
     override fun getHelper(): SaveHelper {

@@ -3,6 +3,7 @@ package hwr.oop.quantomix.fight.logic
 import hwr.oop.quantomix.DeadQuantomixException
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
+import hwr.oop.quantomix.fight.objects.StatusHelper
 import hwr.oop.quantomix.fight.objects.UsefulInformationForStatus
 
 interface DamageStrategy {
@@ -40,21 +41,28 @@ class StandardDamageStrategy : DamageStrategy {
 
     private fun calculateDamage(): Int {
         val effectivityMultiplier = calculateEffectivity()
-        currentAttack.calculateStatusEffect(usefulInformationForStatus)
-
+        lateinit var statusEffect: StatusHelper
+        if (currentAttack.hasStatus()) {
+            statusEffect = currentAttack.getStatus()!!.calculateStatusEffect(
+                attack = currentAttack,
+                usefulInformationForStatus1 = usefulInformationForStatus
+            )
+        } else {
+            statusEffect = StatusHelper()
+        }
         return if (currentAttack.getSpecialAttack()) {
             formulaAttackForce(
-                attackDamage = currentAttack.getDamage(),
+                attackDamage = currentAttack.getDamage() + statusEffect.summand * statusEffect.multiplicator,
                 attackValue = attacker.getStats().getSpecialAttack(),
                 defense = target.getStats().getSpecialDefense(),
-                multiFactor = effectivityMultiplier * statusMultiplier
+                multiFactor = effectivityMultiplier
             )
         } else {
             formulaAttackForce(
-                attackDamage = currentAttack.getDamage(),
+                attackDamage = currentAttack.getDamage() + statusEffect.summand * statusEffect.multiplicator,
                 attackValue = attacker.getStats().getAttack(),
                 defense = target.getStats().getDefense(),
-                multiFactor = (effectivityMultiplier * statusMultiplier)
+                multiFactor = effectivityMultiplier
             )
         }
     }
@@ -68,7 +76,10 @@ class StandardDamageStrategy : DamageStrategy {
             effectivity1
         } else {
             val effectivity2 = type2.getEffectivity(currentAttack)
-            maxOf(effectivity1, effectivity2)
+            when (effectivity1 >= effectivity2) {
+                true -> effectivity1
+                false -> effectivity2
+            }
         }
     }
 

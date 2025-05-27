@@ -23,7 +23,7 @@ class SimpleBattle : Battle {
         if (attack.hits()) {
             val damage = attackStrategy.damageFunction(aktiveQuantomixBattleStats, target, attack)
             target.newKp(damage)
-            attack.changeStats(aktiveQuantomixBattleStats, target)
+            attack.changeStatsAndStatus(aktiveQuantomixBattleStats, target)
         }
         return target.isAlive()
     }

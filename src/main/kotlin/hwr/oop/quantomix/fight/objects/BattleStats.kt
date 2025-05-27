@@ -15,10 +15,12 @@ class BattleStats(
         return this.stats
     }
 
-    fun changeStatus(newStatus: Status) {
+    fun changeStatus(newStatus: Status): Boolean {
         if (this.status == null) {
             this.status = newStatus
+            return true
         }
+        return false
     }
 
     fun changeStats(): Stats {

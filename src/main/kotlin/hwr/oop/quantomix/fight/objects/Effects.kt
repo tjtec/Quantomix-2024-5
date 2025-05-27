@@ -6,8 +6,8 @@ class Effects(
     // private val targetOfChangeStats: BattleStats,
     private val self: Boolean,
 ) {
-    fun buffsAndDebuffs(targetOfChangeStats: BattleStats) {
-        targetOfChangeStats.changeStats().buffsDebuffs(changeStats, buff)
+    fun buffsAndDebuffs(targetOfChangeStats: BattleStats): Boolean {
+        return targetOfChangeStats.changeStats().buffsDebuffs(changeStats, buff)
     }
 
     fun isSelfDebuff(): Boolean {

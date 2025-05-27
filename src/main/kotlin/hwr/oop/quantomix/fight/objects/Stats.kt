@@ -26,7 +26,7 @@ class Stats(
         }
     }
 
-    fun buffsDebuffs(stats: Stats, buff: Boolean) {
+    fun buffsDebuffs(stats: Stats, buff: Boolean): Boolean {
         if (!buff) {
             selfDamage(stats)
             newAttackValueDown(stats)
@@ -42,6 +42,7 @@ class Stats(
             newSpecialDefenseValueUp(stats)
             newSpeedValueUp(stats)
         }
+        return true
     }
 
     private fun selfDamage(stats: Stats) {
