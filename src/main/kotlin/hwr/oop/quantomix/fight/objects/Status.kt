@@ -1,5 +1,7 @@
 package hwr.oop.quantomix.fight.objects
 
+import java.util.*
+
 enum class Status {
     NoDamage,
     Poison,
@@ -10,48 +12,38 @@ enum class Status {
     Confusion,
     Freeze
 }
-//
-//import hwr.oop.quantomix.fight.objects.BattleStats
-//
-//class Status(
-//    var noDamage: Boolean = false,
-//    var poisoning: Boolean = false,
-//    var strongPoisoning: Boolean = false,
-//    var combustion: Boolean = false,
-//    var paralysis: Boolean = false,
-//    var sleep: Boolean = false,
-//    var confusion: Boolean = false,
-//    var freeze: Boolean = false,
-//) {
-//    val duration: Int = (2..5).random()
-//
-//
-//
-//    fun effectsOfStatus(targetBattleStats: BattleStats, alreadyPassedRounds: Int) {
-//        if (poisoning) {
-//            targetBattleStats.stats.kp -= (targetBattleStats.stats.kp / 16)
-//        }
-//        if (strongPoisoning) {
-//            targetBattleStats.stats.kp += (targetBattleStats.stats.kp / 16) * 2
-//        }
-//        if (combustion) {
-//            targetBattleStats.stats.kp -= (targetBattleStats.stats.kp / 8)
-//        }
-//        if (paralysis) {
-//            targetBattleStats.nextAttack!!.damageQuote = targetBattleStats.nextAttack!!.damageQuote * 2 / 3
-//            targetBattleStats.stats.speed = targetBattleStats.stats.speed / 2
-//        }
-//        if (sleep || freeze) {
-//            if (duration >= alreadyPassedRounds) {
-//                if (targetBattleStats.target!!.battleStats.status == null) {
-//                    targetBattleStats.target!!.battleStats.status = Status(true)
-//                } else {
-//                    targetBattleStats.target!!.battleStats.status!!.noDamage = true
-//                }
-//            }
-//        }
-//        if (confusion) {
-//            //ToDo: Ich muss irgendwo festhalten, dass die Attacken in 50% der Fälle nach hinten los gehen, doch wo?
-//        }
-//    }
-//}
+
+class UsefulInformationForStatus(
+    var alreadyPassedRounds: Int,
+    var lastStatusDamage: Float,
+) {
+    var randomValueDuration = Random().nextInt(2, 5)
+
+    fun hitParalysis(): Int {
+        val randomValue = Random().nextInt(0, 100)
+        return when (randomValue < (2 / 3 * 100)) {
+            true -> 1
+            false -> 0
+        }
+    }
+
+    private fun newDuration() {
+        randomValueDuration = Random().nextInt(2, 5)
+    }
+
+    fun selfHit(): Boolean {
+        val randomValue = Random().nextInt(0, 100)
+        return randomValue > 50
+    }
+
+    fun roundsWithStatusEffectLeft(): Boolean {
+        if (alreadyPassedRounds > randomValueDuration) {
+            newDuration()
+            alreadyPassedRounds = 0
+            return true
+        }
+        return false
+    }
+
+
+}

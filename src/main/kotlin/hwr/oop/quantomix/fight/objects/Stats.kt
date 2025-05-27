@@ -20,10 +20,13 @@ class Stats(
     )
 
     fun newKp(damage: Int) {
-        this.kp = maxOf(0, this.kp - damage)
+        this.kp = when ((this.kp - damage) <= 0) {
+            true -> 0
+            else -> this.kp - damage
+        }
     }
 
-    fun BuffsDebuffs(stats: Stats, buff: Boolean) {
+    fun buffsDebuffs(stats: Stats, buff: Boolean) {
         if (!buff) {
             selfDamage(stats)
             newAttackValueDown(stats)
@@ -92,6 +95,15 @@ class Stats(
 
     private fun newSpeedValueUp(stats: Stats) {
         this.speed += stats.speed
+    }
+
+    fun fueseToStats(stats: Stats) {
+        this.kp *= stats.kp
+        this.specialAttack *= stats.specialAttack
+        this.specialDefense *= stats.specialDefense
+        this.speed *= stats.speed
+        this.attack *= stats.attack
+        this.defense *= stats.defense
     }
 
     fun getKp(): Int = this.kp
