@@ -12,7 +12,7 @@ class AttackTest : AnnotationSpec() {
             attackName = "Giftmüll",
             type = Typ.Gift,
             damage = 50,
-            damageQuote = 100,
+            damageQuote = 1,
             specialAttack = true,
             effects = mutableListOf(
                 Effects(
@@ -64,8 +64,37 @@ class AttackTest : AnnotationSpec() {
             ),
             attacks = ListOf(attack)
         )
-        attacker.newBattleStats()
-
+        val target = Quantomix(
+            quantomixName = "Slima",
+            typ1 = Typ.Gift,
+            stats = Stats(
+                kp = 10,
+                attack = 10,
+                defense = 20,
+                specialAttack = 10,
+                specialDefense = 20,
+                speed = 10
+            ),
+            attacks = ListOf(attack)
         )
+        attacker.newBattleStats()
+        target.newBattleStats()
+        assertThat(attack.changeStatsAndStatus).isEqualsTo(true)
+    }
+    fun `Test attack hits`(){
+        val attack=spukball()
+        assertThat(attack.hits()).isEqualsTo(true)
+    }
+    fun `Test attack has status`(){
+        assertThat(spukball().hasStatus()).isEqualsTo(true)
+    }
+    fun `Test getter of attack`(){
+        val attack=spukball()
+        assertThat(attack.getType()).isEqualsTo(Typ.Gift)
+        assertThat(attack.getDamage()).isEqualsTo(50)
+        assertThat(attack.getSpecialAttack()).isEqualsTo(true)
+        assertThat(attack.getDamageQuote()).isEqualsTo(1)
+        assertThat(attack.getEffects()).isNotEmpty
+        assertThat(attack.getStatus()).isEqualsTo(Status.StrongPoison)
     }
 }

@@ -36,15 +36,6 @@ data class Attack(
         return this.status
     }
 
-    fun updateSelfDebuffs(stats: Stats) {
-        val indexCurrentEffect = 0
-        while (indexCurrentEffect < this.effects.size) {
-            if (effects[indexCurrentEffect].isSelfDebuff()) {
-                effects[indexCurrentEffect].upDateEffect(stats)
-            }
-        }
-    }
-
     fun updateSelfDebuffs(stats: Stats): Boolean {
         val indexCurrentEffect = 0
         while (indexCurrentEffect < this.effects.size) {
