@@ -98,8 +98,8 @@ class BattelTests2 : AnnotationSpec() {
             target = quantomix2BattleStats,
             attackStrategy = damageStrategy(),
         )
-        assertThat(solution).isEqualTo(false)
-        assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(50)
+        assertThat(solution).isEqualTo(true)
+        assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(75)
         assertThat(quantomix2BattleStats.getStats().getAttack()).isEqualTo(quantomix2.getStats().getAttack() - 10)
         assertThat(quantomix2BattleStats.getStats().getSpecialAttack()).isEqualTo(quantomix2.getStats().getSpecialAttack() - 15)
         assertThat(quantomix2BattleStats.getStats().getDefense()).isEqualTo(quantomix2.getStats().getDefense() - 5)

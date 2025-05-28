@@ -27,7 +27,7 @@ class BattleTests : AnnotationSpec() {
                 specialAttack = 109,
                 specialDefense = 85,
                 speed = 100),
-            attacks = listOf(tackle(),pfluecker(), glut(), fruststampfer()
+            attacks = listOf(tackle(),pfluecker(), glut(), spukball()
             )
         )
         return glurak
@@ -37,7 +37,7 @@ class BattleTests : AnnotationSpec() {
         val pfluecker= Attack(
             attackName = "Pflücker",
             type = Typ.Flug,
-            damage = 40,
+            damage = 20,
             damageQuote = 100,
             specialAttack = true,
             effects = mutableListOf(),
@@ -85,10 +85,10 @@ class BattleTests : AnnotationSpec() {
         return glut
     }
     @BeforeEach
-    fun fruststampfer():Attack{
+    fun spukball():Attack{
         val fruststampfer = Attack(
             attackName = "Fruststampfer",
-            type = Typ.Kampf,
+            type = Typ.Geist,
             damage = 40,
             damageQuote = 100,
             specialAttack = true,
@@ -167,7 +167,7 @@ class BattleTests : AnnotationSpec() {
             target = schillokBattleStats,
             attackStrategy = damageStrategy(),
         )
-        assertThat(solution).isEqualTo(false)
+        assertThat(solution).isEqualTo(true)
         assertThat(schillokBattleStats.getStats().getKp()).isLessThan(schillok().getStats().getKp())
         assertThat(schillokBattleStats.getStats().getKp()).isEqualTo(26)
         assertThat(schillok().getStats().getKp()).isEqualTo(59)
@@ -186,10 +186,10 @@ class BattleTests : AnnotationSpec() {
             target = schillokBattleStats,
             attackStrategy = damageStrategy(),
         )
-        assertThat(solution).isEqualTo(false)
+        assertThat(solution).isEqualTo(true)
         assertThat(schillokBattleStats.getStats().getKp()).isLessThan(schillok().getStats().getKp())
         assertThat(schillok.getStats().getKp()).isEqualTo(59)
-        assertThat(schillokBattleStats.getStats().getKp()).isEqualTo(16)
+        assertThat(schillokBattleStats.getStats().getKp()).isEqualTo(38)
     }
 
     @Test
@@ -215,7 +215,7 @@ class BattleTests : AnnotationSpec() {
             target = oweiBattleStats,
             attackStrategy = damageStrategy(),
         )
-        assertThat(solution).isEqualTo(false)
+        assertThat(solution).isEqualTo(true)
         assertThat(oweiBattleStats.getStats().getKp()).isLessThan(schillok().getStats().getKp())
         assertThat(owei.getStats().getKp()).isEqualTo(60)
         assertThat(oweiBattleStats.getStats().getKp()).isEqualTo(17)
@@ -227,7 +227,7 @@ class BattleTests : AnnotationSpec() {
         )
         assertThat(solution2).isEqualTo(true)
         assertThat(glurakBattleStats.getStats().getKp()).isLessThan(glurak.getStats().getKp())
-        assertThat(glurakBattleStats.getStats().getKp()).isEqualTo(14)
+        assertThat(glurakBattleStats.getStats().getKp()).isEqualTo(62)
         assertThat(oweiBattleStats.getStats().getKp()).isLessThan(schillok().getStats().getKp())
         assertThat(oweiBattleStats.getStats().getKp()).isEqualTo(17)
     }
@@ -240,13 +240,15 @@ class BattleTests : AnnotationSpec() {
         val battle:Battle=SimpleBattle()
         val solution=battle.simpleBattle(
             aktiveQuantomixBattleStats = glurakBattleStats,
-            attack = fruststampfer(),
+            attack = spukball(),
             target = rattzfatzBattleStats,
             attackStrategy = damageStrategy()
         )
-        assertThat(solution).isEqualTo(false)
-        assertThat(glurakBattleStats.getStats().getKp()).isEqualTo(glurak.getStats().getKp())
-        assertThat(rattzfatzBattleStats.getStats().getKp()).isEqualTo(owei().getStats().getKp())
+        assertThat(solution).isEqualTo(true)
+        assertThat(glurakBattleStats.getStats().getKp()
+        ).isEqualTo(glurak.getStats().getKp())
+        assertThat(rattzfatzBattleStats.getStats().getKp()
+        ).isEqualTo(rattzfatz().getStats().getKp())
     }
     @Test
     fun `BattleTest second Quantomix dead`() {
@@ -261,11 +263,11 @@ class BattleTests : AnnotationSpec() {
             target = oweiBattleStats,
             attackStrategy = damageStrategy()
         )
-        assertThat(solution).isEqualTo(true)
+        assertThat(solution).isEqualTo(false)
         assertThat(glurakBattleStats.getStats().getKp()).isEqualTo(78)
         assertThat(glurak.getStats().getKp()).isEqualTo(78)
         assertThat(oweiBattleStats.getStats().getKp()).isEqualTo(0)
-        assertThat(owei.getStats().getKp()).isEqualTo(84)
+        assertThat(owei.getStats().getKp()).isEqualTo(60)
     }
     @Test
     fun `BattleTest dead Quantomix want to attack`() {
@@ -281,7 +283,7 @@ class BattleTests : AnnotationSpec() {
             attackStrategy = damageStrategy()
         )
         try {
-            val solution=battle.simpleBattle(
+            battle.simpleBattle(
                 aktiveQuantomixBattleStats = glurakBattleStats,
                 attack = glut(),
                 target = oweiBattleStats,

@@ -4,14 +4,12 @@ import hwr.oop.quantomix.DeadQuantomixException
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.fight.objects.StatusHelper
-import hwr.oop.quantomix.fight.objects.UsefulInformationForStatus
 
 interface DamageStrategy {
     fun damageFunction(
         attacker: BattleStats,
         target: BattleStats,
         attack: Attack,
-        useful: UsefulInformationForStatus?,
     ): Int
 }
 
@@ -19,13 +17,11 @@ class StandardDamageStrategy : DamageStrategy {
     private lateinit var attacker: BattleStats
     private lateinit var target: BattleStats
     private lateinit var currentAttack: Attack
-    private var usefulInformationForStatus: UsefulInformationForStatus? = null
 
     override fun damageFunction(
         attacker: BattleStats,
         target: BattleStats,
         attack: Attack,
-        useful: UsefulInformationForStatus?,
     ): Int {
         if (!attacker.isAlive()) {
             throw DeadQuantomixException("The Quantomix which would attack next is already dead!")
@@ -34,21 +30,18 @@ class StandardDamageStrategy : DamageStrategy {
             this.attacker = attacker
             this.target = target
             this.currentAttack = attack
-            this.usefulInformationForStatus = useful
             return calculateDamage()
         }
     }
 
     private fun calculateDamage(): Int {
         val effectivityMultiplier = calculateEffectivity()
-        lateinit var statusEffect: StatusHelper
-        if (currentAttack.hasStatus()) {
-            statusEffect = currentAttack.getStatus()!!.calculateStatusEffect(
-                attack = currentAttack,
-                usefulInformationForStatus1 = usefulInformationForStatus
+        val statusEffect: StatusHelper = if (currentAttack.hasStatus()) {
+            currentAttack.getStatus()!!.calculateStatusEffect(
+                attack = currentAttack
             )
         } else {
-            statusEffect = StatusHelper()
+            StatusHelper()
         }
         return if (currentAttack.getSpecialAttack()) {
             formulaAttackForce(
@@ -69,8 +62,8 @@ class StandardDamageStrategy : DamageStrategy {
 
 
     private fun calculateEffectivity(): Float {
-        val effectivity1 = attacker.getQuantomix().getType1().getEffectivity(currentAttack)
-        val type2 = attacker.getQuantomix().getType2()
+        val effectivity1 = target.getQuantomix().getType1().getEffectivity(currentAttack)
+        val type2 = target.getQuantomix().getType2()
 
         return if (type2 == null) {
             effectivity1
@@ -88,5 +81,6 @@ class StandardDamageStrategy : DamageStrategy {
         attackValue: Int,
         defense: Int,
         multiFactor: Float
-    ): Int = ((attackDamage * attackValue * multiFactor) / ((defense / 100 + 1) * 100)).toInt()
+    ): Int = ((attackDamage * attackValue * multiFactor)
+            / ((defense / 100 + 1) * 100)).toInt()
 }

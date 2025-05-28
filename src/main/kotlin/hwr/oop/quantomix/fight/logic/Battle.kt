@@ -2,7 +2,6 @@ package hwr.oop.quantomix.fight.logic
 
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
-import java.lang.Math.random
 
 interface Battle {
     fun simpleBattle(
@@ -18,16 +17,13 @@ class SimpleBattle : Battle {
         aktiveQuantomixBattleStats: BattleStats,
         attack: Attack,
         target: BattleStats,
-        attackStrategy: DamageStrategy
+        attackStrategy: DamageStrategy,
     ): Boolean {
         if (attack.hits()) {
-            val damage = attackStrategy.damageFunction(aktiveQuantomixBattleStats, target, attack)
+            val damage = attackStrategy.damageFunction(attacker=aktiveQuantomixBattleStats, target =  target, attack =  attack )
             target.newKp(damage)
             attack.changeStatsAndStatus(aktiveQuantomixBattleStats, target)
         }
         return target.isAlive()
-    }
-    private fun effectsOfConfusion() {
-        random(1, 100)
     }
 }

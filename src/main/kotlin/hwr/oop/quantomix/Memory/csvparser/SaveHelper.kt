@@ -7,5 +7,5 @@ import hwr.oop.quantomix.objects.Coach
 class SaveHelper(
     val trainer1: Coach,
     val trainer2: Coach,
-    val quantomixAndBattleStatsMap: mutableMabOf<Quantomix, BattleStats>
+    val quantomixAndBattleStatsMap: MutableMap<Quantomix, BattleStats>
 )

@@ -3,12 +3,14 @@ package hwr.oop.quantomix.fight.objects
 class StatusHelper(
     val multiplicator: Int = 1,
     val summand: Int = 0,
-    val usefulInformationForStatus: UsefulInformationForStatus? = null
+    val alreadyPassedRounds: Int = 0,
 ) {
+    fun roundsWithStatusEffectLeft():Boolean {
+        return alreadyPassedRounds == 6
+    }
     fun setHelper(
         overrideMuliplicator: Int = multiplicator,
         overrideSummand: Int = summand,
-        overrideUsefulInformationForStatus: UsefulInformationForStatus? = usefulInformationForStatus
     ): StatusHelper {
         return StatusHelper(overrideMuliplicator, overrideSummand)
     }

@@ -3,7 +3,7 @@ package hwr.oop.quantomix.fight.objects
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
-import io.kotest.core.spec.style.AnnotationSpec.assertThat
+import org.assertj.core.api.Assertions.assertThat
 
 class AttackTest : AnnotationSpec() {
     @BeforeEach
@@ -46,7 +46,7 @@ class AttackTest : AnnotationSpec() {
                 speed = 1
             )
         )
-        assertThat(succes).isEqualsTo(true)
+        assertThat(succes).isTrue
     }
 
     fun `Test changeStatsAndStatus`() {
@@ -54,6 +54,7 @@ class AttackTest : AnnotationSpec() {
         val attacker = Quantomix(
             quantomixName = "Slima",
             typ1 = Typ.Gift,
+            typ2 = null,
             stats = Stats(
                 kp = 10,
                 attack = 10,
@@ -62,11 +63,12 @@ class AttackTest : AnnotationSpec() {
                 specialDefense = 20,
                 speed = 10
             ),
-            attacks = ListOf(attack)
+            attacks = listOf(attack)
         )
         val target = Quantomix(
             quantomixName = "Slima",
             typ1 = Typ.Gift,
+            typ2 = null,
             stats = Stats(
                 kp = 10,
                 attack = 10,
@@ -75,26 +77,27 @@ class AttackTest : AnnotationSpec() {
                 specialDefense = 20,
                 speed = 10
             ),
-            attacks = ListOf(attack)
+            attacks = listOf(attack)
         )
-        attacker.newBattleStats()
-        target.newBattleStats()
-        assertThat(attack.changeStatsAndStatus).isEqualsTo(true)
+        val attackerBattleStats=attacker.newBattleStats()
+        val targerBattleStats=target.newBattleStats()
+        assertThat(attack.changeStatsAndStatus(attacker=attackerBattleStats,
+            target=targerBattleStats)).isTrue
     }
     fun `Test attack hits`(){
         val attack=spukball()
-        assertThat(attack.hits()).isEqualsTo(true)
+        assertThat(attack.hits()).isTrue
     }
     fun `Test attack has status`(){
-        assertThat(spukball().hasStatus()).isEqualsTo(true)
+        assertThat(spukball().hasStatus()).isTrue
     }
     fun `Test getter of attack`(){
         val attack=spukball()
-        assertThat(attack.getType()).isEqualsTo(Typ.Gift)
-        assertThat(attack.getDamage()).isEqualsTo(50)
-        assertThat(attack.getSpecialAttack()).isEqualsTo(true)
-        assertThat(attack.getDamageQuote()).isEqualsTo(1)
+        assertThat(attack.getType()).isEqualTo(Typ.Gift)
+        assertThat(attack.getDamage()).isEqualTo(50)
+        assertThat(attack.getSpecialAttack()).isEqualTo(true)
+        assertThat(attack.getDamageQuote()).isEqualTo(1)
         assertThat(attack.getEffects()).isNotEmpty
-        assertThat(attack.getStatus()).isEqualsTo(Status.StrongPoison)
+        assertThat(attack.getStatus()).isEqualTo(Status.StrongPoison)
     }
 }

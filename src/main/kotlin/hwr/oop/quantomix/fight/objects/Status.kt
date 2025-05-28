@@ -12,73 +12,73 @@ enum class Status {
     Confusion,
     Freeze;
 
-    fun calculateStatusEffect(attack: Attack, usefulInformationForStatus1: UsefulInformationForStatus?): StatusHelper {
-        var usefulInformationForStatus: UsefulInformationForStatus? = usefulInformationForStatus1
+    var alreadyPassedRounds: Int = 0
+    var lastStatusDamage: Int = 0
+    fun calculateStatusEffect(attack: Attack): StatusHelper {
+        when (alreadyPassedRounds) {
+            6->alreadyPassedRounds=0
+        }
         val status = this
-        var kpDamage = 0.0f
-        val statusHelper = StatusHelper(usefulInformationForStatus = usefulInformationForStatus)
-        if (status == StrongPoison) {
-            if (usefulInformationForStatus == null) {
-                usefulInformationForStatus = UsefulInformationForStatus(
-                    alreadyPassedRounds = 0,
-                    lastStatusDamage = 0.0625f
+        var statusHelper = StatusHelper()
+        when (status) {
+            StrongPoison -> {
+                when (alreadyPassedRounds) {
+                    0 -> lastStatusDamage = 1 / 16
+                    else -> lastStatusDamage *= 2
+                }
+                alreadyPassedRounds++
+                statusHelper = StatusHelper(summand = lastStatusDamage)
+            }
+            Paralysis -> {
+                attack.updateSelfDebuffs(
+                    Stats(
+                        kp = 0,
+                        attack = 0,
+                        defense = 0,
+                        specialAttack = 0,
+                        specialDefense = 0,
+                        speed = 1 / 2
+                    )
                 )
-                statusHelper.setHelper(overrideSummand = 1 / 16)
-            } else {
-                kpDamage = usefulInformationForStatus.lastStatusDamage * 2
-                usefulInformationForStatus.alreadyPassedRounds += 1
-                usefulInformationForStatus.lastStatusDamage = kpDamage
-            }
-        }
-        if (status == Paralysis) {
-            attack.updateSelfDebuffs(
-                Stats(
-                    kp = 0,
-                    attack = 0,
-                    defense = 0,
-                    specialAttack = 0,
-                    specialDefense = 0,
-                    speed = 1 / 2
+                statusHelper = StatusHelper(
+                    multiplicator = UsefulInformationForStatus(
+                        alreadyPassedRounds = alreadyPassedRounds
+                    ).hitParalysis()
                 )
-            )
-            if (usefulInformationForStatus == null) {
-                usefulInformationForStatus =
-                    UsefulInformationForStatus(alreadyPassedRounds = 0, lastStatusDamage = 0.0f)
-                statusHelper.setHelper(overrideMuliplicator = usefulInformationForStatus.hitParalysis())
-                usefulInformationForStatus.alreadyPassedRounds += 1
+                alreadyPassedRounds++
             }
-        }
-        if (status == Sleep) {
-            if (usefulInformationForStatus == null) {
-                usefulInformationForStatus =
-                    UsefulInformationForStatus(alreadyPassedRounds = 0, lastStatusDamage = 0.00f)
-            } else {
-                usefulInformationForStatus.alreadyPassedRounds += 1
+            Sleep -> {
+                statusHelper = if (UsefulInformationForStatus(
+                        alreadyPassedRounds = alreadyPassedRounds
+                    ).roundsWithStatusEffectLeft()
+                ) {
+                    StatusHelper(multiplicator = 0)
+                } else {
+                    StatusHelper(multiplicator = 1)
+                }
+                alreadyPassedRounds++
             }
-            if (usefulInformationForStatus.roundsWithStatusEffectLeft()) {
-                statusHelper.setHelper(overrideMuliplicator = 0)
-            } else {
-                statusHelper.setHelper(overrideMuliplicator = 1)
+            Confusion -> {
+                if (UsefulInformationForStatus(
+                        alreadyPassedRounds = alreadyPassedRounds
+                    ).selfHit()
+                    && UsefulInformationForStatus(
+                        alreadyPassedRounds = alreadyPassedRounds
+                    ).roundsWithStatusEffectLeft()){
+                    statusHelper= StatusHelper(multiplicator = -1)
+                }
+                alreadyPassedRounds++
             }
-        }
-        if (status == Confusion) {
-            if (usefulInformationForStatus == null) {
-                usefulInformationForStatus =
-                    UsefulInformationForStatus(alreadyPassedRounds = 0, lastStatusDamage = 0.00f)
-            } else {
-                usefulInformationForStatus.alreadyPassedRounds += 1
+            Freeze, NoDamage -> {
+                statusHelper= StatusHelper(multiplicator = 0)
             }
-            if (usefulInformationForStatus.selfHit() && usefulInformationForStatus.roundsWithStatusEffectLeft()) {
-                statusHelper.setHelper(overrideMuliplicator = -1)
+            Combustion -> {
+                statusHelper =
+                    StatusHelper(summand = 1 / 8)
             }
-        }
-
-        when (this) {
-            NoDamage -> statusHelper.setHelper(overrideMuliplicator = 0)
-            Poison -> statusHelper.setHelper(overrideSummand = 1 / 16)   // 1/16
-            Combustion -> statusHelper.setHelper(overrideSummand = 1 / 8)  // 1/8
-            Freeze -> statusHelper.setHelper(overrideMuliplicator = 0)
-            else -> 1
+            Poison -> {
+                statusHelper = StatusHelper(summand = 1 / 16)
+            }
         }
         return statusHelper
     }
@@ -86,7 +86,6 @@ enum class Status {
 
 class UsefulInformationForStatus(
     var alreadyPassedRounds: Int,
-    var lastStatusDamage: Float,
 ) {
     var randomValueDuration = Random().nextInt(2, 5)
 
