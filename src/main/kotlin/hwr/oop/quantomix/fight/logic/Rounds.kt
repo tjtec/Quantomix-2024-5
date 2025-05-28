@@ -77,17 +77,20 @@ class Rounds(private var trainer1: Coach, private var trainer2: Coach) {
     }
 
     private fun quantomixBySpeed(): Map<Quantomix, BattleStats> {
-        val activeQuantomix1 = quantomixAndBattleStatsMap.get(activeQuantomixTrainer1)
-        val activeQuantomix2 = quantomixAndBattleStatsMap.get(activeQuantomixTrainer2)
+        val activeQuantomix1 = quantomixAndBattleStatsMap.getOrPut(activeQuantomixTrainer1) {activeQuantomixTrainer1.newBattleStats()
+        }
+        val activeQuantomix2 = quantomixAndBattleStatsMap.getOrPut(activeQuantomixTrainer2) {
+            activeQuantomixTrainer2.newBattleStats()
+        }
+
         val listOfBattleStats =
-            listOf(activeQuantomix1, activeQuantomix2
-            ).sortedByDescending { it!!.getStats().getSpeed() }
+            listOf(activeQuantomix1, activeQuantomix2).sortedByDescending { it.getStats().getSpeed() }
         val mapQuantomixAndBattleStats=mutableMapOf<Quantomix, BattleStats>()
         var indexCurrentQuantomix = 0
         while (listOfBattleStats.size!= mapQuantomixAndBattleStats.size) {
            mapQuantomixAndBattleStats.put(
-               listOfBattleStats[indexCurrentQuantomix]!!.getQuantomix(),
-               listOfBattleStats[indexCurrentQuantomix]!!)
+               listOfBattleStats[indexCurrentQuantomix].getQuantomix(),
+               listOfBattleStats[indexCurrentQuantomix])
             indexCurrentQuantomix++
         }
         return mapQuantomixAndBattleStats.toMap()
