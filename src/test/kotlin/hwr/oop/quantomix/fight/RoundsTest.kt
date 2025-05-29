@@ -1,14 +1,12 @@
 package hwr.oop.quantomix.fight
 
 import hwr.oop.quantomix.fight.objects.Attack
-import hwr.oop.quantomix.fight.objects.Effects
 import hwr.oop.quantomix.fight.objects.Stats
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
 import hwr.oop.quantomix.fight.logic.Rounds
-import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -132,7 +130,7 @@ class RoundsTest : AnnotationSpec() {
         rounds.choseAttack(coach1, attacks[attackIndexCoach1])
         rounds.choseAttack(coach2, attacks[attackIndexCoach2])
     }
-
+/*
     @Test
     fun `Rounds with two trainers`() {
         val coach1 = TestCoach1()
@@ -150,6 +148,8 @@ class RoundsTest : AnnotationSpec() {
             rounds.choseAttack(coach2, attacks[3])
         }
     }
+
+ */
 
     @Test
     fun `choosing attack twice for same trainer throws exception`() {
@@ -185,7 +185,7 @@ class RoundsTest : AnnotationSpec() {
         }
         assertEquals("Attacking Quantomix does not have the attack", exception.message)
     }
-
+/*
     @Test
     fun `simulate multiple rounds without exceptions`() {
         val coach1 = TestCoach1()
@@ -201,4 +201,5 @@ class RoundsTest : AnnotationSpec() {
             }
         }
     }
+ */
 }

@@ -14,13 +14,4 @@ class Coach (
     fun getFirstQuantomix(): Quantomix {
         return quantomixTeam[0]
     }
-
-    fun findAliveQuantomix(currentQuantomix: Quantomix, activeTrainer: Coach): Quantomix {
-        if (currentQuantomix.getStats().getKp() > 0) {
-            return currentQuantomix
-        }
-        val aliveQuantomix = activeTrainer.quantomixTeam.filter { it.getStats().getKp() > 0 }
-        return aliveQuantomix.maxByOrNull { it.getStats().getKp() }
-            ?: throw IllegalStateException("Kein aktiver Quantomix mehr verfügbar für Trainer ${activeTrainer.coachName}")
-    }
 }

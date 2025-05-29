@@ -217,28 +217,29 @@ enum class Typ {
             }
         }
     }
-
-    fun getFromString(name: String): Typ {
-        return when (name) {
-            "Normal" -> Normal
-            "Kampf" -> Kampf
-            "Flug" -> Flug
-            "Gift" -> Gift
-            "Stahl" -> Stahl
-            "Fee" -> Fee
-            "Wasser" -> Wasser
-            "Drache" -> Drache
-            "Unlicht" -> Unlicht
-            "Feuer" -> Feuer
-            "Eis" -> Eis
-            "Boden" -> Boden
-            "Elektro" -> Elektro
-            "Kaefer" -> Kaefer
-            "Pflanze" -> Pflanze
-            "Geist" -> Geist
-            "Psycho" -> Psycho
-            "Gestein" -> Gestein
-            else -> Normal
+    companion object {
+        fun getFromString(name: String): Typ {
+            return when (name) {
+                "Normal" -> Normal
+                "Kampf" -> Kampf
+                "Flug" -> Flug
+                "Gift" -> Gift
+                "Stahl" -> Stahl
+                "Fee" -> Fee
+                "Wasser" -> Wasser
+                "Drache" -> Drache
+                "Unlicht" -> Unlicht
+                "Feuer" -> Feuer
+                "Eis" -> Eis
+                "Boden" -> Boden
+                "Elektro" -> Elektro
+                "Kaefer" -> Kaefer
+                "Pflanze" -> Pflanze
+                "Geist" -> Geist
+                "Psycho" -> Psycho
+                "Gestein" -> Gestein
+                else -> Normal
+            }
         }
     }
 }

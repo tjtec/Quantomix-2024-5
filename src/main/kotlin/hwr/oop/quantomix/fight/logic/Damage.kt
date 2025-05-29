@@ -37,7 +37,7 @@ class StandardDamageStrategy : DamageStrategy {
     private fun calculateDamage(): Int {
         val effectivityMultiplier = calculateEffectivity()
         val statusEffect: StatusHelper = if (currentAttack.hasStatus()) {
-            currentAttack.getStatus()!!.calculateStatusEffect(
+            requireNotNull(currentAttack.getStatus()).calculateStatusEffect(
                 attack = currentAttack
             )
         } else {

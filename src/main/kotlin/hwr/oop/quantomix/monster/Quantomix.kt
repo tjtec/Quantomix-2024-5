@@ -31,15 +31,8 @@ class Quantomix(
         return typ2
     }
 
-    fun getAttacks(): List<Attack> {
-        return attacks
-    }
     fun newBattleStats(): BattleStats {
         return BattleStats(this, stats.deepCopy())
-    }
-
-    fun newKp(damage: Int){
-        this.stats.newKp(damage)
     }
 }
 

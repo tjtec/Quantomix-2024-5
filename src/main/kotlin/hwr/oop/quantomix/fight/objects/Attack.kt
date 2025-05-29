@@ -9,7 +9,7 @@ data class Attack(
     private val damage: Int,
     private val damageQuote: Int,
     private val specialAttack: Boolean,
-    private val effects: MutableList<Effects>,
+    private val effects: MutableList<Effects> = mutableListOf(),
     private val status: Status? = null
 ) {
     fun getType(): Typ {

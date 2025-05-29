@@ -15,7 +15,7 @@ class Translator {
         specialAttack: String,
     ): Attack {
         val getTyp = Typ.Normal
-        return Attack(name, getTyp.getFromString(type), damage.toInt(), damageQuote.toInt(), effects = mutableListOf(), specialAttack = specialAttack.toBoolean())
+        return Attack(name, Typ.getFromString(type), damage.toInt(), damageQuote.toInt(), effects = mutableListOf(), specialAttack = specialAttack.toBoolean())
     }
 
     fun translateToQuantomix(
@@ -32,7 +32,7 @@ class Translator {
     ): Quantomix {
         val type2 = when (typ2) {
             "" -> null
-            else -> Typ.Normal.getFromString(typ2)
+            else -> Typ.getFromString(typ2)
         }
         val stats = Stats(
             kp.toInt(),
@@ -44,7 +44,7 @@ class Translator {
         )
         return Quantomix(
             name,
-            Typ.Normal.getFromString(typ1),
+            Typ.getFromString(typ1),
             type2,
             stats,
             attacks
