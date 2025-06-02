@@ -7,7 +7,7 @@ import hwr.oop.quantomix.fight.objects.Stats
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
-import org.junit.jupiter.api.assertDoesNotThrow
+import org.assertj.core.api.Assertions.assertThat
 
 class DamageTest: AnnotationSpec() {
     @BeforeEach
@@ -51,6 +51,6 @@ class DamageTest: AnnotationSpec() {
             attack = attack(),
             target = battleStats(),
         )
-       assertDoesNotThrow{}
+       assertThat(currentDamage).isEqualTo(20)
        }
 }

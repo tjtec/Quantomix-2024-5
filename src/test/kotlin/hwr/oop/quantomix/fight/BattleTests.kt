@@ -1,6 +1,6 @@
 package hwr.oop.quantomix.fight
 
-import hwr.oop.quantomix.DeadQuantomixException
+import hwr.oop.quantomix.Exceptions.DeadQuantomixException
 import hwr.oop.quantomix.fight.logic.Battle
 import hwr.oop.quantomix.fight.logic.DamageStrategy
 import hwr.oop.quantomix.fight.logic.StandardDamageStrategy

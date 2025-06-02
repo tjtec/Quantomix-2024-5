@@ -23,6 +23,7 @@ class SimpleBattle : Battle {
             val damage = attackStrategy.damageFunction(attacker=aktiveQuantomixBattleStats, target =  target, attack =  attack )
             target.newKp(damage)
             attack.changeStatsAndStatus(aktiveQuantomixBattleStats, target)
+            target.changesAccordingToStatus()
         }
         return target.isAlive()
     }

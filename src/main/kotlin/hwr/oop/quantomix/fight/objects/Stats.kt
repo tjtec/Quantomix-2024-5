@@ -97,6 +97,9 @@ class Stats(
     private fun newSpeedValueUp(stats: Stats) {
         this.speed += stats.speed
     }
+    fun reduceSpeed(parameter: Double) {
+        this.speed = (this.speed * parameter).toInt()
+    }
 
     fun fueseToStats(stats: Stats) {
         this.kp *= stats.kp

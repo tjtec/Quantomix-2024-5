@@ -1,8 +1,9 @@
 package hwr.oop.quantomix.objects
+
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 
-class TypTest2: AnnotationSpec() {
+class TypTest2 : AnnotationSpec() {
     @Test
     fun `Test getFromString`() {
         assertThat(Typ.getFromString("Normal")).isEqualTo(Typ.Normal)
@@ -24,5 +25,18 @@ class TypTest2: AnnotationSpec() {
         assertThat(Typ.getFromString("Psycho")).isEqualTo(Typ.Psycho)
         assertThat(Typ.getFromString("Gestein")).isEqualTo(Typ.Gestein)
         assertThat(Typ.getFromString("Unbekannt")).isEqualTo(Typ.Normal)
+    }
+
+    @Test
+    fun `Test getFromString with default type`() {
+        Typ.entries.forEach { typ ->
+            assertThat(Typ.getFromString(typ.name)).isEqualTo(typ)
+        }
+        assertThat(Typ.getFromString("feuer")).isEqualTo(Typ.Normal)
+        assertThat(Typ.getFromString("Feuer")).isEqualTo(Typ.Feuer)
+        assertThat(Typ.getFromString("Unbekannt")).isEqualTo(Typ.Normal)
+        assertThat(Typ.getFromString("XYZ")).isEqualTo(Typ.Normal)
+        assertThat(Typ.getFromString("")).isEqualTo(Typ.Normal)
+        assertThat(Typ.getFromString(" ")).isEqualTo(Typ.Normal)
     }
 }

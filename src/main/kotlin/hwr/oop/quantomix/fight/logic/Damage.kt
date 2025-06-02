@@ -1,6 +1,6 @@
 package hwr.oop.quantomix.fight.logic
 
-import hwr.oop.quantomix.DeadQuantomixException
+import hwr.oop.quantomix.Exceptions.DeadQuantomixException
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.fight.objects.StatusHelper
@@ -37,9 +37,7 @@ class StandardDamageStrategy : DamageStrategy {
     private fun calculateDamage(): Int {
         val effectivityMultiplier = calculateEffectivity()
         val statusEffect: StatusHelper = if (currentAttack.hasStatus()) {
-            requireNotNull(currentAttack.getStatus()).calculateStatusEffect(
-                attack = currentAttack
-            )
+            target.changesAccordingToStatus()
         } else {
             StatusHelper()
         }

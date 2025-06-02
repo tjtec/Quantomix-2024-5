@@ -7,9 +7,7 @@ class BattleStats(
     private val stats: Stats,
     private var status: Status? = null,
 ) {
-    fun isMyQuantomix(quantomixToProve:Quantomix):Boolean{
-        return quantomixToProve==this.quantomix
-    }
+    private var currentStatusHelper: StatusHelper = StatusHelper()
     fun newKp(damage: Int) {
         this.stats.newKp(damage)
     }
@@ -21,18 +19,22 @@ class BattleStats(
     fun changeStatus(newStatus: Status): Boolean {
         if (this.status == null) {
             this.status = newStatus
+            currentStatusHelper = StatusHelper()
             return true
         }
         return false
     }
 
-    fun hasStatusEffect():Boolean{
-        return status != null
+    fun changesAccordingToStatus(): StatusHelper {
+        if (this.status != null) {
+            currentStatusHelper = this.status!!.calculateStatusEffect(previous = currentStatusHelper, battleStats = this)
+            this.stats.newKp(currentStatusHelper.summand)
+            return currentStatusHelper
+        } else {
+            return currentStatusHelper
+        }
     }
 
-    fun changeStats(): Stats {
-        return this.stats
-    }
 
     fun getQuantomix(): Quantomix {
         return quantomix
