@@ -74,7 +74,6 @@ data class Attack(
 
   fun hits(): Boolean {
     val randomValue = Random().nextInt(1, 100)
-    //val randomValue = (1..100).random()
     return when (randomValue <= this.getDamageQuote()) {
       true -> true
       else -> false

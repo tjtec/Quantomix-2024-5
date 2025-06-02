@@ -1,8 +1,7 @@
 package hwr.oop.quantomix.fight
 
-import hwr.oop.quantomix.fight.logic.Battle
-import hwr.oop.quantomix.fight.logic.DamageStrategy
 import hwr.oop.quantomix.fight.logic.SimpleBattle
+import hwr.oop.quantomix.fight.logic.DamageStrategy
 import hwr.oop.quantomix.fight.logic.StandardDamageStrategy
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.Effects
@@ -91,7 +90,7 @@ class BattelTests2 : AnnotationSpec() {
     val quantomix2 = quantomix2()
     val quantomix1BattleStats = quantomix1.newBattleStats()
     val quantomix2BattleStats = quantomix2.newBattleStats()
-    val battle: Battle = SimpleBattle()
+    val battle= SimpleBattle()
     val solution = battle.simpleBattle(
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = math(),

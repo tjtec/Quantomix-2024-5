@@ -27,7 +27,9 @@ class BattleStats(
 
   fun changesAccordingToStatus(): StatusHelper {
     if (this.status != null) {
-      currentStatusHelper = this.status!!.calculateStatusEffect(
+      currentStatusHelper = checkNotNull(
+        this.status
+      ).calculateStatusEffect(
         previous = currentStatusHelper,
         battleStats = this
       )

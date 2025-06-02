@@ -3,7 +3,6 @@ package hwr.oop.quantomix.fight.objects
 class Effects(
   private val buff: Boolean,
   private val changeStats: Stats,
-  // private val targetOfChangeStats: BattleStats,
   private val self: Boolean,
 ) {
   fun buffsAndDebuffs(targetOfChangeStats: BattleStats): Boolean {
@@ -20,14 +19,3 @@ class Effects(
     this.changeStats.fueseToStats(newStats)
   }
 }
-
-/*enum class Status {
-    NoDamage,
-    Poisoning,
-    StrongPoisoning,
-    Combustion,
-    Paralysis,
-    Sleep,
-    Confusion,
-    Freeze;
-}*/

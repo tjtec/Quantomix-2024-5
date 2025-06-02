@@ -24,217 +24,73 @@ enum class Typ {
 
   fun weaknesses(): Set<Typ> {
     return when (this) {
-      Normal -> setOf(Typ.Gestein, Stahl)
-      else -> setOf(Geist, Feuer)
+      Normal -> setOf(Kampf)
+      Kampf -> setOf(Flug, Psycho, Fee)
+      Flug -> setOf(Gestein, Elektro, Eis)
+      Gift -> setOf(Boden, Psycho)
+      Boden -> setOf(Wasser, Pflanze, Eis)
+        Gestein -> setOf(Wasser, Pflanze, Kampf, Boden, Stahl)
+        Kaefer -> setOf(Feuer, Flug, Gestein)
+        Geist -> setOf(Geist, Unlicht)
+        Stahl -> setOf(Kampf, Boden, Feuer)
+        Feuer -> setOf(Wasser, Boden, Gestein)
+        Wasser -> setOf(Pflanze, Elektro)
+        Pflanze -> setOf(Feuer, Eis, Gift, Flug, Kaefer)
+        Elektro -> setOf(Boden)
+        Psycho -> setOf(Kaefer, Geist, Unlicht)
+        Eis -> setOf(Feuer, Kampf, Gestein, Stahl)
+        Drache -> setOf(Eis, Drache, Fee)
+        Unlicht -> setOf(Kampf, Fee)
+        Fee -> setOf(Gift, Stahl)
     }
   }
-
   fun strength(): Set<Typ> {
     return when (this) {
-      Pflanze -> setOf(Wasser, Boden)
-      else -> setOf(Geist, Feuer)
+      Normal -> emptySet()
+      Kampf -> setOf(Kaefer, Gestein, Unlicht)
+        Flug -> setOf(Kampf, Kaefer, Pflanze)
+        Gift -> setOf(Pflanze, Fee, Kampf, Gift)
+        Boden -> setOf(Gift, Gestein)
+        Gestein -> setOf(Normal, Feuer, Gift, Flug)
+        Kaefer -> setOf(Kampf, Pflanze, Boden)
+        Geist -> setOf(Gift, Kaefer) // Korrigiert: Unlicht entfernt!
+        Stahl -> setOf(Normal, Pflanze, Eis, Flug, Psycho, Kaefer, Gestein, Drache, Fee) // Korrigiert: Feuer/Wasser/Elektro entfernt!
+        Feuer -> setOf(Feuer, Pflanze, Eis, Kaefer, Stahl)
+        Wasser -> setOf(Feuer, Wasser, Eis, Stahl)
+        Pflanze -> setOf(Wasser, Elektro, Pflanze, Boden)
+        Elektro -> setOf(Elektro, Flug, Stahl)
+        Psycho -> setOf(Kampf, Psycho)
+        Eis -> setOf(Eis)
+        Drache -> setOf(Wasser, Elektro, Pflanze, Feuer)
+        Unlicht -> setOf(Geist, Unlicht)
+        Fee -> setOf(Kampf, Kaefer, Unlicht)
+    }
+
+  }
+  fun notEffective(): Set<Typ> {
+    return when (this) {
+      Normal -> setOf(Geist)
+      Geist -> setOf(Normal, Kampf)
+      Flug -> setOf(Boden)
+      Boden->setOf(Elektro)
+      Stahl -> setOf(Gift)
+      Elektro -> setOf(Boden)
+      Psycho -> setOf(Unlicht)
+      Drache -> setOf(Fee)
+      else -> emptySet()
     }
   }
 
   fun getEffectivity(attack: Attack): Float {
-    if (
-      this.weaknesses().contains(attack.getType())) {
-      return 2.0f
-    } else if (strength().contains(attack.getType())) {
-      return 0.5f
-    }
-    return when (attack.getType()) {
-      Normal -> when (this) {
-        Gestein -> 0.5f
-        Stahl -> 0.5f
-        Geist -> 0.0f
-        else -> 1.0f
-      }
-
-      Kampf -> when (this) {
-        Normal -> 2.0f
-        Gestein -> 2.0f
-        Stahl -> 2.0f
-        Eis -> 2.0f
-        Unlicht -> 2.0f
-        Flug -> 0.5f
-        Gift -> 0.5f
-        Kaefer -> 0.5f
-        Psycho -> 0.5f
-        Fee -> 0.5f
-        Geist -> 0.0f
-        else -> 1.0f
-      }
-
-      Flug -> return when (this) {
-        Kampf -> 2.0f
-        Kaefer -> 2.0f
-        Pflanze -> 2.0f
-        Gestein -> 0.5f
-        Stahl -> 0.5f
-        Elektro -> 0.5f
-        else -> 1.0f
-      }
-
-      Gift -> return when (this) {
-        Pflanze -> 2.0f
-        Fee -> 2.0f
-        Gift -> 0.5f
-        Boden -> 0.5f
-        Gestein -> 0.5f
-        Geist -> 0.5f
-        Stahl -> 0.0f
-        else -> 1.0f
-      }
-
-      Boden -> return when (this) {
-        Gift -> 2.0f
-        Gestein -> 2.0f
-        Stahl -> 2.0f
-        Feuer -> 2.0f
-        Elektro -> 2.0f
-        Kaefer -> 0.5f
-        Pflanze -> 0.5f
-        Flug -> 0.0f
-        else -> 1.0f
-      }
-
-      Gestein -> return when (this) {
-        Flug -> 2.0f
-        Kaefer -> 2.0f
-        Feuer -> 2.0f
-        Eis -> 2.0f
-        Kampf -> 0.5f
-        Boden -> 0.5f
-        Stahl -> 0.5f
-        else -> 1.0f
-      }
-
-      Kaefer -> return when (this) {
-        Pflanze -> 2.0f
-        Psycho -> 2.0f
-        Unlicht -> 2.0f
-        Kampf -> 0.5f
-        Flug -> 0.5f
-        Gift -> 0.5f
-        Geist -> 0.5f
-        Stahl -> 0.5f
-        Feuer -> 0.5f
-        Fee -> 0.5f
-        else -> 1.0f
-      }
-
-      Geist -> return when (this) {
-        Geist -> 2.0f
-        Psycho -> 2.0f
-        Unlicht -> 0.5f
-        Normal -> 0.0f
-        else -> 1.0f
-      }
-
-      Stahl -> return when (this) {
-        Gestein -> 2.0f
-        Eis -> 2.0f
-        Fee -> 2.0f
-        Stahl -> 0.5f
-        Feuer -> 0.5f
-        Wasser -> 0.5f
-        Elektro -> 0.5f
-        else -> 1.0f
-      }
-
-      Feuer -> return when (this) {
-        Kaefer -> 2.0f
-        Stahl -> 2.0f
-        Pflanze -> 2.0f
-        Eis -> 2.0f
-        Gestein -> 0.5f
-        Feuer -> 0.5f
-        Wasser -> 0.5f
-        Drache -> 0.5f
-        else -> 1.0f
-      }
-
-      Wasser -> return when (this) {
-        Boden -> 2.0f
-        Gestein -> 2.0f
-        Feuer -> 2.0f
-        Wasser -> 0.5f
-        Pflanze -> 0.5f
-        Drache -> 0.5f
-        else -> 1.0f
-      }
-
-      Pflanze -> return when (this) {
-        Boden -> 2.0f
-        Gestein -> 2.0f
-        Wasser -> 2.0f
-        Flug -> 0.5f
-        Gift -> 0.5f
-        Kaefer -> 0.5f
-        Stahl -> 0.5f
-        Feuer -> 0.5f
-        Pflanze -> 0.5f
-        Drache -> 0.5f
-        else -> 1.0f
-      }
-
-      Elektro -> return when (this) {
-        Flug -> 2.0f
-        Wasser -> 2.0f
-        Pflanze -> 0.5f
-        Elektro -> 0.5f
-        Drache -> 0.5f
-        Boden -> 0.0f
-        else -> 1.0f
-      }
-
-      Psycho -> return when (this) {
-        Kampf -> 2.0f
-        Gift -> 2.0f
-        Stahl -> 0.5f
-        Psycho -> 0.5f
-        Unlicht -> 0.0f
-        else -> 1.0f
-      }
-
-      Eis -> return when (this) {
-        Flug -> 2.0f
-        Boden -> 2.0f
-        Pflanze -> 2.0f
-        Drache -> 2.0f
-        Stahl -> 0.5f
-        Feuer -> 0.5f
-        Wasser -> 0.5f
-        Eis -> 0.5f
-        else -> 1.0f
-      }
-
-      Drache -> return when (this) {
-        Drache -> 2.0f
-        Stahl -> 0.5f
-        Fee -> 0.0f
-        else -> 1.0f
-      }
-
-      Unlicht -> return when (this) {
-        Geist -> 2.0f
-        Psycho -> 2.0f
-        Kampf -> 0.5f
-        Unlicht -> 0.5f
-        Fee -> 0.5f
-        else -> 1.0f
-      }
-
-      Fee -> return when (this) {
-        Kampf -> 2.0f
-        Drache -> 2.0f
-        Unlicht -> 2.0f
-        Gift -> 0.5f
-        Stahl -> 0.5f
-        Feuer -> 0.5f
-        else -> 1.0f
-      }
+    return if (
+      this.strength().contains(attack.getType())) {
+      0.5f
+    } else if (weaknesses().contains(attack.getType())) {
+      2.0f
+    }else if (notEffective().contains(attack.getType())) {
+      0.0f
+    } else {
+      1.0f
     }
   }
 

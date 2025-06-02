@@ -1,7 +1,6 @@
 package hwr.oop.quantomix.fight
 
 import hwr.oop.quantomix.Exceptions.DeadQuantomixException
-import hwr.oop.quantomix.fight.logic.Battle
 import hwr.oop.quantomix.fight.logic.DamageStrategy
 import hwr.oop.quantomix.fight.logic.SimpleBattle
 import hwr.oop.quantomix.fight.logic.StandardDamageStrategy
@@ -173,7 +172,7 @@ class BattleTests : AnnotationSpec() {
     val glurak = glurak()
     val glurakBattleStats = glurak.newBattleStats()
     val schillokBattleStats = schillok().newBattleStats()
-    val battle: Battle = SimpleBattle()
+    val battle = SimpleBattle()
     val solution = battle.simpleBattle(
       aktiveQuantomixBattleStats = glurakBattleStats,
       attack = tackle(),
@@ -194,7 +193,7 @@ class BattleTests : AnnotationSpec() {
     val glurakBattleStats = glurak.newBattleStats()
     val schillok = schillok()
     val schillokBattleStats = schillok.newBattleStats()
-    val battle: Battle = SimpleBattle()
+    val battle = SimpleBattle()
     val solution = battle.simpleBattle(
       aktiveQuantomixBattleStats = glurakBattleStats,
       attack = pfluecker(),
@@ -215,7 +214,7 @@ class BattleTests : AnnotationSpec() {
     val glurakBattleStats = glurak.newBattleStats()
     val owei = owei()
     val oweiBattleStats = owei.newBattleStats()
-    val battle: Battle = SimpleBattle()
+    val battle = SimpleBattle()
     assertThat(glurakBattleStats.getStats().getKp()).isEqualTo(
       glurak.getStats().getKp()
     )
@@ -281,7 +280,7 @@ class BattleTests : AnnotationSpec() {
     val rattzfatzBattleStats = rattzfatz.newBattleStats()
     val glurak = glurak()
     val glurakBattleStats = glurak.newBattleStats()
-    val battle: Battle = SimpleBattle()
+    val battle = SimpleBattle()
     val solution = battle.simpleBattle(
       aktiveQuantomixBattleStats = glurakBattleStats,
       attack = spukball(),
@@ -303,7 +302,7 @@ class BattleTests : AnnotationSpec() {
     val owei = owei()
     val oweiBattleStats = owei.newBattleStats()
     val glurakBattleStats = glurak.newBattleStats()
-    val battle: Battle = SimpleBattle()
+    val battle = SimpleBattle()
     val solution = battle.simpleBattle(
       aktiveQuantomixBattleStats = glurakBattleStats,
       attack = feuerball(),
@@ -323,7 +322,7 @@ class BattleTests : AnnotationSpec() {
     val owei = owei()
     val oweiBattleStats = owei.newBattleStats()
     val glurakBattleStats = glurak.newBattleStats()
-    val battle: Battle = SimpleBattle()
+    val battle = SimpleBattle()
     battle.simpleBattle(
       aktiveQuantomixBattleStats = glurakBattleStats,
       attack = glut(),
