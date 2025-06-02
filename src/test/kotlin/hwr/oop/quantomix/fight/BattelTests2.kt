@@ -13,104 +13,113 @@ import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 
 class BattelTests2 : AnnotationSpec() {
-    @BeforeEach
-    fun quantomix1(): Quantomix {
-        val quantomix1 = Quantomix(
-            quantomixName = "Quantomix1",
-            typ1 = Typ.Normal,
-            typ2 = null,
-            stats = Stats(
-                kp = 100,
-                attack = 100,
-                defense = 100,
-                specialAttack = 100,
-                specialDefense = 100,
-                speed = 100
-            ),
-            attacks = listOf(
-            )
+  @BeforeEach
+  fun quantomix1(): Quantomix {
+    val quantomix1 = Quantomix(
+      quantomixName = "Quantomix1",
+      typ1 = Typ.Normal,
+      typ2 = null,
+      stats = Stats(
+        kp = 100,
+        attack = 100,
+        defense = 100,
+        specialAttack = 100,
+        specialDefense = 100,
+        speed = 100
+      ),
+      attacks = listOf(
+      )
+    )
+    return quantomix1
+  }
+
+  @BeforeEach
+  fun quantomix2(): Quantomix {
+    val quantomix2 = Quantomix(
+      quantomixName = "Quantomix1",
+      typ1 = Typ.Normal,
+      typ2 = null,
+      stats = Stats(
+        kp = 100,
+        attack = 100,
+        defense = 100,
+        specialAttack = 100,
+        specialDefense = 100,
+        speed = 100
+      ),
+      attacks = listOf(
+      )
+    )
+    return quantomix2
+  }
+
+  @BeforeEach
+  fun math(): Attack {
+    return Attack(
+      attackName = "Math",
+      type = Typ.Normal,
+      damage = 50,
+      damageQuote = 100,
+      specialAttack = false,
+      effects = mutableListOf(
+        Effects(
+          buff = false,
+          changeStats = Stats(
+            kp = 0,
+            attack = 10,
+            defense = 5,
+            specialAttack = 15,
+            specialDefense = 8,
+            speed = 20
+          ),
+          self = false
         )
-        return quantomix1
-    }
+      ),
+      status = null
+    )
+  }
 
-    @BeforeEach
-    fun quantomix2(): Quantomix {
-        val quantomix2 = Quantomix(
-            quantomixName = "Quantomix1",
-            typ1 = Typ.Normal,
-            typ2 = null,
-            stats = Stats(
-                kp = 100,
-                attack = 100,
-                defense = 100,
-                specialAttack = 100,
-                specialDefense = 100,
-                speed = 100
-            ),
-            attacks = listOf(
-            )
-        )
-        return quantomix2
-    }
+  @BeforeEach
+  fun damageStrategy(): DamageStrategy {
+    val damageFunction: DamageStrategy = StandardDamageStrategy()
+    return damageFunction
+  }
 
-    @BeforeEach
-    fun math(): Attack {
-        return Attack(
-            attackName = "Math",
-            type = Typ.Normal,
-            damage = 50,
-            damageQuote = 100,
-            specialAttack = false,
-            effects = mutableListOf(
-                Effects(
-                    buff = false,
-                    changeStats = Stats(
-                        kp = 0,
-                        attack = 10,
-                        defense = 5,
-                        specialAttack = 15,
-                        specialDefense = 8,
-                        speed = 20
-                    ),
-                    self = false
-                )
-            ),
-            status = null
-        )
-    }
+  @Test
+  fun `Test Attack with damage and debuff`() {
+    val quantomix1 = quantomix1()
+    val quantomix2 = quantomix2()
+    val quantomix1BattleStats = quantomix1.newBattleStats()
+    val quantomix2BattleStats = quantomix2.newBattleStats()
+    val battle: Battle = SimpleBattle()
+    val solution = battle.simpleBattle(
+      aktiveQuantomixBattleStats = quantomix1BattleStats,
+      attack = math(),
+      target = quantomix2BattleStats,
+      attackStrategy = damageStrategy(),
+    )
+    assertThat(solution).isEqualTo(true)
+    assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(75)
+    assertThat(quantomix2BattleStats.getStats().getAttack()).isEqualTo(
+      quantomix2.getStats().getAttack() - 10
+    )
+    assertThat(quantomix2BattleStats.getStats().getSpecialAttack()).isEqualTo(
+      quantomix2.getStats().getSpecialAttack() - 15
+    )
+    assertThat(quantomix2BattleStats.getStats().getDefense()).isEqualTo(
+      quantomix2.getStats().getDefense() - 5
+    )
+    assertThat(quantomix2BattleStats.getStats().getSpecialDefense())
+      .isEqualTo(quantomix2.getStats().getSpecialDefense() - 8)
+    assertThat(
+      quantomix2BattleStats.getStats().getSpeed()
+    ).isEqualTo(quantomix2.getStats().getSpeed() - 20)
+  }
 
-    @BeforeEach
-    fun damageStrategy(): DamageStrategy {
-        val damageFunction: DamageStrategy = StandardDamageStrategy()
-        return damageFunction
-    }
+  @Test
+  fun `Test Debuff without Attackdamage`() {
 
-    @Test
-    fun `Test Attack with damage and debuff`() {
-        val quantomix1 = quantomix1()
-        val quantomix2 = quantomix2()
-        val quantomix1BattleStats = quantomix1.newBattleStats()
-        val quantomix2BattleStats = quantomix2.newBattleStats()
-        val battle: Battle = SimpleBattle()
-        val solution = battle.simpleBattle(
-            aktiveQuantomixBattleStats = quantomix1BattleStats,
-            attack = math(),
-            target = quantomix2BattleStats,
-            attackStrategy = damageStrategy(),
-        )
-        assertThat(solution).isEqualTo(true)
-        assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(75)
-        assertThat(quantomix2BattleStats.getStats().getAttack()).isEqualTo(quantomix2.getStats().getAttack() - 10)
-        assertThat(quantomix2BattleStats.getStats().getSpecialAttack()).isEqualTo(quantomix2.getStats().getSpecialAttack() - 15)
-        assertThat(quantomix2BattleStats.getStats().getDefense()).isEqualTo(quantomix2.getStats().getDefense() - 5)
-        assertThat(quantomix2BattleStats.getStats().getSpecialDefense())
-            .isEqualTo(quantomix2.getStats().getSpecialDefense() - 8)
-        assertThat(quantomix2BattleStats.getStats().getSpeed()).isEqualTo(quantomix2.getStats().getSpeed() - 20)
-    }
-    @Test
-    fun `Test Debuff without Attackdamage`() {
-
-    }
+  }
 }
 /*
     @Test

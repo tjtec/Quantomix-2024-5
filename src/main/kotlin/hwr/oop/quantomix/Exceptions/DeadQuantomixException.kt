@@ -1,3 +1,3 @@
 package hwr.oop.quantomix.Exceptions
 
-class DeadQuantomixException (message: String): Exception(message){}
+class DeadQuantomixException(message: String) : Exception(message) {}
