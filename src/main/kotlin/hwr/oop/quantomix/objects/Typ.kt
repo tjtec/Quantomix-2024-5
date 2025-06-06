@@ -29,54 +29,67 @@ enum class Typ {
       Flug -> setOf(Gestein, Elektro, Eis)
       Gift -> setOf(Boden, Psycho)
       Boden -> setOf(Wasser, Pflanze, Eis)
-        Gestein -> setOf(Wasser, Pflanze, Kampf, Boden, Stahl)
-        Kaefer -> setOf(Feuer, Flug, Gestein)
-        Geist -> setOf(Geist, Unlicht)
-        Stahl -> setOf(Kampf, Boden, Feuer)
-        Feuer -> setOf(Wasser, Boden, Gestein)
-        Wasser -> setOf(Pflanze, Elektro)
-        Pflanze -> setOf(Feuer, Eis, Gift, Flug, Kaefer)
-        Elektro -> setOf(Boden)
-        Psycho -> setOf(Kaefer, Geist, Unlicht)
-        Eis -> setOf(Feuer, Kampf, Gestein, Stahl)
-        Drache -> setOf(Eis, Drache, Fee)
-        Unlicht -> setOf(Kampf, Fee)
-        Fee -> setOf(Gift, Stahl)
+      Gestein -> setOf(Wasser, Pflanze, Kampf, Boden, Stahl)
+      Kaefer -> setOf(Feuer, Flug, Gestein)
+      Geist -> setOf(Geist, Unlicht)
+      Stahl -> setOf(Kampf, Boden, Feuer)
+      Feuer -> setOf(Wasser, Boden, Gestein)
+      Wasser -> setOf(Pflanze, Elektro)
+      Pflanze -> setOf(Feuer, Eis, Gift, Flug, Kaefer)
+      Elektro -> setOf(Boden)
+      Psycho -> setOf(Kaefer, Geist, Unlicht)
+      Eis -> setOf(Feuer, Kampf, Gestein, Stahl)
+      Drache -> setOf(Eis, Drache, Fee)
+      Unlicht -> setOf(Kampf, Fee)
+      Fee -> setOf(Gift, Stahl)
     }
   }
+
   fun strength(): Set<Typ> {
     return when (this) {
       Normal -> emptySet()
       Kampf -> setOf(Kaefer, Gestein, Unlicht)
-        Flug -> setOf(Kampf, Kaefer, Pflanze)
-        Gift -> setOf(Pflanze, Fee, Kampf, Gift)
-        Boden -> setOf(Gift, Gestein)
-        Gestein -> setOf(Normal, Feuer, Gift, Flug)
-        Kaefer -> setOf(Kampf, Pflanze, Boden)
-        Geist -> setOf(Gift, Kaefer) // Korrigiert: Unlicht entfernt!
-        Stahl -> setOf(Normal, Pflanze, Eis, Flug, Psycho, Kaefer, Gestein, Drache, Fee) // Korrigiert: Feuer/Wasser/Elektro entfernt!
-        Feuer -> setOf(Feuer, Pflanze, Eis, Kaefer, Stahl)
-        Wasser -> setOf(Feuer, Wasser, Eis, Stahl)
-        Pflanze -> setOf(Wasser, Elektro, Pflanze, Boden)
-        Elektro -> setOf(Elektro, Flug, Stahl)
-        Psycho -> setOf(Kampf, Psycho)
-        Eis -> setOf(Eis)
-        Drache -> setOf(Wasser, Elektro, Pflanze, Feuer)
-        Unlicht -> setOf(Geist, Unlicht)
-        Fee -> setOf(Kampf, Kaefer, Unlicht)
+      Flug -> setOf(Kampf, Kaefer, Pflanze)
+      Gift -> setOf(Pflanze, Fee, Kampf, Gift)
+      Boden -> setOf(Gift, Gestein)
+      Gestein -> setOf(Normal, Feuer, Gift, Flug)
+      Kaefer -> setOf(Kampf, Pflanze, Boden)
+      Geist -> setOf(Gift, Kaefer) // Korrigiert: Unlicht entfernt!
+      Stahl -> setOf(
+        Normal,
+        Pflanze,
+        Eis,
+        Flug,
+        Psycho,
+        Kaefer,
+        Gestein,
+        Drache,
+        Fee
+      )
+
+      Feuer -> setOf(Feuer, Pflanze, Eis, Kaefer, Stahl)
+      Wasser -> setOf(Feuer, Wasser, Eis, Stahl)
+      Pflanze -> setOf(Wasser, Elektro, Pflanze, Boden)
+      Elektro -> setOf(Elektro, Flug, Stahl)
+      Psycho -> setOf(Kampf, Psycho)
+      Eis -> setOf(Eis)
+      Drache -> setOf(Wasser, Elektro, Pflanze, Feuer)
+      Unlicht -> setOf(Geist, Unlicht)
+      Fee -> setOf(Kampf, Kaefer, Unlicht)
     }
 
   }
+
   fun notEffective(): Set<Typ> {
     return when (this) {
       Normal -> setOf(Geist)
       Geist -> setOf(Normal, Kampf)
       Flug -> setOf(Boden)
-      Boden->setOf(Elektro)
+      Boden -> setOf(Elektro)
       Stahl -> setOf(Gift)
       Elektro -> setOf(Boden)
       Psycho -> setOf(Unlicht)
-      Drache -> setOf(Fee)
+      Fee -> setOf(Drache)
       else -> emptySet()
     }
   }
@@ -87,7 +100,7 @@ enum class Typ {
       0.5f
     } else if (weaknesses().contains(attack.getType())) {
       2.0f
-    }else if (notEffective().contains(attack.getType())) {
+    } else if (notEffective().contains(attack.getType())) {
       0.0f
     } else {
       1.0f
@@ -120,4 +133,3 @@ enum class Typ {
     }
   }
 }
-//class Typ(val name: String)

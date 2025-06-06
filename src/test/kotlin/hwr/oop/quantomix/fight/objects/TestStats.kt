@@ -17,7 +17,7 @@ class TestStats : AnnotationSpec() {
   }
 
   @BeforeEach
-  fun stats3(): Stats {
+  fun buffStats(): Stats {
     return Stats(
       kp = 40,
       attack = 2,
@@ -27,9 +27,20 @@ class TestStats : AnnotationSpec() {
       speed = 2
     )
   }
+  @BeforeEach
+  fun deBuffstats(): Stats {
+    return Stats(
+      kp = 40,
+      attack = -2,
+      defense = -2,
+      specialAttack = -2,
+      specialDefense = -2,
+      speed = -2
+    )
+  }
 
   @Test
-  fun `Test newKp`() {
+  fun `Test takeDamage`() {
     val stats = stats1()
     stats.takeDamage(damage = 25)
     assertThat(stats.getKp()).isEqualTo(5)
@@ -38,38 +49,30 @@ class TestStats : AnnotationSpec() {
   @Test
   fun `Test buffsDebuffs only Buff`() {
     val stats = stats1()
-    val solution = stats.buffsDebuffs(stats = stats3(), buff = true)
+    stats.buffsDebuffs(stats = buffStats(), buff = true)
     assertThat(stats.getKp()).isEqualTo(70)
-    assertThat(stats.getAttack()).isEqualTo(32)
-    assertThat(stats.getDefense()).isEqualTo(32)
-    assertThat(stats.getSpecialAttack()).isEqualTo(32)
-    assertThat(stats.getSpecialDefense()).isEqualTo(32)
-    assertThat(stats.getSpeed()).isEqualTo(32)
-    assertThat(solution).isEqualTo(true)
+    assertThat(stats.getAttack()).isEqualTo(60)
+    assertThat(stats.getDefense()).isEqualTo(60)
+    assertThat(stats.getSpecialAttack()).isEqualTo(60)
+    assertThat(stats.getSpecialDefense()).isEqualTo(60)
+    assertThat(stats.getSpeed()).isEqualTo(60)
   }
 
   @Test
   fun `Test buffsDebuffs only Debuff`() {
     val stats = stats1()
-    val solution = stats.buffsDebuffs(stats = stats3(), buff = false)
+    stats.buffsDebuffs(stats = deBuffstats(), buff = false)
     assertThat(stats.getKp()).isEqualTo(0)
-    assertThat(stats.getAttack()).isEqualTo(28)
-    assertThat(stats.getDefense()).isEqualTo(28)
-    assertThat(stats.getSpecialAttack()).isEqualTo(28)
-    assertThat(stats.getSpecialDefense()).isEqualTo(28)
-    assertThat(stats.getSpeed()).isEqualTo(28)
-    assertThat(solution).isEqualTo(true)
+    assertThat(stats.getAttack()).isEqualTo(15)
+    assertThat(stats.getDefense()).isEqualTo(15)
+    assertThat(stats.getSpecialAttack()).isEqualTo(15)
+    assertThat(stats.getSpecialDefense()).isEqualTo(15)
+    assertThat(stats.getSpeed()).isEqualTo(15)
   }
-
   @Test
-  fun `Test fueseToStats`() {
+  fun `Test reduceSpeed`() {
     val stats = stats1()
-    stats.fueseToStats(stats = stats3())
-    assertThat(stats.getKp()).isEqualTo(60)
-    assertThat(stats.getAttack()).isEqualTo(60)
-    assertThat(stats.getDefense()).isEqualTo(60)
-    assertThat(stats.getSpecialDefense()).isEqualTo(60)
-    assertThat(stats.getSpeed()).isEqualTo(60)
-    assertThat(stats.getSpecialAttack()).isEqualTo(60)
+    stats.reduceSpeed(0.6666666)
+    assertThat(stats.getSpeed()).isEqualTo(11)
   }
 }

@@ -5,17 +5,9 @@ class Effects(
   private val changeStats: Stats,
   private val self: Boolean,
 ) {
-  fun buffsAndDebuffs(targetOfChangeStats: BattleStats): Boolean {
-    return targetOfChangeStats.getStats().buffsDebuffs(changeStats, buff)
+  fun buffsAndDebuffs(targetOfChangeStats: BattleStats) {
+    targetOfChangeStats.getStats().buffsDebuffs(changeStats, buff)
   }
 
-  fun isSelfDebuff(): Boolean {
-    return !buff && self
-  }
-
-  fun getSelf(): Boolean = self
-
-  fun upDateEffect(newStats: Stats) {
-    this.changeStats.fueseToStats(newStats)
-  }
+  fun hitsAttacker(): Boolean = self
 }

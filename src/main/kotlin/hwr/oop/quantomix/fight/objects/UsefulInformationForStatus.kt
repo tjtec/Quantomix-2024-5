@@ -2,32 +2,24 @@ package hwr.oop.quantomix.fight.objects
 
 import java.util.*
 
-class UsefulInformationForStatus(var alreadyPassedRounds: Int) {
-  var randomValueDuration = Random().nextInt(2, 5)
+class UsefulInformationForStatus( private var alreadyPassedRounds: Int) {
 
-  fun hitParalysis(): Int {
-    val randomValue = Random().nextInt(0, 100)
-    return when (randomValue < (2 / 3 * 100)) {
-      true -> 1
-      false -> 0
-    }
+  fun hitParalysis(randomValue:Int = Random().nextInt(0, 100)): Int {
+    return when (randomValue < (0.66666 * 100)) {
+        true -> 1
+        false -> 0
+      }
   }
 
-  private fun newDuration() {
-    randomValueDuration = Random().nextInt(2, 5)
-  }
-
-  fun selfHit(): Boolean {
-    val randomValue = Random().nextInt(0, 100)
+  fun selfHit(randomValue:Int = Random().nextInt(0, 100)): Boolean {
     return randomValue > 50
   }
 
-  fun roundsWithStatusEffectLeft(): Boolean {
+  fun roundsWithStatusEffectLeft(randomValueDuration:Int = Random().nextInt(2, 5)): Boolean {
     if (alreadyPassedRounds > randomValueDuration) {
-      newDuration()
       alreadyPassedRounds = 0
-      return true
+      return false
     }
-    return false
+    return true
   }
 }

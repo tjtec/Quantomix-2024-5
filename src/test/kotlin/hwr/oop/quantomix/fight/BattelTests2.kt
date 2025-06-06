@@ -65,11 +65,11 @@ class BattelTests2 : AnnotationSpec() {
           buff = false,
           changeStats = Stats(
             kp = 0,
-            attack = 10,
-            defense = 5,
-            specialAttack = 15,
-            specialDefense = 8,
-            speed = 20
+            attack = -4,
+            defense = -5,
+            specialAttack = -3,
+            specialDefense = -2,
+            speed = -1
           ),
           self = false
         )
@@ -100,19 +100,18 @@ class BattelTests2 : AnnotationSpec() {
     assertThat(solution).isEqualTo(true)
     assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(75)
     assertThat(quantomix2BattleStats.getStats().getAttack()).isEqualTo(
-      quantomix2.getStats().getAttack() - 10
+      (33)
     )
     assertThat(quantomix2BattleStats.getStats().getSpecialAttack()).isEqualTo(
-      quantomix2.getStats().getSpecialAttack() - 15
-    )
+      40)
     assertThat(quantomix2BattleStats.getStats().getDefense()).isEqualTo(
-      quantomix2.getStats().getDefense() - 5
+      28
     )
     assertThat(quantomix2BattleStats.getStats().getSpecialDefense())
-      .isEqualTo(quantomix2.getStats().getSpecialDefense() - 8)
+      .isEqualTo(50)
     assertThat(
       quantomix2BattleStats.getStats().getSpeed()
-    ).isEqualTo(quantomix2.getStats().getSpeed() - 20)
+    ).isEqualTo(67)
   }
 
   @Test

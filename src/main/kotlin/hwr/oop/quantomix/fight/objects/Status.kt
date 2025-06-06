@@ -1,5 +1,7 @@
 package hwr.oop.quantomix.fight.objects
 
+import java.util.*
+
 enum class Status {
   NoDamage,
   Poison,
@@ -11,15 +13,17 @@ enum class Status {
   Freeze;
 
   fun calculateStatusEffect(
-      battleStats: BattleStats,
-      previous: StatusHelper = StatusHelper(),
-      setDurationForRounds: Int? = null,
+    battleStats: BattleStats,
+    previous: StatusHelper = StatusHelper(),
+    setDurationForRounds: Int = Random().nextInt(2, 5),
+    selfHit: Int = Random().nextInt(0, 100),
+    randomValueParalysis: Int = Random().nextInt(0, 100),
   ): StatusHelper {
     return when (this) {
       StrongPoison -> {
         val rounds = previous.alreadyPassedRounds + 1
-        val newSummand = if (previous.alreadyPassedRounds == 0)
-          (battleStats.getStats().getKp() * 1 / 16)
+        val newSummand = if (previous.alreadyPassedRounds <= 0)
+          (battleStats.getStats().getKp() / 16)
         else previous.summand * 2
         StatusHelper(
           multiplicator = 1,
@@ -29,42 +33,36 @@ enum class Status {
       }
 
       Poison -> {
-        val rounds = previous.alreadyPassedRounds + 1
         StatusHelper(
           multiplicator = 1,
-          summand = (battleStats.getStats().getKp() * 1 / 16),
-          alreadyPassedRounds = rounds
+          summand = (battleStats.getStats().getKp() / 16),
         )
       }
 
       Combustion -> {
-        val rounds = previous.alreadyPassedRounds + 1
         StatusHelper(
           multiplicator = 1,
           summand = (battleStats.getStats().getKp() / 8),
-          alreadyPassedRounds = rounds
         )
       }
 
       Paralysis -> {
         battleStats.getStats().reduceSpeed(0.5)
-        val rounds = previous.alreadyPassedRounds + 1
         val m =
-          UsefulInformationForStatus(previous.alreadyPassedRounds).hitParalysis()
+          UsefulInformationForStatus(previous.alreadyPassedRounds).hitParalysis(
+            randomValueParalysis
+          )
         StatusHelper(
           multiplicator = m,
           summand = 0,
-          alreadyPassedRounds = rounds
         )
       }
 
       Sleep -> {
         val rounds = previous.alreadyPassedRounds + 1
-        val effectiveMultiplicator = if (setDurationForRounds != null) {
+        val effectiveMultiplicator =
           if (previous.alreadyPassedRounds < setDurationForRounds) 0 else 1
-        } else {
-          if (UsefulInformationForStatus(previous.alreadyPassedRounds).roundsWithStatusEffectLeft()) 0 else 1
-        }
+        if (UsefulInformationForStatus(previous.alreadyPassedRounds).roundsWithStatusEffectLeft()) 0 else 1
         StatusHelper(
           multiplicator = effectiveMultiplicator,
           summand = 0,
@@ -75,8 +73,16 @@ enum class Status {
       Confusion -> {
         val rounds = previous.alreadyPassedRounds + 1
         val effectiveMultiplicator = if (
-          UsefulInformationForStatus(previous.alreadyPassedRounds).selfHit() &&
-          UsefulInformationForStatus(previous.alreadyPassedRounds).roundsWithStatusEffectLeft()
+          UsefulInformationForStatus(
+            alreadyPassedRounds = previous.alreadyPassedRounds
+          ).selfHit(
+            selfHit
+          ) &&
+          UsefulInformationForStatus(
+            alreadyPassedRounds = previous.alreadyPassedRounds
+          ).roundsWithStatusEffectLeft(
+            randomValueDuration = setDurationForRounds
+          )
         ) -1 else 1
         StatusHelper(
           multiplicator = effectiveMultiplicator,

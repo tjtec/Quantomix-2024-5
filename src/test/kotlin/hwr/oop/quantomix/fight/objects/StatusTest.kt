@@ -96,7 +96,7 @@ class StatusTest : AnnotationSpec() {
     val battleStats = battleStats()
     val statusHelper = Status.Paralysis.calculateStatusEffect(
       battleStats,
-      StatusHelper(), 3
+      StatusHelper(), 3, selfHit = 40, randomValueParalysis = 70
     )
     assertThat(statusHelper.multiplicator).isEqualTo(0)
     assertThat(battleStats.getStats().getSpeed()).isEqualTo(25)
@@ -128,5 +128,19 @@ class StatusTest : AnnotationSpec() {
       battleStats(), statusHelperRound4, 4
     )
     assertThat(statusHelperRound5.multiplicator).isEqualTo(1)
+  }
+  @Test
+  fun `Test Confusion`(){
+    val statusHelper = Status.Confusion.calculateStatusEffect(battleStats(),
+      StatusHelper(), setDurationForRounds = 3, selfHit = 60)
+    assertThat(statusHelper.multiplicator).isEqualTo(-1)
+    val statusHelperRound1 = Status.Confusion.calculateStatusEffect(battleStats(),statusHelper, 3, selfHit = 40)
+    assertThat(statusHelperRound1.multiplicator).isEqualTo(1)
+    val statusHelperRound2 = Status.Confusion.calculateStatusEffect(battleStats(), statusHelperRound1, 3, selfHit = 60)
+    assertThat(statusHelperRound2.multiplicator).isEqualTo(-1)
+    val statusHelperRound3 = Status.Confusion.calculateStatusEffect(battleStats(), statusHelperRound2, 3, selfHit = 70)
+    assertThat(statusHelperRound3.multiplicator).isEqualTo(-1)
+    val statusHelperRound4 = Status.Confusion.calculateStatusEffect(battleStats(), statusHelperRound3, 3, selfHit = 80)
+    assertThat(statusHelperRound4.multiplicator).isEqualTo(1)
   }
 }

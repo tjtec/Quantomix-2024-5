@@ -32,21 +32,6 @@ data class Attack(
     return this.effects
   }
 
-  fun getStatus(): Status? {
-    return this.status
-  }
-
-  fun updateSelfDebuffs(stats: Stats): Boolean {
-    val indexCurrentEffect = 0
-    while (indexCurrentEffect < this.effects.size) {
-      if (effects[indexCurrentEffect].isSelfDebuff()) {
-        effects[indexCurrentEffect].upDateEffect(stats)
-        return true
-      }
-    }
-    return false
-  }
-
   fun changeStatsAndStatus(
       attacker: BattleStats,
       target: BattleStats,
@@ -56,24 +41,25 @@ data class Attack(
     while (!(this.getEffects()
         .isEmpty()) && this.getEffects().size > alreadyChangedEffects
     ) {
-      if (this.getEffects()[alreadyChangedEffects].getSelf()) {
-        successful =
-          this.getEffects()[alreadyChangedEffects].buffsAndDebuffs(attacker)
-      } else {
-        successful =
-          this.getEffects()[alreadyChangedEffects].buffsAndDebuffs(target)
+      if (this.getEffects()[alreadyChangedEffects].hitsAttacker()) {
+        this.getEffects()[alreadyChangedEffects].buffsAndDebuffs(attacker)
+      successful = true
+      } else if (!this.getEffects()[alreadyChangedEffects].hitsAttacker()) {
+        this.getEffects()[alreadyChangedEffects].buffsAndDebuffs(target)
+      successful = true
+      }
+      else{
+        successful = false
       }
       alreadyChangedEffects += 1
     }
-    val status = this.getStatus()
-    if (status != null) {
+    if (this.status != null) {
       successful = target.changeStatus(status)
     }
     return successful
   }
 
-  fun hits(): Boolean {
-    val randomValue = Random().nextInt(1, 100)
+  fun hits(randomValue:Int = Random().nextInt(1, 100)): Boolean {
     return when (randomValue <= this.getDamageQuote()) {
       true -> true
       else -> false

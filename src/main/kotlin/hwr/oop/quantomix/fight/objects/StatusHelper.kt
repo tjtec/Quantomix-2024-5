@@ -5,17 +5,6 @@ class StatusHelper(
   val summand: Int = 0,
   val alreadyPassedRounds: Int = 0,
 ) {
-  fun roundsWithStatusEffectLeft(): Boolean {
-    return alreadyPassedRounds == 6
-  }
-
-  fun setHelper(
-    overrideMuliplicator: Int = multiplicator,
-    overrideSummand: Int = summand,
-  ): StatusHelper {
-    return StatusHelper(overrideMuliplicator, overrideSummand)
-  }
-
   fun selfHit(): Boolean {
     return when (multiplicator) {
       -1 -> true

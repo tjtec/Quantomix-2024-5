@@ -4,6 +4,7 @@ import hwr.oop.quantomix.Exceptions.DeadQuantomixException
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.fight.objects.StatusHelper
+import hwr.oop.quantomix.objects.Typ
 
 interface DamageStrategy {
   fun damageFunction(
@@ -17,6 +18,7 @@ class StandardDamageStrategy : DamageStrategy {
   private lateinit var attacker: BattleStats
   private lateinit var target: BattleStats
   private lateinit var currentAttack: Attack
+  private var selfHit: Boolean = false
 
   override fun damageFunction(
     attacker: BattleStats,
@@ -42,27 +44,55 @@ class StandardDamageStrategy : DamageStrategy {
     }
     return if (currentAttack.getSpecialAttack()) {
       formulaAttackForce(
-        attackDamage = currentAttack.getDamage() + statusEffect.summand * statusEffect.multiplicator,
+        attackDamage = currentAttack.getDamage(),
         attackValue = attacker.getStats().getSpecialAttack(),
         defense = target.getStats().getSpecialDefense(),
-        multiFactor = effectivityMultiplier
+        multiFactor = effectivityMultiplier,
+        statusEffect = statusEffect
       )
-    } else {
+    } else if(statusEffect.selfHit() && currentAttack.getSpecialAttack()){
+      selfHit = true
       formulaAttackForce(
-        attackDamage = currentAttack.getDamage() + statusEffect.summand * statusEffect.multiplicator,
+        attackDamage = currentAttack.getDamage() ,
+        attackValue = attacker.getStats().getSpecialAttack(),
+        defense = attacker.getStats().getSpecialDefense(),
+        multiFactor = effectivityMultiplier,
+        statusEffect = statusEffect
+      )
+    }
+    else if (statusEffect.selfHit() && !currentAttack.getSpecialAttack()){
+      selfHit = true
+      formulaAttackForce(
+        attackDamage = currentAttack.getDamage() ,
+        attackValue = attacker.getStats().getAttack(),
+        defense = attacker.getStats().getDefense(),
+        multiFactor = effectivityMultiplier,
+        statusEffect = statusEffect
+      )
+    }
+    else {
+      formulaAttackForce(
+        attackDamage = currentAttack.getDamage(),
         attackValue = attacker.getStats().getAttack(),
         defense = target.getStats().getDefense(),
-        multiFactor = effectivityMultiplier
+        multiFactor = effectivityMultiplier,
+        statusEffect = statusEffect
       )
     }
   }
 
-
   private fun calculateEffectivity(): Float {
-    val effectivity1 =
-      target.getQuantomix().getType1().getEffectivity(currentAttack)
-    val type2 = target.getQuantomix().getType2()
-
+    val effectivity1: Float
+    val type2: Typ?
+    if (selfHit){
+     effectivity1=attacker.getQuantomix().getType1().getEffectivity(currentAttack)
+      type2 = attacker.getQuantomix().getType2()
+    }
+    else {
+      effectivity1 =
+        target.getQuantomix().getType1().getEffectivity(currentAttack)
+      type2 = target.getQuantomix().getType2()
+    }
     return if (type2 == null) {
       effectivity1
     } else {
@@ -79,8 +109,10 @@ class StandardDamageStrategy : DamageStrategy {
       attackValue: Int,
       defense: Int,
       multiFactor: Float,
+      statusEffect: StatusHelper
   ): Int = ((attackDamage * attackValue * multiFactor)
-      / ((defense / 100 + 1) * 100)).toInt()
+      / ((defense / 100 + 1) * 100)).toInt() + statusEffect.summand * statusEffect.multiplicator
 }
 //ToDo: 2 schadensformeln gleichzeitig in benutzung die zweite soll schauen innerhalb des berechneten Schaden wie viel schaden entsteht (mit randomasation)
 //ToDo: im CLi soll man aussuchen, welche schadensformel benutzt wird
+//ToDo: STAB Factor einbeziehen

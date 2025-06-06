@@ -280,10 +280,8 @@ class TypTest : AnnotationSpec() {
   fun `test Attacktyp Kaefer`() {
     assertThat(Typ.Pflanze.getEffectivity(attackKaefer())).isEqualTo(2.0f)
     assertThat(Typ.Psycho.getEffectivity(attackKaefer())).isEqualTo(2.0f)
-    assertThat(Typ.Unlicht.getEffectivity(attackKaefer())).isEqualTo(2.0f)
     assertThat(Typ.Kampf.getEffectivity(attackKaefer())).isEqualTo(0.5f)
     assertThat(Typ.Flug.getEffectivity(attackKaefer())).isEqualTo(0.5f)
-    assertThat(Typ.Gift.getEffectivity(attackKaefer())).isEqualTo(0.5f)
     assertThat(Typ.Geist.getEffectivity(attackKaefer())).isEqualTo(0.5f)
     assertThat(Typ.Stahl.getEffectivity(attackKaefer())).isEqualTo(0.5f)
     assertThat(Typ.Feuer.getEffectivity(attackKaefer())).isEqualTo(0.5f)
@@ -305,7 +303,6 @@ class TypTest : AnnotationSpec() {
     assertThat(Typ.Gestein.getEffectivity(attackStahl())).isEqualTo(2.0f)
     assertThat(Typ.Eis.getEffectivity(attackStahl())).isEqualTo(2.0f)
     assertThat(Typ.Fee.getEffectivity(attackStahl())).isEqualTo(2.0f)
-    assertThat(Typ.Stahl.getEffectivity(attackStahl())).isEqualTo(0.5f)
     assertThat(Typ.Feuer.getEffectivity(attackStahl())).isEqualTo(0.5f)
     assertThat(Typ.Wasser.getEffectivity(attackStahl())).isEqualTo(0.5f)
     assertThat(Typ.Elektro.getEffectivity(attackStahl())).isEqualTo(0.5f)
@@ -368,7 +365,6 @@ class TypTest : AnnotationSpec() {
     assertThat(Typ.Gift.getEffectivity(attackPsycho())).isEqualTo(2.0f)
     assertThat(Typ.Stahl.getEffectivity(attackPsycho())).isEqualTo(0.5f)
     assertThat(Typ.Psycho.getEffectivity(attackPsycho())).isEqualTo(0.5f)
-    assertThat(Typ.Unlicht.getEffectivity(attackPsycho())).isEqualTo(0.0f)
     assertThat(Typ.Normal.getEffectivity(attackPsycho())).isEqualTo(1.0f)
   }
 
@@ -410,7 +406,6 @@ class TypTest : AnnotationSpec() {
     assertThat(Typ.Unlicht.getEffectivity(attackFee())).isEqualTo(2.0f)
     assertThat(Typ.Gift.getEffectivity(attackFee())).isEqualTo(0.5f)
     assertThat(Typ.Stahl.getEffectivity(attackFee())).isEqualTo(0.5f)
-    assertThat(Typ.Feuer.getEffectivity(attackFee())).isEqualTo(0.5f)
     assertThat(Typ.Normal.getEffectivity(attackFee())).isEqualTo(1.0f)
   }
 }

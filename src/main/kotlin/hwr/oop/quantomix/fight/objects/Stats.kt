@@ -1,5 +1,7 @@
 package hwr.oop.quantomix.fight.objects
 
+import hwr.oop.quantomix.Exceptions.NoBuffOrDebuffValue
+
 class Stats(
   private var kp: Int,
   private var attack: Int,
@@ -9,12 +11,12 @@ class Stats(
   private var speed: Int,
 ) {
   fun deepCopy(
-      kp: Int = this.kp,
-      attack: Int = this.attack,
-      defense: Int = this.defense,
-      specialAttack: Int = this.specialAttack,
-      specialDefense: Int = this.specialDefense,
-      speed: Int = this.speed,
+    kp: Int = this.kp,
+    attack: Int = this.attack,
+    defense: Int = this.defense,
+    specialAttack: Int = this.specialAttack,
+    specialDefense: Int = this.specialDefense,
+    speed: Int = this.speed,
   ) = Stats(
     kp, attack, defense, specialAttack, specialDefense, speed
   )
@@ -26,23 +28,17 @@ class Stats(
     }
   }
 
-  fun buffsDebuffs(stats: Stats, buff: Boolean): Boolean {
+  fun buffsDebuffs(stats: Stats, buff: Boolean) {
     if (!buff) {
       selfDamage(stats)
-      newAttackValueDown(stats)
-      newDefenseValueDown(stats)
-      newSpecialAttackValueDown(stats)
-      newSpecialDefenseValueDown(stats)
-      newSpeedValueDown(stats)
     } else {
       heal(stats)
-      newAttackValueUp(stats)
-      newDefenseValueUp(stats)
-      newSpecialAttackValueUp(stats)
-      newSpecialDefenseValueUp(stats)
-      newSpeedValueUp(stats)
     }
-    return true
+    this.attack=effectOfDeBuff(stats.getAttack(), this.attack)
+    this.defense=effectOfDeBuff(stats.getDefense(), this.defense)
+    this.specialAttack=effectOfDeBuff(stats.getSpecialAttack(), this.specialAttack)
+    this.specialDefense=effectOfDeBuff(stats.getSpecialDefense(), this.specialDefense)
+    this.speed=effectOfDeBuff(stats.getSpeed(), this.speed)
   }
 
   private fun selfDamage(stats: Stats) {
@@ -58,57 +54,8 @@ class Stats(
     this.kp += stats.kp
   }
 
-  private fun newAttackValueDown(stats: Stats) {
-    this.attack -= stats.attack
-  }
-
-  private fun newDefenseValueDown(stats: Stats) {
-    this.defense -= stats.defense
-  }
-
-  private fun newSpecialAttackValueDown(stats: Stats) {
-    this.specialAttack -= stats.specialAttack
-  }
-
-  private fun newSpecialDefenseValueDown(stats: Stats) {
-    this.specialDefense -= stats.specialDefense
-  }
-
-  private fun newSpeedValueDown(stats: Stats) {
-    this.speed -= stats.speed
-  }
-
-  private fun newAttackValueUp(stats: Stats) {
-    this.attack += stats.attack
-  }
-
-  private fun newDefenseValueUp(stats: Stats) {
-    this.defense += stats.defense
-  }
-
-  private fun newSpecialAttackValueUp(stats: Stats) {
-    this.specialAttack += stats.specialAttack
-  }
-
-  private fun newSpecialDefenseValueUp(stats: Stats) {
-    this.specialDefense += stats.specialDefense
-  }
-
-  private fun newSpeedValueUp(stats: Stats) {
-    this.speed += stats.speed
-  }
-
   fun reduceSpeed(parameter: Double) {
-    this.speed = (this.speed * parameter).toInt()
-  }
-
-  fun fueseToStats(stats: Stats) {
-    this.kp *= stats.kp
-    this.specialAttack *= stats.specialAttack
-    this.specialDefense *= stats.specialDefense
-    this.speed *= stats.speed
-    this.attack *= stats.attack
-    this.defense *= stats.defense
+    this.speed -= (this.speed * parameter).toInt()
   }
 
   fun getKp(): Int = this.kp
@@ -117,4 +64,28 @@ class Stats(
   fun getDefense(): Int = this.defense
   fun getSpecialAttack(): Int = this.specialAttack
   fun getSpecialDefense(): Int = this.specialDefense
+
+  private fun effectOfDeBuff(
+    effectLevel: Int,
+    oldValue: Int,
+  ): Int {
+    var multiplier: Double
+    when (effectLevel) {
+      -6 -> multiplier = 0.25
+      -5 -> multiplier = 0.29
+      -4 -> multiplier = 0.33
+      -3 -> multiplier = 0.4
+      -2 -> multiplier = 0.5
+      -1 -> multiplier = 0.67
+      0 -> multiplier = 1.0
+      1 -> multiplier = 1.5
+      2 -> multiplier = 2.0
+      3 -> multiplier = 2.5
+      4 -> multiplier = 3.0
+      5 -> multiplier = 3.5
+      6 -> multiplier = 4.0
+      else -> throw NoBuffOrDebuffValue("The number $effectLevel is a not allowed number for Buffs and Debuffs.")
+    }
+    return (oldValue * multiplier).toInt()
+  }
 }

@@ -12,6 +12,8 @@ class BattleStats(
     this.stats.takeDamage(damage)
   }
 
+  fun hasStatus() = status != null
+
   fun getStats(): Stats {
     return this.stats
   }
