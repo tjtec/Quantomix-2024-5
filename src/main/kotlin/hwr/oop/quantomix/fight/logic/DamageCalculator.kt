@@ -51,6 +51,7 @@ object DamageCalculator {
         )
     }
     val stabFactor = calculateStabFactor(context)
+    if (maxDamage <= 0) return 0
     return when (mode) {
       ModeOfDamageCalculation.Complex -> (Random.nextInt(
         1,

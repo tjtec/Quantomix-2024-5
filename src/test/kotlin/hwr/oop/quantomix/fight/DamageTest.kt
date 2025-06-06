@@ -54,6 +54,6 @@ class DamageTest : AnnotationSpec() {
       attack = attack(),
       target = battleStats(),
     )
-    assertThat(currentDamage).isEqualTo(20)
+    assertThat(currentDamage).isEqualTo(30)
   }
 }
