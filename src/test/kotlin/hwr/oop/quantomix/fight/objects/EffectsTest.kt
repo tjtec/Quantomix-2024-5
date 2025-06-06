@@ -20,7 +20,7 @@ class EffectsTest: AnnotationSpec() {
   @BeforeEach
   fun effects1():Effects{
     return Effects(
-      buff = true,
+      heal = true,
       changeStats = stats(),
       self=false
     )
@@ -28,7 +28,7 @@ class EffectsTest: AnnotationSpec() {
   @BeforeEach
   fun effects2():Effects{
     return Effects(
-      buff = true,
+      heal = true,
       changeStats = stats(),
       self=true
     )

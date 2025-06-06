@@ -16,7 +16,7 @@ class AttackTest : AnnotationSpec() {
       specialAttack = true,
       effects = mutableListOf(
         Effects(
-          buff = false,
+          heal = false,
           changeStats = Stats(
             kp = 10,
             attack = 4,
@@ -42,7 +42,7 @@ class AttackTest : AnnotationSpec() {
       specialAttack = true,
       effects = mutableListOf(
         Effects(
-          buff = false,
+          heal = false,
           changeStats = Stats(
             kp = 10,
             attack = 4,

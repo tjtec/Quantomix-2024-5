@@ -9,6 +9,7 @@ class BattleStats(
 ) {
   private var currentStatusHelper: StatusHelper = StatusHelper()
   fun takeDamage(damage: Int) {
+    battleStatsKpNotMoreThanQuantomixKp()
     this.stats.takeDamage(damage)
   }
 
@@ -41,7 +42,9 @@ class BattleStats(
       return currentStatusHelper
     }
   }
-
+   private fun battleStatsKpNotMoreThanQuantomixKp() {
+    this.stats.setOnlyUntilMax(this.quantomix.getStats().getKp())
+   }
 
   fun getQuantomix(): Quantomix {
     return quantomix
