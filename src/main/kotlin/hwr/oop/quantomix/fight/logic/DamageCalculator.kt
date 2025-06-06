@@ -50,16 +50,27 @@ object DamageCalculator {
           statusEffect = context.statusEffect
         )
     }
-    val stabFactor = calculateStabFactor(context)
+
     if (maxDamage <= 0) return 0
     return when (mode) {
-      ModeOfDamageCalculation.Complex -> (Random.nextInt(
-        1,
-        maxDamage + 1
-      ) * stabFactor).toInt()
+      ModeOfDamageCalculation.Complex -> damageWithStabFactor(
+        damage = Random.nextInt(
+          1,
+          maxDamage + 1
+        ),
+        context = context
+      )
 
-      ModeOfDamageCalculation.Simple -> (maxDamage * stabFactor).toInt()
+      ModeOfDamageCalculation.Simple -> damageWithStabFactor(
+        damage = maxDamage,
+        context = context
+      )
     }
+  }
+
+  private fun damageWithStabFactor(damage: Int, context: DamageContext): Int {
+    val stabFactor = calculateStabFactor(context)
+    return (damage * stabFactor).toInt()
   }
 
   private fun calculateStabFactor(context: DamageContext): Float {
@@ -79,7 +90,7 @@ object DamageCalculator {
     multiplier: Float,
     statusEffect: StatusHelper,
   ): Int =
-    ((attackDamage * attackValue * multiplier) /
+    (((attackDamage * attackValue * multiplier) /
         ((defenseValue / 100 + 1) * 100)).toInt() +
-        statusEffect.summand * statusEffect.multiplicator
+        statusEffect.summand) * statusEffect.multiplicator
 }
