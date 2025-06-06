@@ -6,12 +6,5 @@ import org.assertj.core.api.Assertions
 
 class MainTest : AnnotationSpec() {
 
-  //@Test
-  fun `main prints hello world to stdout`() {
-    val output = captureStandardOut {
-        //main()
-    }.trim()
-    Assertions.assertThat(output).isEqualTo("Test")
-  }
 
 }

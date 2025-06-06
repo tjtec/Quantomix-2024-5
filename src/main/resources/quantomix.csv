@@ -45,7 +45,7 @@ Elektek,Elektro,,65,83,57,95,85,105,Donnerblitz,Donnerschlag,Hyperstrahl,Power-P
 Magmar,Feuer,,65,95,57,100,85,93,Flammenwurf,Feuerschlag,Gigastoß,Brandsand
 Pinsir,Käfer,,65,125,100,55,70,85,Kreuzschere,Durchbruch,Schaufler,Kraftkoloss
 Tauros,Normal,,75,100,95,40,70,110,Bodyslam,Flammenwurf,Eisenschädel,Eisstrahl
-Garados,Wasser,Flug,95,125,79,60,100,81,Surfer,Frustventil,Risikotackle,Eisstrahl
+Garados,Wasser,Flug,95,125,79,60,100,81,Surfer,Frustventil,Risiko-Tackle,Eisstrahl
 Lapras,Wasser,Eis,130,85,80,85,95,60,Aquadurchstoß,Eisstrahl,Gigastoß,Hyperstrahl
 Ditto,Normal,,48,48,48,48,48,48,Wandler,,,
 Evoli,Normal,,55,55,50,45,65,55,Fassade,Spukball,Schallwelle,Lockstimme
@@ -65,14 +65,14 @@ Lavados,Feuer,Flug,90,100,90,125,85,90,Flammenwurf,Fliegen,Frustflamme,Brandsand
 Dragoran,Drache,Flug,91,134,95,100,100,80,Drachenklaue,Fliegen,Fruststampfer,Eisstrahl
 Mewtu,Psycho,,106,110,90,154,90,130,Flächenmacht,Psychokinese,Donnerblitz,Flammenwurf
 Mew,Psycho,,100,100,100,100,100,100,Psychoschock,Feuerschlag,Eishieb,Donnerschlag
-Endivie,Pflanze,,45,49,65,49,65,45,Energieball,Samenbombe,Tera-Ausbruch,Risikotackle
-Lorblatt,Pflanze,,60,62,80,63,80,60,Blättersturm,Energieball,Tera-Ausbruch,Risikotackle
+Endivie,Pflanze,,45,49,65,49,65,45,Energieball,Samenbombe,Tera-Ausbruch,Risiko-Tackle
+Lorblatt,Pflanze,,60,62,80,63,80,60,Blättersturm,Energieball,Tera-Ausbruch,Risiko-Tackle
 Meganie,Pflanze,,80,82,100,83,100,80,Energieball,Solarstrahl,Hyperstrahl,Erdbeben
-Feurigel,Feuer,,39,52,43,60,50,65,Flammenlitz,Feuersäulen,Risikotackle,Eisenschädel
+Feurigel,Feuer,,39,52,43,60,50,65,Flammenblitz,Feuersäulen,Risiko-Tackle,Eisenschädel
 Igelavar,Feuer,,58,64,58,80,65,80,Flammenwurf,Hitzewelle,Bodyslam,Fassade
 Tornupto,Feuer,,78,84,78,109,85,100,Flammenwurf,Neck Strike,Spukball,Solarstrahl
 Karnimani,Wasser,,50,65,64,44,48,43,Kaskade,Power-Punch,Aufruhr,Eisstrahl
-Tyracroc,Wasser,,65,80,80,59,63,58,Aquadurchstoß,Surfer,Risikotackle,Power-Punch
+Tyracroc,Wasser,,65,80,80,59,63,58,Aquadurchstoß,Surfer,Risiko-Tackle,Power-Punch
 Impergator,Wasser,,85,105,100,79,83,78,Kaskade,Hydropumpe,Erdbeben,Gigastoß
 Wiesor,Normal,,35,46,34,35,45,55,Fassade,Bodyslam,Spukball,Donnerblitz
 Wiesenior,Normal,,60,86,54,55,75,90,Schallwelle,Surfer,Spukball,Solarstrahl

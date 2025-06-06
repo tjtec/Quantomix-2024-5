@@ -1,7 +1,7 @@
 package hwr.oop.quantomix.csvparser
 
 import io.kotest.core.spec.style.AnnotationSpec
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import java.io.File
 
 class CsvFileTest : AnnotationSpec() {
