@@ -298,7 +298,33 @@ class BattelTests2 : AnnotationSpec() {
         val quantomix2 = quantomix2()
         val quantomix1BattleStats = quantomix1.newBattleStats()
         val quantomix2BattleStats = quantomix2.newBattleStats()
+      val attackComplex = Attack(
+        attackName = "Komplexe Strategie",
+        type = Typ.Normal,
+        damage = 0,
+        damageQuote = 100,
+        specialAttack = false,
+        effects = mutableListOf(
+          Effects(heal = true, changeStats = Stats(kp = 25, attack = 0, defense = -6, specialAttack = 0, specialDefense = -5, speed = 0), self = true),
+          Effects(heal = false, changeStats = Stats(kp = 0, attack = -5, defense = 0, specialAttack = -4, specialDefense = 0, speed = -5), self = true)
+        ),
+        status = Status.NoDamage
+      )
 
+      val battle = SimpleBattle()
+      battle.simpleBattle(
+        aktiveQuantomixBattleStats = quantomix1BattleStats,
+        attack = attackComplex,
+        target = quantomix2BattleStats,
+        attackStrategy = damageStrategy(),
+      )
+
+      assertThat(quantomix1BattleStats.getStats().getKp()).isEqualTo(125)
+      assertThat(quantomix1BattleStats.getStats().getAttack()).isEqualTo(28)
+      assertThat(quantomix1BattleStats.getStats().getSpecialAttack()).isEqualTo(33)
+      assertThat(quantomix1BattleStats.getStats().getDefense()).isEqualTo(25)
+      assertThat(quantomix1BattleStats.getStats().getSpecialDefense()).isEqualTo(28)
+      assertThat(quantomix1BattleStats.getStats().getSpeed()).isEqualTo(28)
     }
 
     @Test
@@ -336,51 +362,34 @@ class BattelTests2 : AnnotationSpec() {
         assertThat(quantomix1BattleStats.getStats().getSpecialDefense()).isEqualTo(350)
         assertThat(quantomix1BattleStats.getStats().getSpeed()).isEqualTo(350)
     }
-    /*
     @Test
     fun `Test Attack with damage and buff`() {
         val quantomix1 = quantomix1()
         val quantomix2 = quantomix2()
         val quantomix1BattleStats = quantomix1.newBattleStats()
         val quantomix2BattleStats = quantomix2.newBattleStats()
-
-        val attackBuff = Attack(
-            attackName = "Direkter Treffer",
-            type = Typ.Geist,
-            damage = 100,
-            damageQuote = 100,
-            specialAttack = false,
-            effects = mutableListOf(
-                Effects(
-                    buff = true,
-                    changeStats = Stats(
-                        kp = 0,
-                        attack = 10,
-                        defense = 5,
-                        specialAttack = 15,
-                        specialDefense = 8,
-                        speed = 20
-                    ),
-                    self = false
-                )
-            ),
-            status = null
-        )
-
         val battle = SimpleBattle()
-        battle.simpleBattle(
+        val solution = battle.simpleBattle(
             aktiveQuantomixBattleStats = quantomix1BattleStats,
-            attack = attackBuff,
+            attack = oop(),
             target = quantomix2BattleStats,
             attackStrategy = damageStrategy(),
         )
-
-        assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(50)
-        assertThat(quantomix2BattleStats.getStats().getAttack()).isEqualTo(110)
-        assertThat(quantomix2BattleStats.getStats().getSpecialAttack()).isEqualTo(115)
-        assertThat(quantomix2BattleStats.getStats().getDefense()).isEqualTo(105)
-        assertThat(quantomix2BattleStats.getStats().getSpecialDefense()).isEqualTo(108)
-        assertThat(quantomix2BattleStats.getStats().getSpeed()).isEqualTo(120)
+        assertThat(solution).isEqualTo(true)
+        assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(75)
+        assertThat(quantomix2BattleStats.getStats().getAttack()).isEqualTo(
+            (400)
+        )
+        assertThat(quantomix2BattleStats.getStats().getSpecialAttack()).isEqualTo(
+            250
+        )
+        assertThat(quantomix2BattleStats.getStats().getDefense()).isEqualTo(
+            350
+        )
+        assertThat(quantomix2BattleStats.getStats().getSpecialDefense())
+            .isEqualTo(200)
+        assertThat(
+            quantomix2BattleStats.getStats().getSpeed()
+        ).isEqualTo(150)
     }
-    */
 }
