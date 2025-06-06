@@ -30,6 +30,7 @@ class TestStats : AnnotationSpec() {
       speed = 2
     )
   }
+
   @BeforeEach
   fun deBuffstats(): Stats {
     return Stats(
@@ -72,25 +73,30 @@ class TestStats : AnnotationSpec() {
     assertThat(stats.getSpecialDefense()).isEqualTo(15)
     assertThat(stats.getSpeed()).isEqualTo(15)
   }
+
   @Test
   fun `Test reduceSpeed`() {
     val stats = stats1()
     stats.reduceSpeed(0.6666666)
     assertThat(stats.getSpeed()).isEqualTo(11)
   }
+
   @Test
-  fun `not allowed buff or debuff number`(){
-    val exception=assertThrows(NoBuffOrDebuffValue::class.java){
-        val changeStats = Stats(
-          kp = 10,
-          attack = 10,
-          defense = 20,
-          specialAttack = -30,
-          specialDefense = -10,
-          speed = 100
-        )
+  fun `not allowed buff or debuff number`() {
+    val exception = assertThrows(NoBuffOrDebuffValue::class.java) {
+      val changeStats = Stats(
+        kp = 10,
+        attack = 10,
+        defense = 20,
+        specialAttack = -30,
+        specialDefense = -10,
+        speed = 100
+      )
       stats1().buffsDebuffs(stats = changeStats, heal = true)
     }
-    assertEquals("The number 10 is a not allowed number for Buffs and Debuffs.", exception.message)
+    assertEquals(
+      "The number 10 is a not allowed number for Buffs and Debuffs.",
+      exception.message
+    )
   }
 }

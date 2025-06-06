@@ -9,7 +9,6 @@ import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
-import org.junit.jupiter.api.Assertions.*
 
 
 class RoundsTest : AnnotationSpec() {

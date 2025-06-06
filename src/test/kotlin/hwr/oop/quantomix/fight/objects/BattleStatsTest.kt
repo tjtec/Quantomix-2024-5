@@ -78,7 +78,7 @@ class BattleStatsTest : AnnotationSpec() {
   }
 
   @Test
-  fun `has Status`(){
+  fun `has Status`() {
     val battleStats = pikatchu().newBattleStats()
 
   }

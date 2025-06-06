@@ -3,7 +3,6 @@ package hwr.oop.quantomix.fight.objects
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 
 class StatsTest : AnnotationSpec() {

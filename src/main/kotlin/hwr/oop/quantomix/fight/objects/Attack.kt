@@ -4,13 +4,13 @@ import hwr.oop.quantomix.objects.Typ
 import java.util.*
 
 data class Attack(
-    private val attackName: String,
-    private val type: Typ,
-    private val damage: Int,
-    private val damageQuote: Int,
-    private val specialAttack: Boolean,
-    private val effects: MutableList<Effects> = mutableListOf(),
-    private val status: Status? = null,
+  private val attackName: String,
+  private val type: Typ,
+  private val damage: Int,
+  private val damageQuote: Int,
+  private val specialAttack: Boolean,
+  private val effects: MutableList<Effects> = mutableListOf(),
+  private val status: Status? = null,
 ) {
   fun getType(): Typ {
     return this.type
@@ -33,9 +33,9 @@ data class Attack(
   }
 
   fun changeStatsAndStatus(
-      attacker: BattleStats,
-      target: BattleStats,
-  ){
+    attacker: BattleStats,
+    target: BattleStats,
+  ) {
     var alreadyChangedEffects = 0
     while (!(this.getEffects()
         .isEmpty()) && this.getEffects().size > alreadyChangedEffects
@@ -52,7 +52,7 @@ data class Attack(
     }
   }
 
-  fun hits(randomValue:Int = Random().nextInt(1, 100)): Boolean {
+  fun hits(randomValue: Int = Random().nextInt(1, 100)): Boolean {
     return when (randomValue <= this.getDamageQuote()) {
       true -> true
       else -> false

@@ -50,27 +50,25 @@ class StandardDamageStrategy : DamageStrategy {
         multiFactor = effectivityMultiplier,
         statusEffect = statusEffect
       )
-    } else if(statusEffect.selfHit() && currentAttack.getSpecialAttack()){
+    } else if (statusEffect.selfHit() && currentAttack.getSpecialAttack()) {
       selfHit = true
       formulaAttackForce(
-        attackDamage = currentAttack.getDamage() ,
+        attackDamage = currentAttack.getDamage(),
         attackValue = attacker.getStats().getSpecialAttack(),
         defense = attacker.getStats().getSpecialDefense(),
         multiFactor = effectivityMultiplier,
         statusEffect = statusEffect
       )
-    }
-    else if (statusEffect.selfHit() && !currentAttack.getSpecialAttack()){
+    } else if (statusEffect.selfHit() && !currentAttack.getSpecialAttack()) {
       selfHit = true
       formulaAttackForce(
-        attackDamage = currentAttack.getDamage() ,
+        attackDamage = currentAttack.getDamage(),
         attackValue = attacker.getStats().getAttack(),
         defense = attacker.getStats().getDefense(),
         multiFactor = effectivityMultiplier,
         statusEffect = statusEffect
       )
-    }
-    else {
+    } else {
       formulaAttackForce(
         attackDamage = currentAttack.getDamage(),
         attackValue = attacker.getStats().getAttack(),
@@ -84,11 +82,11 @@ class StandardDamageStrategy : DamageStrategy {
   private fun calculateEffectivity(): Float {
     val effectivity1: Float
     val type2: Typ?
-    if (selfHit){
-     effectivity1=attacker.getQuantomix().getType1().getEffectivity(currentAttack)
+    if (selfHit) {
+      effectivity1 =
+        attacker.getQuantomix().getType1().getEffectivity(currentAttack)
       type2 = attacker.getQuantomix().getType2()
-    }
-    else {
+    } else {
       effectivity1 =
         target.getQuantomix().getType1().getEffectivity(currentAttack)
       type2 = target.getQuantomix().getType2()
@@ -105,11 +103,11 @@ class StandardDamageStrategy : DamageStrategy {
   }
 
   private fun formulaAttackForce(
-      attackDamage: Int,
-      attackValue: Int,
-      defense: Int,
-      multiFactor: Float,
-      statusEffect: StatusHelper
+    attackDamage: Int,
+    attackValue: Int,
+    defense: Int,
+    multiFactor: Float,
+    statusEffect: StatusHelper,
   ): Int = ((attackDamage * attackValue * multiFactor)
       / ((defense / 100 + 1) * 100)).toInt() + statusEffect.summand * statusEffect.multiplicator
 }

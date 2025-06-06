@@ -17,6 +17,7 @@ class UsefulInformationForStatusTest : AnnotationSpec() {
     assertThat(usefulInformationForStatus.selfHit(51)).isEqualTo(true)
     assertThat(usefulInformationForStatus.selfHit(50)).isEqualTo(false)
   }
+
   @Test
   fun `Test roundsWithStatusEffectLeft`() {
     var usefulInformationForStatus = UsefulInformationForStatus(0)

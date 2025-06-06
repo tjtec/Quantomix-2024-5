@@ -34,11 +34,13 @@ class Stats(
     } else {
       heal(stats)
     }
-    this.attack=effectOfDeBuff(stats.getAttack(), this.attack)
-    this.defense=effectOfDeBuff(stats.getDefense(), this.defense)
-    this.specialAttack=effectOfDeBuff(stats.getSpecialAttack(), this.specialAttack)
-    this.specialDefense=effectOfDeBuff(stats.getSpecialDefense(), this.specialDefense)
-    this.speed=effectOfDeBuff(stats.getSpeed(), this.speed)
+    this.attack = effectOfDeBuff(stats.getAttack(), this.attack)
+    this.defense = effectOfDeBuff(stats.getDefense(), this.defense)
+    this.specialAttack =
+      effectOfDeBuff(stats.getSpecialAttack(), this.specialAttack)
+    this.specialDefense =
+      effectOfDeBuff(stats.getSpecialDefense(), this.specialDefense)
+    this.speed = effectOfDeBuff(stats.getSpeed(), this.speed)
   }
 
   private fun selfDamage(stats: Stats) {

@@ -2,6 +2,7 @@ package hwr.oop.quantomix.fight.logic
 
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
+
 class SimpleBattle {
   fun simpleBattle(
     aktiveQuantomixBattleStats: BattleStats,
