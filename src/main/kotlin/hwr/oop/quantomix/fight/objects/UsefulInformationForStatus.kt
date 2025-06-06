@@ -5,7 +5,7 @@ import java.util.*
 class UsefulInformationForStatus( private var alreadyPassedRounds: Int) {
 
   fun hitParalysis(randomValue:Int = Random().nextInt(0, 100)): Int {
-    return when (randomValue < (0.66666 * 100)) {
+    return when (randomValue < (0.66 * 100)) {
         true -> 1
         false -> 0
       }

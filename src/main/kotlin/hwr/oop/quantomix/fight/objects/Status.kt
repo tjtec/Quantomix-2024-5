@@ -62,7 +62,6 @@ enum class Status {
         val rounds = previous.alreadyPassedRounds + 1
         val effectiveMultiplicator =
           if (previous.alreadyPassedRounds < setDurationForRounds) 0 else 1
-        if (UsefulInformationForStatus(previous.alreadyPassedRounds).roundsWithStatusEffectLeft()) 0 else 1
         StatusHelper(
           multiplicator = effectiveMultiplicator,
           summand = 0,

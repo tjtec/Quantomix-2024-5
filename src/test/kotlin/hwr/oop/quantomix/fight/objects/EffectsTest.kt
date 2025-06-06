@@ -1,9 +1,13 @@
 package hwr.oop.quantomix.fight.objects
 
+import hwr.oop.quantomix.Exceptions.NoBuffOrDebuffValue
+import hwr.oop.quantomix.fight.logic.SimpleBattle
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 
 class EffectsTest: AnnotationSpec() {
   @BeforeEach

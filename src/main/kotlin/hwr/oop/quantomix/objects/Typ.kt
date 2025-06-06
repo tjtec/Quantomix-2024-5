@@ -87,7 +87,6 @@ enum class Typ {
       Flug -> setOf(Boden)
       Boden -> setOf(Elektro)
       Stahl -> setOf(Gift)
-      Elektro -> setOf(Boden)
       Psycho -> setOf(Unlicht)
       Fee -> setOf(Drache)
       else -> emptySet()

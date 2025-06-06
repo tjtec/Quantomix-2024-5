@@ -1,9 +1,14 @@
 package hwr.oop.quantomix.fight.objects
 
+import hwr.oop.quantomix.Exceptions.NoBuffOrDebuffValue
+import hwr.oop.quantomix.fight.logic.SimpleBattle
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.assertThrows
 
 class AttackTest : AnnotationSpec() {
   @BeforeEach
@@ -98,23 +103,22 @@ class AttackTest : AnnotationSpec() {
     val target = target()
     val attackerBattleStats = attacker.newBattleStats()
     val targerBattleStats = target.newBattleStats()
-    assertThat(
-      attack.changeStatsAndStatus(
-        attacker = attackerBattleStats,
-        target = targerBattleStats
-      )
-    ).isTrue
+  attack.changeStatsAndStatus(
+    attacker = attackerBattleStats,
+    target = targerBattleStats
+  )
     assertThat(targerBattleStats.hasStatus()).isTrue()
   assertThat(attackerBattleStats.getStats().getKp()).isLessThan(attacker.getStats().getKp())
   val attackFluch=fluch()
-  assertThat(attackFluch.changeStatsAndStatus(attacker = targerBattleStats,
-    target=attackerBattleStats)).isTrue
+  attackFluch.changeStatsAndStatus(attacker = targerBattleStats,
+    target=attackerBattleStats)
+  assertThat(targerBattleStats.getStats().getKp()).isEqualTo(target.getStats().getKp())
   assertThat(attackerBattleStats.hasStatus()).isFalse()
   }
 @Test
   fun `Test attack hits`() {
     val attack = giftmuell()
-    assertThat(attack.hits(49)).isTrue
+    assertThat(attack.hits(50)).isTrue
   assertThat(attack.hits(51)).isFalse
   }
 @Test
@@ -131,4 +135,5 @@ class AttackTest : AnnotationSpec() {
     assertThat(attack.getDamageQuote()).isEqualTo(50)
     assertThat(attack.getEffects()).isNotEmpty
   }
+
 }

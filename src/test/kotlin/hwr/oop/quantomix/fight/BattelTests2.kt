@@ -1,6 +1,7 @@
 package hwr.oop.quantomix.fight
 
 import hwr.oop.quantomix.Exceptions.DeadQuantomixException
+import hwr.oop.quantomix.Exceptions.NoBuffOrDebuffValue
 import hwr.oop.quantomix.fight.logic.DamageStrategy
 import hwr.oop.quantomix.fight.logic.SimpleBattle
 import hwr.oop.quantomix.fight.logic.StandardDamageStrategy
@@ -391,5 +392,9 @@ class BattelTests2 : AnnotationSpec() {
         assertThat(
             quantomix2BattleStats.getStats().getSpeed()
         ).isEqualTo(150)
+    }
+    @Test
+    fun `not more healed than possible`(){
+
     }
 }

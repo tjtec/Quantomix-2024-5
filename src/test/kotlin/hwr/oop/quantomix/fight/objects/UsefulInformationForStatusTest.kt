@@ -7,8 +7,8 @@ class UsefulInformationForStatusTest : AnnotationSpec() {
   @Test
   fun `Test hitParalysis`() {
     val usefulInformationForStatus = UsefulInformationForStatus(0)
-    assertThat(usefulInformationForStatus.hitParalysis(66)).isEqualTo(1)
-    assertThat(usefulInformationForStatus.hitParalysis(67)).isEqualTo(0)
+    assertThat(usefulInformationForStatus.hitParalysis(65)).isEqualTo(1)
+    assertThat(usefulInformationForStatus.hitParalysis(66)).isEqualTo(0)
   }
 
   @Test

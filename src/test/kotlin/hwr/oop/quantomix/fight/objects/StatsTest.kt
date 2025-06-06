@@ -4,6 +4,7 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 
 class StatsTest : AnnotationSpec() {
   @Test
@@ -21,15 +22,15 @@ class StatsTest : AnnotationSpec() {
     val quantomix1 =
       Quantomix("Test", type, null, statsQuantomix, listOf(attack))
     val battleStatsQuantomix1 = quantomix1.newBattleStats()
-    Assertions.assertThat(battleStatsQuantomix1.getStats().getKp())
+    assertThat(battleStatsQuantomix1.getStats().getKp())
       .isEqualTo(quantomix1.getStats().getKp())
     battleStatsQuantomix1.takeDamage(30)
-    Assertions.assertThat(battleStatsQuantomix1.getStats().getKp())
+    assertThat(battleStatsQuantomix1.getStats().getKp())
       .isNotEqualTo(quantomix1.getStats().getKp())
-    Assertions.assertThat(battleStatsQuantomix1.getStats().getKp())
+    assertThat(battleStatsQuantomix1.getStats().getKp())
       .isEqualTo(70)
-    Assertions.assertThat(quantomix1.getStats().getKp()).isEqualTo(100)
-    Assertions.assertThat(battleStatsQuantomix1.getQuantomix())
+    assertThat(quantomix1.getStats().getKp()).isEqualTo(100)
+    assertThat(battleStatsQuantomix1.getQuantomix())
       .isEqualTo(quantomix1)
   }
 }

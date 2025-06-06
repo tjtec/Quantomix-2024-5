@@ -33,7 +33,7 @@ class BattleStatsTest : AnnotationSpec() {
   }
 
   @Test
-  fun `Test newKp`() {
+  fun `Test takeDamage`() {
     val battleStats = pikatchu().newBattleStats()
     battleStats.takeDamage(40)
     assertThat(battleStats.getStats().getKp()).isEqualTo(10)

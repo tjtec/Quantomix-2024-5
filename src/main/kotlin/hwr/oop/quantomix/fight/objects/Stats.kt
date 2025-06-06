@@ -20,12 +20,6 @@ class Stats(
   ) = Stats(
     kp, attack, defense, specialAttack, specialDefense, speed
   )
-  fun setOnlyUntilMax(maxKp: Int){
-    this.kp = when (this.kp > maxKp) {
-      true -> maxKp
-      else -> this.kp
-    }
-  }
 
   fun takeDamage(damage: Int) {
     this.kp = when ((this.kp - damage) <= 0) {
@@ -34,8 +28,8 @@ class Stats(
     }
   }
 
-  fun buffsDebuffs(stats: Stats, buff: Boolean) {
-    if (!buff) {
+  fun buffsDebuffs(stats: Stats, heal: Boolean) {
+    if (!heal) {
       selfDamage(stats)
     } else {
       heal(stats)
