@@ -26,7 +26,7 @@ class BattleTests : AnnotationSpec() {
         specialAttack = 109,
         specialDefense = 85,
         speed = 100
-      ),
+            ),
       attacks = listOf(
         tackle(), pfluecker(), glut(), spukball()
       )
@@ -164,8 +164,8 @@ class BattleTests : AnnotationSpec() {
   @BeforeEach
   fun damageStrategy(): DamageStrategy {
     val damageFunction: DamageStrategy = StandardDamageStrategy()
-    return damageFunction
-  }
+    return damageFunction}
+
 
   @Test
   fun `BattleTest with normal Attack`() {

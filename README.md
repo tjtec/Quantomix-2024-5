@@ -42,7 +42,9 @@ just build
 ## Abstract
 
 [TODO]: # (Write a short description of your project.)
+
 [TODO]: # (State most important features.)
+
 [TODO]: # (State the most interesting problems you encountered during the project.)
 
 ## Feature List
@@ -80,7 +82,8 @@ The repository contains an IntelliJ IDEA formatter configuration file.
 It is located in the `.intellij` folder (not in `.idea`, which is the folder created by IntelliJ IDEA).
 To use the formatter, you need to import the configuration into your IntelliJ IDEA settings.
 
-Under **Settings**, go to **Editor**, then **Code Style**, click the **Gear Symbol** next to the Dropdown, click **Import Scheme**, then **IntelliJ IDEA code style XML**. Finally, select the `.intellij/formatter.xml` file.
+Under **Settings**, go to **Editor**, then **Code Style**, click the **Gear Symbol** next to the Dropdown, click *
+*Import Scheme**, then **IntelliJ IDEA code style XML**. Finally, select the `.intellij/formatter.xml` file.
 
 Make sure to always use the imported `HWR OOP` code style when formatting your code.
 Be aware that it might differ from the code style configured in your *Project*, or IntelliJ's *Default* code style.
@@ -125,4 +128,5 @@ git pull upstream main
 ```
 
 [maven]: https://maven.apache.org/
+
 [just]: https://github.com/casey/just

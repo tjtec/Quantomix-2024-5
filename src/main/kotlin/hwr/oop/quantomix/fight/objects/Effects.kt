@@ -8,6 +8,5 @@ class Effects(
   fun buffsAndDebuffs(targetOfChangeStats: BattleStats) {
     targetOfChangeStats.getStats().buffsDebuffs(changeStats, heal)
   }
-
   fun hitsAttacker(): Boolean = self
 }

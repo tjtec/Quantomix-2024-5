@@ -1,4 +1,4 @@
-package hwr.oop.quantomix.Memory
+package hwr.oop.quantomix.memory
 
 interface Load {
   fun createHelper(): SaveHelper
@@ -12,7 +12,7 @@ class CSVLoad : Load {
   ): SaveHelper {
     TODO(
       "hier ist die gewünschte Vorbereitung" +
-          " val translator = Translator()\n" +
+          " val translator = Translato()\n" +
           "        val saveHelper = SaveHelper(translator.translateToCoach(), trainer2, quantomixAndBattleStatsMap)\n" +
           "        return saveHelper"
     )

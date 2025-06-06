@@ -393,8 +393,4 @@ class BattelTests2 : AnnotationSpec() {
             quantomix2BattleStats.getStats().getSpeed()
         ).isEqualTo(150)
     }
-    @Test
-    fun `not more healed than possible`(){
-
-    }
 }

@@ -22,7 +22,7 @@ class Translator {
       damageQuote.toInt(),
       effects = mutableListOf(),
       specialAttack = specialAttack.toBoolean()
-    )
+        )
   }
 
   fun translateToQuantomix(
