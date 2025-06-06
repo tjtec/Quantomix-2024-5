@@ -16,7 +16,7 @@ enum class Status {
     var lastStatusDamage: Int = 0
     fun calculateStatusEffect(attack: Attack): StatusHelper {
         when (alreadyPassedRounds) {
-            6->alreadyPassedRounds=0
+            6 -> alreadyPassedRounds = 0
         }
         val status = this
         var statusHelper = StatusHelper()
@@ -29,6 +29,7 @@ enum class Status {
                 alreadyPassedRounds++
                 statusHelper = StatusHelper(summand = lastStatusDamage)
             }
+
             Paralysis -> {
                 attack.updateSelfDebuffs(
                     Stats(
@@ -47,6 +48,7 @@ enum class Status {
                 )
                 alreadyPassedRounds++
             }
+
             Sleep -> {
                 statusHelper = if (UsefulInformationForStatus(
                         alreadyPassedRounds = alreadyPassedRounds
@@ -58,24 +60,29 @@ enum class Status {
                 }
                 alreadyPassedRounds++
             }
+
             Confusion -> {
                 if (UsefulInformationForStatus(
                         alreadyPassedRounds = alreadyPassedRounds
                     ).selfHit()
                     && UsefulInformationForStatus(
                         alreadyPassedRounds = alreadyPassedRounds
-                    ).roundsWithStatusEffectLeft()){
-                    statusHelper= StatusHelper(multiplicator = -1)
+                    ).roundsWithStatusEffectLeft()
+                ) {
+                    statusHelper = StatusHelper(multiplicator = -1)
                 }
                 alreadyPassedRounds++
             }
+
             Freeze, NoDamage -> {
-                statusHelper= StatusHelper(multiplicator = 0)
+                statusHelper = StatusHelper(multiplicator = 0)
             }
+
             Combustion -> {
                 statusHelper =
                     StatusHelper(summand = 1 / 8)
             }
+
             Poison -> {
                 statusHelper = StatusHelper(summand = 1 / 16)
             }

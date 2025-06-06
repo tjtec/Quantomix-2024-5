@@ -12,9 +12,10 @@ class Quantomix(
     private val stats: Stats,
     private val attacks: List<Attack>,
 ) {
-    fun hasAttack (attack:Attack): Boolean  {
+    fun hasAttack(attack: Attack): Boolean {
         return attack in attacks
     }
+
     fun getStats(): Stats {
         return stats
     }
@@ -31,15 +32,8 @@ class Quantomix(
         return typ2
     }
 
-    fun getAttacks(): List<Attack> {
-        return attacks
-    }
     fun newBattleStats(): BattleStats {
         return BattleStats(this, stats.deepCopy())
-    }
-
-    fun newKp(damage: Int){
-        this.stats.newKp(damage)
     }
 }
 

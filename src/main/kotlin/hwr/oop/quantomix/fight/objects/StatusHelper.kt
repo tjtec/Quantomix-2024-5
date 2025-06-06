@@ -5,9 +5,10 @@ class StatusHelper(
     val summand: Int = 0,
     val alreadyPassedRounds: Int = 0,
 ) {
-    fun roundsWithStatusEffectLeft():Boolean {
+    fun roundsWithStatusEffectLeft(): Boolean {
         return alreadyPassedRounds == 6
     }
+
     fun setHelper(
         overrideMuliplicator: Int = multiplicator,
         overrideSummand: Int = summand,

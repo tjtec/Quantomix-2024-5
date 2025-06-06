@@ -13,6 +13,7 @@ class Effects(
     fun isSelfDebuff(): Boolean {
         return !buff && self
     }
+
     fun getSelf(): Boolean = self
 
     fun upDateEffect(newStats: Stats) {

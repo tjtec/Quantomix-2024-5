@@ -79,20 +79,27 @@ class AttackTest : AnnotationSpec() {
             ),
             attacks = listOf(attack)
         )
-        val attackerBattleStats=attacker.newBattleStats()
-        val targerBattleStats=target.newBattleStats()
-        assertThat(attack.changeStatsAndStatus(attacker=attackerBattleStats,
-            target=targerBattleStats)).isTrue
+        val attackerBattleStats = attacker.newBattleStats()
+        val targerBattleStats = target.newBattleStats()
+        assertThat(
+            attack.changeStatsAndStatus(
+                attacker = attackerBattleStats,
+                target = targerBattleStats
+            )
+        ).isTrue
     }
-    fun `Test attack hits`(){
-        val attack=spukball()
+
+    fun `Test attack hits`() {
+        val attack = spukball()
         assertThat(attack.hits()).isTrue
     }
-    fun `Test attack has status`(){
+
+    fun `Test attack has status`() {
         assertThat(spukball().hasStatus()).isTrue
     }
-    fun `Test getter of attack`(){
-        val attack=spukball()
+
+    fun `Test getter of attack`() {
+        val attack = spukball()
         assertThat(attack.getType()).isEqualTo(Typ.Gift)
         assertThat(attack.getDamage()).isEqualTo(50)
         assertThat(attack.getSpecialAttack()).isEqualTo(true)

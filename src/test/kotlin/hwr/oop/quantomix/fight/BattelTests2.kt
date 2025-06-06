@@ -101,12 +101,15 @@ class BattelTests2 : AnnotationSpec() {
         assertThat(solution).isEqualTo(true)
         assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(75)
         assertThat(quantomix2BattleStats.getStats().getAttack()).isEqualTo(quantomix2.getStats().getAttack() - 10)
-        assertThat(quantomix2BattleStats.getStats().getSpecialAttack()).isEqualTo(quantomix2.getStats().getSpecialAttack() - 15)
+        assertThat(quantomix2BattleStats.getStats().getSpecialAttack()).isEqualTo(
+            quantomix2.getStats().getSpecialAttack() - 15
+        )
         assertThat(quantomix2BattleStats.getStats().getDefense()).isEqualTo(quantomix2.getStats().getDefense() - 5)
         assertThat(quantomix2BattleStats.getStats().getSpecialDefense())
             .isEqualTo(quantomix2.getStats().getSpecialDefense() - 8)
         assertThat(quantomix2BattleStats.getStats().getSpeed()).isEqualTo(quantomix2.getStats().getSpeed() - 20)
     }
+
     @Test
     fun `Test Debuff without Attackdamage`() {
 

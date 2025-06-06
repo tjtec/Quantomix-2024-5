@@ -7,9 +7,10 @@ class BattleStats(
     private val stats: Stats,
     private var status: Status? = null,
 ) {
-    fun isMyQuantomix(quantomixToProve:Quantomix):Boolean{
-        return quantomixToProve==this.quantomix
+    fun isMyQuantomix(quantomixToProve: Quantomix): Boolean {
+        return quantomixToProve == this.quantomix
     }
+
     fun newKp(damage: Int) {
         this.stats.newKp(damage)
     }
@@ -26,7 +27,7 @@ class BattleStats(
         return false
     }
 
-    fun hasStatusEffect():Boolean{
+    fun hasStatusEffect(): Boolean {
         return status != null
     }
 
@@ -37,9 +38,10 @@ class BattleStats(
     fun getQuantomix(): Quantomix {
         return quantomix
     }
-    fun isAlive():Boolean{
-        return when(this.stats.getKp()){
-            0->false
+
+    fun isAlive(): Boolean {
+        return when (this.stats.getKp()) {
+            0 -> false
             else -> true
         }
     }

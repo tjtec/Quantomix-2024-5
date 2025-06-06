@@ -1,15 +1,13 @@
 package hwr.oop.quantomix.fight
 
+import hwr.oop.quantomix.fight.logic.Round
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.Stats
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
-import hwr.oop.quantomix.fight.logic.Round
-import org.junit.jupiter.api.Assertions.assertThrows
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.*
 
 
 class RoundsTest : AnnotationSpec() {
@@ -141,16 +139,15 @@ class RoundsTest : AnnotationSpec() {
         // Überprüfe die Voraussetzungen
         require(coach1.quantomixTeam.isNotEmpty()) { "Coach1 hat keine Quantomixe" }
         require(coach2.quantomixTeam.isNotEmpty()) { "Coach2 hat keine Quantomixe" }
-        require(coach1.quantomixTeam[0] != null) { "Erster Quantomix von Coach1 ist null" }
-        require(coach2.quantomixTeam[0] != null) { "Erster Quantomix von Coach2 ist null" }
+
 
         // Erstelle die Runde
         Round(coach1, coach2)
-        
+
         // Hole die Attacken und prüfe sie
         val attacks = testAttacks()
         require(attacks.isNotEmpty()) { "Keine Attacken verfügbar" }
-        require(attacks[0] != null && attacks[1] != null) { "Attacken sind null" }
+
 
 
     }
@@ -196,15 +193,15 @@ class RoundsTest : AnnotationSpec() {
         val coach2 = testCoach2()
         val rounds = Round(coach1, coach2)
         val attacks = testAttacks() // Einmalig aufrufen
-        
+
         require(attacks.isNotEmpty()) { "Attackenliste darf nicht leer sein" }
-        
+
         for (round in 0 until 3) {
             val attackIndexCoach1 = round % attacks.size
             val attackIndexCoach2 = (round + 1) % attacks.size
-            
+
             performRound(rounds, coach1, coach2, attackIndexCoach1, attackIndexCoach2)
-            
+
 
             assertNotNull(coach1.getFirstQuantomix())
             assertNotNull(coach2.getFirstQuantomix())

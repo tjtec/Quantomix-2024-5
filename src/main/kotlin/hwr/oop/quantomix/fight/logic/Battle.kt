@@ -20,7 +20,8 @@ class SimpleBattle : Battle {
         attackStrategy: DamageStrategy,
     ): Boolean {
         if (attack.hits()) {
-            val damage = attackStrategy.damageFunction(attacker=aktiveQuantomixBattleStats, target =  target, attack =  attack )
+            val damage =
+                attackStrategy.damageFunction(attacker = aktiveQuantomixBattleStats, target = target, attack = attack)
             target.newKp(damage)
             attack.changeStatsAndStatus(aktiveQuantomixBattleStats, target)
         }

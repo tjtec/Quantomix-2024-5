@@ -6,12 +6,12 @@ import hwr.oop.quantomix.monster.Quantomix
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions
 
-class QuantomixTest: AnnotationSpec() {
+class QuantomixTest : AnnotationSpec() {
     @Test
     fun `Quantomix test`() {
         //val type1= Typ("hello")
         //val type2= Typ("world")
-        val attack = Attack("attack", Typ.Normal, 40, 100, specialAttack= false, mutableListOf())
+        val attack = Attack("attack", Typ.Normal, 40, 100, specialAttack = false, mutableListOf())
         val attacks = listOf(attack)
         val stats = Stats(200, 100, 30, 70, 35, 88)
         val quantomix = Quantomix("Test", Typ.Pflanze, Typ.Psycho, stats, attacks)

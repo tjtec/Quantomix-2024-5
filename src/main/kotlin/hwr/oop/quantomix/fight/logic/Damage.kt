@@ -25,8 +25,7 @@ class StandardDamageStrategy : DamageStrategy {
     ): Int {
         if (!attacker.isAlive()) {
             throw DeadQuantomixException("The Quantomix which would attack next is already dead!")
-        }
-        else {
+        } else {
             this.attacker = attacker
             this.target = target
             this.currentAttack = attack

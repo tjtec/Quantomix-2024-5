@@ -9,14 +9,15 @@ interface Save {
         trainer1: Coach,
         trainer2: Coach,
         quantomixAndBattleStatsMap: MutableMap<Quantomix, BattleStats>
-    ):Boolean
+    ): Boolean
 }
 
-class CSVSave: Save{
-    override fun save(trainer1:Coach,
-                          trainer2:Coach,
-                      quantomixAndBattleStatsMap: MutableMap<Quantomix, BattleStats>
+class CSVSave : Save {
+    override fun save(
+        trainer1: Coach,
+        trainer2: Coach,
+        quantomixAndBattleStatsMap: MutableMap<Quantomix, BattleStats>
     ): Boolean {
         return true
-     }
+    }
 }
