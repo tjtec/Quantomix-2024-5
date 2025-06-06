@@ -3,122 +3,100 @@ package hwr.oop.quantomix.fight.objects
 import java.util.*
 
 enum class Status {
-    NoDamage,
-    Poison,
-    StrongPoison,
-    Combustion,
-    Paralysis,
-    Sleep,
-    Confusion,
-    Freeze;
+  NoDamage,
+  Poison,
+  StrongPoison,
+  Combustion,
+  Paralysis,
+  Sleep,
+  Confusion,
+  Freeze;
 
-    var alreadyPassedRounds: Int = 0
-    var lastStatusDamage: Int = 0
-    fun calculateStatusEffect(attack: Attack): StatusHelper {
-        when (alreadyPassedRounds) {
-            6 -> alreadyPassedRounds = 0
-        }
-        val status = this
-        var statusHelper = StatusHelper()
-        when (status) {
-            StrongPoison -> {
-                when (alreadyPassedRounds) {
-                    0 -> lastStatusDamage = 1 / 16
-                    else -> lastStatusDamage *= 2
-                }
-                alreadyPassedRounds++
-                statusHelper = StatusHelper(summand = lastStatusDamage)
-            }
+  fun calculateStatusEffect(
+    battleStats: BattleStats,
+    previous: StatusHelper = StatusHelper(),
+    setDurationForRounds: Int = Random().nextInt(2, 5),
+    selfHit: Int = Random().nextInt(0, 100),
+    randomValueParalysis: Int = Random().nextInt(0, 100),
+  ): StatusHelper {
+    return when (this) {
+      StrongPoison -> {
+        val rounds = previous.alreadyPassedRounds + 1
+        val newSummand = if (previous.alreadyPassedRounds <= 0)
+          (battleStats.getStats().getKp() / 16)
+        else previous.summand * 2
+        StatusHelper(
+          multiplicator = 1,
+          summand = newSummand,
+          alreadyPassedRounds = rounds
+        )
+      }
 
-            Paralysis -> {
-                attack.updateSelfDebuffs(
-                    Stats(
-                        kp = 0,
-                        attack = 0,
-                        defense = 0,
-                        specialAttack = 0,
-                        specialDefense = 0,
-                        speed = 1 / 2
-                    )
-                )
-                statusHelper = StatusHelper(
-                    multiplicator = UsefulInformationForStatus(
-                        alreadyPassedRounds = alreadyPassedRounds
-                    ).hitParalysis()
-                )
-                alreadyPassedRounds++
-            }
+      Poison -> {
+        StatusHelper(
+          multiplicator = 1,
+          summand = (battleStats.getStats().getKp() / 16),
+        )
+      }
 
-            Sleep -> {
-                statusHelper = if (UsefulInformationForStatus(
-                        alreadyPassedRounds = alreadyPassedRounds
-                    ).roundsWithStatusEffectLeft()
-                ) {
-                    StatusHelper(multiplicator = 0)
-                } else {
-                    StatusHelper(multiplicator = 1)
-                }
-                alreadyPassedRounds++
-            }
+      Combustion -> {
+        StatusHelper(
+          multiplicator = 1,
+          summand = (battleStats.getStats().getKp() / 8),
+        )
+      }
 
-            Confusion -> {
-                if (UsefulInformationForStatus(
-                        alreadyPassedRounds = alreadyPassedRounds
-                    ).selfHit()
-                    && UsefulInformationForStatus(
-                        alreadyPassedRounds = alreadyPassedRounds
-                    ).roundsWithStatusEffectLeft()
-                ) {
-                    statusHelper = StatusHelper(multiplicator = -1)
-                }
-                alreadyPassedRounds++
-            }
+      Paralysis -> {
+        battleStats.getStats().reduceSpeed(0.5)
+        val m =
+          UsefulInformationForStatus(previous.alreadyPassedRounds).hitParalysis(
+            randomValueParalysis
+          )
+        StatusHelper(
+          multiplicator = m,
+          summand = 0,
+        )
+      }
 
-            Freeze, NoDamage -> {
-                statusHelper = StatusHelper(multiplicator = 0)
-            }
+      Sleep -> {
+        val rounds = previous.alreadyPassedRounds + 1
+        val effectiveMultiplicator =
+          if (previous.alreadyPassedRounds < setDurationForRounds) 0 else 1
+        StatusHelper(
+          multiplicator = effectiveMultiplicator,
+          summand = 0,
+          alreadyPassedRounds = rounds
+        )
+      }
 
-            Combustion -> {
-                statusHelper =
-                    StatusHelper(summand = 1 / 8)
-            }
+      Confusion -> {
+        val rounds = previous.alreadyPassedRounds + 1
+        val effectiveMultiplicator = if (
+          UsefulInformationForStatus(
+            alreadyPassedRounds = previous.alreadyPassedRounds
+          ).selfHit(
+            selfHit
+          ) &&
+          UsefulInformationForStatus(
+            alreadyPassedRounds = previous.alreadyPassedRounds
+          ).roundsWithStatusEffectLeft(
+            randomValueDuration = setDurationForRounds
+          )
+        ) -1 else 1
+        StatusHelper(
+          multiplicator = effectiveMultiplicator,
+          summand = 0,
+          alreadyPassedRounds = rounds
+        )
+      }
 
-            Poison -> {
-                statusHelper = StatusHelper(summand = 1 / 16)
-            }
-        }
-        return statusHelper
+      Freeze, NoDamage -> {
+        StatusHelper(
+          multiplicator = 0,
+          summand = 0,
+          alreadyPassedRounds = previous.alreadyPassedRounds
+        )
+      }
     }
-}
-
-class UsefulInformationForStatus(
-    var alreadyPassedRounds: Int,
-) {
-    var randomValueDuration = Random().nextInt(2, 5)
-
-    fun hitParalysis(): Int {
-        val randomValue = Random().nextInt(0, 100)
-        return when (randomValue < (2 / 3 * 100)) {
-            true -> 1
-            false -> 0
-        }
-    }
-
-    private fun newDuration() {
-        randomValueDuration = Random().nextInt(2, 5)
-    }
-
-    fun selfHit(): Boolean {
-        val randomValue = Random().nextInt(0, 100)
-        return randomValue > 50
-    }
-
-    fun roundsWithStatusEffectLeft(): Boolean {
-        if (alreadyPassedRounds > randomValueDuration) {
-            newDuration()
-            alreadyPassedRounds = 0
-            return true
-        }
-        return false
-    }
+  }
 }

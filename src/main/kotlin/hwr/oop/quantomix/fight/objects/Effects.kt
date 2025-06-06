@@ -1,33 +1,13 @@
 package hwr.oop.quantomix.fight.objects
 
 class Effects(
-    private val buff: Boolean,
-    private val changeStats: Stats,
-    // private val targetOfChangeStats: BattleStats,
-    private val self: Boolean,
+  private val heal: Boolean,
+  private val changeStats: Stats,
+  private val self: Boolean,
 ) {
-    fun buffsAndDebuffs(targetOfChangeStats: BattleStats): Boolean {
-        return targetOfChangeStats.changeStats().buffsDebuffs(changeStats, buff)
-    }
+  fun buffsAndDebuffs(targetOfChangeStats: BattleStats) {
+    targetOfChangeStats.getStats().buffsDebuffs(changeStats, heal)
+  }
 
-    fun isSelfDebuff(): Boolean {
-        return !buff && self
-    }
-
-    fun getSelf(): Boolean = self
-
-    fun upDateEffect(newStats: Stats) {
-        this.changeStats.fueseToStats(newStats)
-    }
+  fun hitsAttacker(): Boolean = self
 }
-
-/*enum class Status {
-    NoDamage,
-    Poisoning,
-    StrongPoisoning,
-    Combustion,
-    Paralysis,
-    Sleep,
-    Confusion,
-    Freeze;
-}*/

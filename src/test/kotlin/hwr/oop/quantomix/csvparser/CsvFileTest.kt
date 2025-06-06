@@ -6,10 +6,10 @@ import java.io.File
 
 class CsvFileTest : AnnotationSpec() {
 
-    @Test
-    fun `CSV file with 2 lines should be parsed correctly`() {
-        val testCsvFile = "src/test/resources/test.csv"
-        val csvFile = CsvFile.parseCsv(File(testCsvFile))
-        assertEquals(2, csvFile.lines.size)
-    }
+  @Test
+  fun `CSV file with 2 lines should be parsed correctly`() {
+    val testCsvFile = "src/test/resources/test.csv"
+    val csvFile = CsvFile.parseCsv(File(testCsvFile))
+    assertEquals(2, csvFile.lines.size)
+  }
 }
