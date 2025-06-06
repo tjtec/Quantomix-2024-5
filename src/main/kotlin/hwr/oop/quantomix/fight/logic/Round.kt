@@ -57,14 +57,15 @@ class Round(private var trainer1: Coach, private var trainer2: Coach) {
             val defender = otherQuantomix(attacker)
 
             val battleStats = getBattleStatsForCombatants(attacker, defender)
-
-            battle.simpleBattle(
-                aktiveQuantomixBattleStats = battleStats.first,
-                attack = chosenAttacksMap.getValue(attacker),
-                target = battleStats.second,
-                attackStrategy = damageFunction
-            )
-            saveMethode.save(trainer1, trainer2, quantomixAndBattleStatsMap)
+            if (battleStats.first.isAlive()) {
+                battle.simpleBattle(
+                    aktiveQuantomixBattleStats = battleStats.first,
+                    attack = chosenAttacksMap.getValue(attacker),
+                    target = battleStats.second,
+                    attackStrategy = damageFunction
+                )
+                saveMethode.save(trainer1, trainer2, quantomixAndBattleStatsMap)
+            }
         }
         chosenAttacksMap.clear()
     }
@@ -103,11 +104,11 @@ class Round(private var trainer1: Coach, private var trainer2: Coach) {
 //        private fun defendingQuantomix(attacking: Coach) =
 //            if (attacking == trainer2) activeQuantomixTrainer2 else activeQuantomixTrainer1
 
-    private fun loadRound() {
+    /*private fun loadRound() {
         val loadHelper = loadMethode.getHelper()
         quantomixAndBattleStatsMap = loadHelper.quantomixAndBattleStatsMap
         trainer1 = loadHelper.trainer1
         trainer2 = loadHelper.trainer2
-    }
+    }*/
 
 }
