@@ -1,4 +1,4 @@
-package hwr.oop.quantomix.Memory
+package hwr.oop.quantomix.memory
 
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.monster.Quantomix
@@ -17,6 +17,6 @@ class CSVSave: Save{
                           trainer2:Coach,
                       quantomixAndBattleStatsMap: MutableMap<Quantomix, BattleStats>
     ): Boolean {
-    TODO("Hier muss die Funktion stehen, die die übergebenen sachen in eine CSV schreibt.")
+        TODO("Hier muss die Funktion stehen, die die übergebenen sachen in eine CSV schreibt.")
      }
 }

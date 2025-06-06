@@ -1,4 +1,4 @@
-package hwr.oop.quantomix.Memory
+package hwr.oop.quantomix.memory
 
 interface Load {
     fun createHelper(): SaveHelper

@@ -6,10 +6,10 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
-import hwr.oop.quantomix.fight.logic.Rounds
-import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import hwr.oop.quantomix.fight.logic.Round
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 
 
 class RoundsTest : AnnotationSpec() {
@@ -121,7 +121,7 @@ class RoundsTest : AnnotationSpec() {
     }
 
     private fun performRound(
-        rounds: Rounds,
+        rounds: Round,
         coach1: Coach,
         coach2: Coach,
         attackIndexCoach1: Int,
@@ -145,7 +145,7 @@ class RoundsTest : AnnotationSpec() {
         require(coach2.quantomixTeam[0] != null) { "Erster Quantomix von Coach2 ist null" }
 
         // Erstelle die Runde
-        val rounds = Rounds(coach1, coach2)
+        Round(coach1, coach2)
         
         // Hole die Attacken und prüfe sie
         val attacks = testAttacks()
@@ -159,7 +159,7 @@ class RoundsTest : AnnotationSpec() {
     fun `choosing attack twice for same trainer throws exception`() {
         val coach1 = testCoach1()
         val coach2 = testCoach2()
-        val rounds = Rounds(coach1, coach2)
+        val rounds = Round(coach1, coach2)
         val attacks = testAttacks()
 
         rounds.choseAttack(coach1, attacks[0])
@@ -173,7 +173,7 @@ class RoundsTest : AnnotationSpec() {
     fun `choosing an attack not possessed by Quantomix throws exception`() {
         val coach1 = testCoach1()
         val coach2 = testCoach2()
-        val rounds = Rounds(coach1, coach2)
+        val rounds = Round(coach1, coach2)
 
         // Erzeuge einen Angriff, den der aktive Quantomix nicht besitzt.
         val invalidAttack = Attack(
@@ -194,15 +194,20 @@ class RoundsTest : AnnotationSpec() {
     fun `simulate multiple rounds without exceptions`() {
         val coach1 = testCoach1()
         val coach2 = testCoach2()
-        val rounds = Rounds(coach1, coach2)
-
-        // Simuliere mehrere Runden mithilfe der Helper-Funktion
+        val rounds = Round(coach1, coach2)
+        val attacks = testAttacks() // Einmalig aufrufen
+        
+        require(attacks.isNotEmpty()) { "Attackenliste darf nicht leer sein" }
+        
         for (round in 0 until 3) {
-            val attackIndexCoach1 = round % testAttacks().size
-            val attackIndexCoach2 = (round + 1) % testAttacks().size
-            assertDoesNotThrow {
-                performRound(rounds, coach1, coach2, attackIndexCoach1, attackIndexCoach2)
-            }
+            val attackIndexCoach1 = round % attacks.size
+            val attackIndexCoach2 = (round + 1) % attacks.size
+            
+            performRound(rounds, coach1, coach2, attackIndexCoach1, attackIndexCoach2)
+            
+
+            assertNotNull(coach1.getFirstQuantomix())
+            assertNotNull(coach2.getFirstQuantomix())
         }
     }
 }

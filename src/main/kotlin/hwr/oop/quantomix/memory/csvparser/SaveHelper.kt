@@ -1,4 +1,4 @@
-package hwr.oop.quantomix.Memory
+package hwr.oop.quantomix.memory
 
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.monster.Quantomix

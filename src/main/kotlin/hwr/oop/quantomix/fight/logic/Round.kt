@@ -1,9 +1,9 @@
 package hwr.oop.quantomix.fight.logic
 
-import hwr.oop.quantomix.Memory.CSVLoad
-import hwr.oop.quantomix.Memory.CSVSave
-import hwr.oop.quantomix.Memory.Load
-import hwr.oop.quantomix.Memory.Save
+import hwr.oop.quantomix.memory.CSVLoad
+import hwr.oop.quantomix.memory.CSVSave
+import hwr.oop.quantomix.memory.Load
+import hwr.oop.quantomix.memory.Save
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.monster.Quantomix
@@ -12,7 +12,7 @@ import hwr.oop.quantomix.objects.Coach
 //ToDo: mehr als ein Quantomix implementieren^Doppelkampf/Dreifachkampf
 //ToDo: Exeption schreiben Attacke ist nicht in der Liste möglicher auswählbarer Attacken (vielleicht auch erst ins CLI)
 
-class Rounds(private var trainer1: Coach, private var trainer2: Coach) {
+class Round(private var trainer1: Coach, private var trainer2: Coach) {
     private val chosenAttacksMap = mutableMapOf<Quantomix, Attack>()
     private val damageFunction: DamageStrategy = StandardDamageStrategy()
     private val battle: Battle = SimpleBattle()
@@ -109,4 +109,5 @@ class Rounds(private var trainer1: Coach, private var trainer2: Coach) {
         trainer1 = loadHelper.trainer1
         trainer2 = loadHelper.trainer2
     }
+
 }
