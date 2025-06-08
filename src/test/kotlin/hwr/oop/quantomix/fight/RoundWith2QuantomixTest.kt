@@ -10,6 +10,7 @@ import io.kotest.core.spec.style.AnnotationSpec.BeforeEach
 import io.kotest.core.spec.style.AnnotationSpec.Test
 import io.kotest.core.spec.style.AnnotationSpec
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 
 class RoundWith2QuantomixTest {
