@@ -14,4 +14,12 @@ class Coach(
   fun getFirstQuantomix(): Quantomix {
     return quantomixTeam[0]
   }
+
+  fun getActiveQuantomix(numberOfQuantomixInRound: Int): List<Quantomix> {
+
+    require (numberOfQuantomixInRound > 0) {"Die Anzahl der Quantomix muss positiv sein."}
+    require (numberOfQuantomixInRound <= quantomixTeam.size) {"Nicht genügend Quantomix im Team"}
+
+    return quantomixTeam.take(numberOfQuantomixInRound)
+  }
 }

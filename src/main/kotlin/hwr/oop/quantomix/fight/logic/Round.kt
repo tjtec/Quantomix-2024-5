@@ -8,7 +8,14 @@ import hwr.oop.quantomix.objects.Coach
 //ToDo: mehr als ein Quantomix implementieren^Doppelkampf/Dreifachkampf
 //ToDo: Exeption schreiben Attacke ist nicht in der Liste möglicher auswählbarer Attacken (vielleicht auch erst ins CLI)
 
-class Rounds(private var trainer1: Coach, private var trainer2: Coach) {
+interface Rounds {
+  fun choseAttack(
+    attackingTrainer: Quantomix,
+    attack: Attack,
+  )
+}
+
+class RoundsWithOneQuantomix(private var trainer1: Coach, private var trainer2: Coach): Rounds {
   private val chosenAttacksMap = mutableMapOf<Quantomix, Attack>()
   private val damageFunction: DamageStrategy = StandardDamageStrategy()
   private val battle = SimpleBattle()
@@ -18,11 +25,12 @@ class Rounds(private var trainer1: Coach, private var trainer2: Coach) {
   private var quantomixAndBattleStatsMap =
     mutableMapOf<Quantomix, BattleStats>()
 
+
   private val activeQuantomixTrainer1 = trainer1.getFirstQuantomix()
   private val activeQuantomixTrainer2 = trainer2.getFirstQuantomix()
 
-  fun choseAttack(
-    attackingTrainer: Coach,
+  override fun choseAttack(
+    attackingTrainer: Quantomix,
     attack: Attack,
   ) {
     val attackingQuantomix = attackingQuantomix(attackingTrainer)
