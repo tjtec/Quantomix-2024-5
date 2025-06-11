@@ -127,35 +127,9 @@ class RoundsTest : AnnotationSpec() {
     attackIndexCoach2: Int,
   ) {
     val attacks = testAttacks()
-    rounds.choseAttack(coach1, attacks[attackIndexCoach1])
-    rounds.choseAttack(coach2, attacks[attackIndexCoach2])
+    rounds.chooseAttack(coach1, attacks[attackIndexCoach1])
+    rounds.chooseAttack(coach2, attacks[attackIndexCoach2])
   }
-  /*
-      @Test
-      fun `Rounds with two trainers`() {
-          // Erstelle die Coaches
-        val coach1 = testCoach1()
-          val coach2 = testCoach2()
-          // Überprüfe die Voraussetzungen
-        require(coach1.quantomixTeam.isNotEmpty()) { "Coach1 hat keine Quantomixe" }
-        require(coach2.quantomixTeam.isNotEmpty()) { "Coach2 hat keine Quantomixe" }
-
-
-        // Erstelle die Runde
-        Round(coach1, coach2)
-  // Hole die Attacken und prüfe sie
-        val attacks = testAttacks()
-        require(attacks.isNotEmpty()) { "Keine Attacken verfügbar" }
-
-          assertDoesNotThrow {
-              rounds.choseAttack(coach1, attacks[0])
-              rounds.choseAttack(coach2, attacks[1])
-          }
-
-
-      }
-
-   */
 
   @Test
   fun `choosing attack twice for same trainer throws exception`() {
@@ -164,9 +138,9 @@ class RoundsTest : AnnotationSpec() {
     val rounds = Rounds(coach1, coach2)
     val attacks = testAttacks()
 
-    rounds.choseAttack(coach1, attacks[0])
+    rounds.chooseAttack(coach1, attacks[0])
     val exception = assertThrows(IllegalArgumentException::class.java) {
-      rounds.choseAttack(coach1, attacks[1])
+      rounds.chooseAttack(coach1, attacks[1])
     }
     assertEquals(
       "Attacking trainer has already chosen an attack",
@@ -190,31 +164,11 @@ class RoundsTest : AnnotationSpec() {
       effects = mutableListOf()
     )
     val exception = assertThrows(IllegalArgumentException::class.java) {
-      rounds.choseAttack(coach1, invalidAttack)
+      rounds.chooseAttack(coach1, invalidAttack)
     }
     assertEquals(
       "Attacking Quantomix does not have the attack",
       exception.message
     )
   }
-  /*
-      @Test
-      fun `simulate multiple rounds without exceptions`() {
-          val coach1 = testCoach1()
-          val coach2 = testCoach2()
-          val rounds = Round(coach1, coach2)
-        val attacks = testAttacks() // Einmalig aufrufen
-
-          require(attacks.isNotEmpty()) { "Attackenliste darf nicht leer sein" }
-          for (round in 0 until 3) {
-              val attackIndexCoach1 = round % attacks.size
-              val attackIndexCoach2 = (round + 1) % attacks.size
-
-                  performRound(rounds, coach1, coach2, attackIndexCoach1, attackIndexCoach2)
-
-
-      assertNotNull(coach1.getFirstQuantomix())
-            assertNotNull(coach2.getFirstQuantomix())
-        }}
-   */
 }
