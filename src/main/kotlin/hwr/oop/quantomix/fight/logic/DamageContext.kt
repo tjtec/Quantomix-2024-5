@@ -10,7 +10,7 @@ data class DamageContext(
   val attack: Attack,
   val selfHitMultiplier:Int = 0
 ) {
-  val statusEffect: StatusHelper = if (this.attack.hasStatus()) {
+  val statusEffect: StatusHelper = if (this.attack.hasStatus()||this.target.hasStatus()) {
     StatusHelper(multiplicator = this.attacker.changesAccordingToStatus().multiplicator,
     summand = this.target.changesAccordingToStatus().summand)
   } else {

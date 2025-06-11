@@ -104,17 +104,18 @@ class DamageCalculatorTest : AnnotationSpec() {
   }
 
   @Test
-  fun `maxDamage less than 0 and equal to 0`() {
-    var attack = Attack(
-      attackName = "maxDamage less than 0",
+  fun `maxDamage less than 0 and no attack damage but Status effect`() {
+    val target=flamara2()
+    val attack = Attack(
+      attackName = "maxDamage 0",
       type = Typ.Feuer,
-      damage = -80,
+      damage = 1,
       damageQuote = 100,
       specialAttack = false,
     )
     var context = DamageContext(
       attacker = flamara(),
-      target = flamara(),
+      target = target,
       attack = attack,
       selfHitMultiplier = -1
     )
@@ -123,15 +124,7 @@ class DamageCalculatorTest : AnnotationSpec() {
       mode = ModeOfDamageCalculation.Simple
     )
     assertThat(damage).isEqualTo(0)
-    val target=flamara2()
     target.changeStatus(Status.Poison)
-    attack = Attack(
-      attackName = "maxDamage 0",
-      type = Typ.Feuer,
-      damage = 1,
-      damageQuote = 100,
-      specialAttack = false,
-    )
     context = DamageContext(
       attacker = flamara(),
       target = target,
@@ -142,7 +135,7 @@ class DamageCalculatorTest : AnnotationSpec() {
       context,
       mode = ModeOfDamageCalculation.Simple
     )
-    assertThat(damage).isEqualTo(0)
+    assertThat(damage).isEqualTo(6)
   }
 
   @Test
@@ -190,8 +183,8 @@ class DamageCalculatorTest : AnnotationSpec() {
     )
     damage =
       DamageCalculator.calculateDamage(context, ModeOfDamageCalculation.Complex)
-    assertThat(damage).isLessThanOrEqualTo(3)
-    assertThat(damage).isBetween(1, 3)
+    assertThat(damage).isLessThanOrEqualTo(4)
+    assertThat(damage).isBetween(1, 4)
   }
   @Test
   fun `status summand and multiplier makes the correct damage`(){

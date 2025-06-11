@@ -1,5 +1,6 @@
 package hwr.oop.quantomix.fight.objects
 
+import hwr.oop.quantomix.Exceptions.CannotBeNegativ
 import hwr.oop.quantomix.objects.Typ
 import java.util.*
 
@@ -12,12 +13,16 @@ data class Attack(
   private val effects: MutableList<Effects> = mutableListOf(),
   private val status: Status? = null,
 ) {
+  init {
+    require(damage >= 0) { throw CannotBeNegativ("Damage must be greater than or equal to 0") }
+  }
+
   fun getType(): Typ {
     return this.type
   }
 
   fun getDamage(): Int {
-    return this.damage
+      return this.damage
   }
 
   fun getSpecialAttack(): Boolean {

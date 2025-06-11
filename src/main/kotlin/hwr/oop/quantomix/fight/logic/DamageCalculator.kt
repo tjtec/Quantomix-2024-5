@@ -50,8 +50,6 @@ object DamageCalculator {
           statusEffect = context.statusEffect
         )
     }
-
-    if (maxDamage <= 0) return 0
     return when (mode) {
       ModeOfDamageCalculation.Complex -> damageWithStabFactor(
         damage = Random.nextInt(

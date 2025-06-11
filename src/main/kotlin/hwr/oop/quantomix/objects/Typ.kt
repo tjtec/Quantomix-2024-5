@@ -1,5 +1,6 @@
 package hwr.oop.quantomix.objects
 
+import hwr.oop.quantomix.Exceptions.NotAllowedTyp
 import hwr.oop.quantomix.fight.objects.Attack
 
 enum class Typ {
@@ -127,7 +128,12 @@ enum class Typ {
         "Geist" -> Geist
         "Psycho" -> Psycho
         "Gestein" -> Gestein
-        else -> Normal
+        else -> throw NotAllowedTyp(
+          "$name is not an allowed type. " +
+              "The following types are possible:" + "Normal; Kampf; Flug; Gift; " +
+              "Stahl; Fee; Wasser; Drache; Unlicht; Feuer; Eis; Boden; Elektro; " +
+              "Kaefer;" + " Pflanze; Geist; Psycho; Gestein "
+        )
       }
     }
   }

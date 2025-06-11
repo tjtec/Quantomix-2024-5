@@ -17,10 +17,19 @@ class DamageContextTest : AnnotationSpec() {
       damage = 80,
       damageQuote = 100,
       specialAttack = true,
-      status = Status.Poison
+      status = Status.Sleep
     )
   }
-
+  @BeforeEach
+  fun feuerballWithoutPoison():Attack{
+    return Attack(
+      attackName = "Feuerball",
+      type = Typ.Feuer,
+      damage = 80,
+      damageQuote = 100,
+      specialAttack = true,
+    )
+  }
   @BeforeEach
   fun flamara(): BattleStats {
     return Quantomix(
@@ -103,5 +112,48 @@ class DamageContextTest : AnnotationSpec() {
       target = flamara2(),
       attack = feuerball(),
     ).selfHitMultiplier).isEqualTo(0)
+  }
+  @Test
+  fun `target and attack have no status effect`() {
+    assertThat(DamageContext(
+      attacker = flamara(),
+      target = flamara2(),
+      attack = feuerballWithoutPoison(),
+    ).statusEffect.summand).isEqualTo(0)
+    assertThat(DamageContext(
+      attacker = flamara(),
+      target = flamara2(),
+      attack = feuerballWithoutPoison(),
+    ).statusEffect.multiplicator).isEqualTo(1)
+  }
+  @Test
+  fun `target has status effect`() {
+    val flamara = flamara()
+    flamara.changeStatus(Status.Combustion)
+    assertThat(DamageContext(
+      attacker = flamara2(),
+      target = flamara,
+      attack = feuerballWithoutPoison(),
+    ).statusEffect.summand).isEqualTo(8)
+    assertThat(DamageContext(
+      attacker = flamara2(),
+      target = flamara,
+      attack = feuerballWithoutPoison(),
+    ).statusEffect.multiplicator).isEqualTo(1)
+  }
+  @Test
+  fun `attack has status effect`() {
+    val flamara = flamara2()
+    flamara.changeStatus(Status.Sleep)
+    assertThat(DamageContext(
+      attacker = flamara,
+      target = flamara2(),
+      attack = feuerball(),
+    ).statusEffect.summand).isEqualTo(0)
+    assertThat(DamageContext(
+      attacker = flamara,
+      target = flamara2(),
+      attack = feuerball(),
+    ).statusEffect.multiplicator).isEqualTo(0)
   }
 }
