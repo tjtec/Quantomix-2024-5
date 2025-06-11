@@ -1,7 +1,9 @@
 package hwr.oop.quantomix.fight.objects
 
 import hwr.oop.quantomix.monster.Quantomix
+import kotlinx.serialization.Serializable
 
+@Serializable
 class BattleStats(
   private val quantomix: Quantomix,
   private val stats: Stats,

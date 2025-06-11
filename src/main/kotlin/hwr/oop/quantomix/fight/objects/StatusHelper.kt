@@ -1,5 +1,8 @@
 package hwr.oop.quantomix.fight.objects
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class StatusHelper(
   val multiplicator: Int = 1,
   val summand: Int = 0,

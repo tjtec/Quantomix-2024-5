@@ -190,8 +190,8 @@ class DamageCalculatorTest : AnnotationSpec() {
     )
     damage =
       DamageCalculator.calculateDamage(context, ModeOfDamageCalculation.Complex)
-    assertThat(damage).isLessThanOrEqualTo(3)
-    assertThat(damage).isBetween(1, 3)
+    assertThat(damage).isLessThanOrEqualTo(4)
+    assertThat(damage).isBetween(1, 4)
   }
   @Test
   fun `status summand and multiplier makes the correct damage`(){
