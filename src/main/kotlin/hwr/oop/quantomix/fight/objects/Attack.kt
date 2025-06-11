@@ -2,8 +2,9 @@ package hwr.oop.quantomix.fight.objects
 
 import hwr.oop.quantomix.Exceptions.CannotBeNegativ
 import hwr.oop.quantomix.objects.Typ
+import kotlinx.serialization.Serializable
 import java.util.*
-
+@Serializable
 data class Attack(
   private val attackName: String,
   private val type: Typ,

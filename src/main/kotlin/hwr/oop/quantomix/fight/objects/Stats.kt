@@ -1,7 +1,9 @@
 package hwr.oop.quantomix.fight.objects
 
 import hwr.oop.quantomix.Exceptions.NoBuffOrDebuffValue
+import kotlinx.serialization.Serializable
 
+@Serializable
 class Stats(
   private var kp: Int,
   private var attack: Int,

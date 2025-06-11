@@ -11,5 +11,6 @@ class CsvFileTest : AnnotationSpec() {
     val testCsvFile = "src/test/resources/test.csv"
     val csvFile = CsvFile.parseCsv(File(testCsvFile))
     assertEquals(2, csvFile.lines.size)
+    assertEquals("Glurak2", csvFile.lines[1].values[0] )
   }
 }
