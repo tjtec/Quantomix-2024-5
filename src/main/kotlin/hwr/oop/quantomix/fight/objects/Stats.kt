@@ -24,7 +24,7 @@ class Stats(
   fun takeDamage(damage: Int) {
     this.kp = when ((this.kp - damage) <= 0) {
       true -> 0
-      else -> this.kp - damage
+      false -> this.kp - damage
     }
   }
 
