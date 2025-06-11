@@ -149,8 +149,8 @@ class RoundsTest : AnnotationSpec() {
     require(attacks.isNotEmpty()) { "Keine Attacken verfügbar" }
 
     assertDoesNotThrow {
-      rounds.choseAttack(coach1, attacks[0])
-      rounds.choseAttack(coach2, attacks[1])
+      rounds.chooseAttack(coach1, attacks[0])
+      rounds.chooseAttack(coach2, attacks[1])
     }
 
   }
