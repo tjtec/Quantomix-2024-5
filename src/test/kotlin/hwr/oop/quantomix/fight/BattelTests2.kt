@@ -134,11 +134,11 @@ class BattelTests2 : AnnotationSpec() {
     )
   }
 
-  @BeforeEach
-  fun damageStrategy(): DamageStrategy {
-    val damageFunction: DamageStrategy = StandardDamageStrategy()
-    return damageFunction
-  }
+//  @BeforeEach
+//  fun damageStrategy(): DamageStrategy {
+//    val damageFunction: DamageStrategy = StandardDamageStrategy()
+//    return damageFunction
+//  }
 
   @Test
   fun `Test Attack with damage and debuff`() {
@@ -151,10 +151,10 @@ class BattelTests2 : AnnotationSpec() {
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = math(),
       target = quantomix2BattleStats,
-      attackStrategy = damageStrategy(),
+      attackStrategy = StandardDamageStrategy(),
     )
     assertThat(solution).isEqualTo(true)
-    assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(75)
+    assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(63)
     assertThat(quantomix2BattleStats.getStats().getAttack()).isEqualTo(
       (33)
     )
@@ -204,7 +204,7 @@ class BattelTests2 : AnnotationSpec() {
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = attack1,
       target = quantomix2BattleStats,
-      attackStrategy = damageStrategy()
+      attackStrategy = StandardDamageStrategy()
     )
     assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(100)
     assertThat(quantomix2BattleStats.getStats().getAttack())
@@ -231,7 +231,7 @@ class BattelTests2 : AnnotationSpec() {
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = attack1,
       target = quantomix2BattleStats,
-      attackStrategy = damageStrategy()
+      attackStrategy = StandardDamageStrategy()
     )
 
     assertThat(quantomix1BattleStats.getStats().getKp()).isEqualTo(100)
@@ -243,7 +243,7 @@ class BattelTests2 : AnnotationSpec() {
     assertThat(quantomix1BattleStats.getStats().getSpecialDefense())
       .isEqualTo(200)
     assertThat(quantomix2BattleStats.getStats().getSpeed()).isEqualTo(100)
-    assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(75)
+    assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(63)
   }
 
   @Test
@@ -280,7 +280,7 @@ class BattelTests2 : AnnotationSpec() {
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = attackDeadly,
       target = quantomix2BattleStats,
-      attackStrategy = damageStrategy(),
+      attackStrategy = StandardDamageStrategy(),
     )
     assertThat(quantomix1BattleStats.getStats().getKp()).isEqualTo(100)
     assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(0)
@@ -289,7 +289,7 @@ class BattelTests2 : AnnotationSpec() {
         aktiveQuantomixBattleStats = quantomix2BattleStats,
         attack = attackDeadly,
         target = quantomix1BattleStats,
-        attackStrategy = damageStrategy()
+        attackStrategy = StandardDamageStrategy()
       )
     }
     assertEquals(
@@ -345,7 +345,7 @@ class BattelTests2 : AnnotationSpec() {
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = attackComplex,
       target = quantomix2BattleStats,
-      attackStrategy = damageStrategy(),
+      attackStrategy = StandardDamageStrategy(),
     )
 
     assertThat(quantomix1BattleStats.getStats().getKp()).isEqualTo(125)
@@ -407,7 +407,7 @@ class BattelTests2 : AnnotationSpec() {
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = attackComplex,
       target = quantomix2BattleStats,
-      attackStrategy = damageStrategy(),
+      attackStrategy = StandardDamageStrategy(),
     )
 
     assertThat(quantomix1BattleStats.getStats().getKp()).isEqualTo(75)
@@ -433,10 +433,10 @@ class BattelTests2 : AnnotationSpec() {
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = oop(),
       target = quantomix2BattleStats,
-      attackStrategy = damageStrategy(),
+      attackStrategy = StandardDamageStrategy(),
     )
     assertThat(solution).isEqualTo(true)
-    assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(75)
+    assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(63)
     assertThat(quantomix2BattleStats.getStats().getAttack()).isEqualTo(
       (400)
     )

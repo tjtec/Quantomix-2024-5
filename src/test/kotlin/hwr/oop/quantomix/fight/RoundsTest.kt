@@ -129,8 +129,8 @@ class RoundsTest : AnnotationSpec() {
     attackIndexCoach2: Int,
   ) {
     val attacks = testAttacks()
-    rounds.choseAttack(coach1, attacks[attackIndexCoach1])
-    rounds.choseAttack(coach2, attacks[attackIndexCoach2])
+    rounds.chooseAttack(coach1, attacks[attackIndexCoach1])
+    rounds.chooseAttack(coach2, attacks[attackIndexCoach2])
   }
 
   @Test
@@ -162,9 +162,9 @@ class RoundsTest : AnnotationSpec() {
     val rounds = Rounds(coach1, coach2)
     val attacks = testAttacks()
 
-    rounds.choseAttack(coach1, attacks[0])
+    rounds.chooseAttack(coach1, attacks[0])
     val exception = assertThrows(IllegalArgumentException::class.java) {
-      rounds.choseAttack(coach1, attacks[1])
+      rounds.chooseAttack(coach1, attacks[1])
     }
     assertEquals(
       "Attacking trainer has already chosen an attack",
@@ -188,7 +188,7 @@ class RoundsTest : AnnotationSpec() {
       effects = mutableListOf()
     )
     val exception = assertThrows(IllegalArgumentException::class.java) {
-      rounds.choseAttack(coach1, invalidAttack)
+      rounds.chooseAttack(coach1, invalidAttack)
     }
     assertEquals(
       "Attacking Quantomix does not have the attack",
@@ -214,5 +214,4 @@ class RoundsTest : AnnotationSpec() {
       assertNotNull(coach2.getFirstQuantomix())
     }
   }
-
 }
