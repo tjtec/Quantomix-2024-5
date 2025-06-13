@@ -14,7 +14,10 @@ class StandardDamageStrategy : DamageStrategy {
       throw DeadQuantomixException("The Quantomix which would attack next is already dead!")
     }
     val context = DamageContext(attacker, target, attack)
-    return DamageCalculator.calculateDamage(context, mode = ModeOfDamageCalculation.Simple)
+    return DamageCalculator.calculateDamage(
+      context,
+      mode = ModeOfDamageCalculation.Simple
+    )
   }
 }
 //ToDo: im CLi soll man aussuchen, welche schadensformel benutzt wird

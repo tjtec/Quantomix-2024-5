@@ -35,10 +35,12 @@ class EffetivityCalculatorTest : AnnotationSpec() {
       ),
       typ1 = Typ.Normal,
       typ2 = null,
-      attacks = listOf(attack()
+      attacks = listOf(
+        attack()
       )
     ).newBattleStats()
   }
+
   @BeforeEach
   fun quantomixToTypesBattleStats(): BattleStats {
     return Quantomix(
@@ -53,10 +55,12 @@ class EffetivityCalculatorTest : AnnotationSpec() {
       ),
       typ1 = Typ.Normal,
       typ2 = Typ.Geist,
-      attacks = listOf(attack()
+      attacks = listOf(
+        attack()
       )
     ).newBattleStats()
   }
+
   @BeforeEach
   fun context(): DamageContext {
     return DamageContext(
@@ -66,6 +70,7 @@ class EffetivityCalculatorTest : AnnotationSpec() {
       selfHitMultiplier = 2
     )
   }
+
   @BeforeEach
   fun context2Types(): DamageContext {
     return DamageContext(
@@ -75,9 +80,14 @@ class EffetivityCalculatorTest : AnnotationSpec() {
       selfHitMultiplier = 2
     )
   }
+
   @Test
   fun `right calculated effetivity with self hit`() {
-    assertThat(EffectivityCalculator.calculateEffectivity(context())).isEqualTo(0.0f)
-    assertThat(EffectivityCalculator.calculateEffectivity(context2Types())).isEqualTo(2.0f)
+    assertThat(EffectivityCalculator.calculateEffectivity(context())).isEqualTo(
+      0.0f
+    )
+    assertThat(EffectivityCalculator.calculateEffectivity(context2Types())).isEqualTo(
+      2.0f
+    )
   }
 }

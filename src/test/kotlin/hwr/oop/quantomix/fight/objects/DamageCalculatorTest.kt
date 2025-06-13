@@ -1,10 +1,6 @@
 package hwr.oop.quantomix.fight.objects
 
-import hwr.oop.quantomix.fight.logic.DamageCalculator
-import hwr.oop.quantomix.fight.logic.DamageContext
-import hwr.oop.quantomix.fight.logic.ModeOfDamageCalculation
-import hwr.oop.quantomix.fight.logic.SimpleBattle
-import hwr.oop.quantomix.fight.logic.StandardDamageStrategy
+import hwr.oop.quantomix.fight.logic.*
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
@@ -105,7 +101,7 @@ class DamageCalculatorTest : AnnotationSpec() {
 
   @Test
   fun `maxDamage less than 0 and no attack damage but Status effect`() {
-    val target=flamara2()
+    val target = flamara2()
     val attack = Attack(
       attackName = "maxDamage 0",
       type = Typ.Feuer,
@@ -186,9 +182,10 @@ class DamageCalculatorTest : AnnotationSpec() {
     assertThat(damage).isLessThanOrEqualTo(4)
     assertThat(damage).isBetween(1, 4)
   }
+
   @Test
-  fun `status summand and multiplier makes the correct damage`(){
-    val attackPoisoning=Attack(
+  fun `status summand and multiplier makes the correct damage`() {
+    val attackPoisoning = Attack(
       attackName = "Poisoning",
       type = Typ.Normal,
       damage = 3,
@@ -196,8 +193,8 @@ class DamageCalculatorTest : AnnotationSpec() {
       specialAttack = false,
       status = Status.Poison
     )
-    val flamara=flamara()
-    val flamara2=flamara2()
+    val flamara = flamara()
+    val flamara2 = flamara2()
     SimpleBattle().simpleBattle(
       aktiveQuantomixBattleStats = flamara,
       attack = attackPoisoning,
@@ -205,23 +202,23 @@ class DamageCalculatorTest : AnnotationSpec() {
       attackStrategy = StandardDamageStrategy()
     )
     flamara2.changeStatus(Status.Poison)
-    var context= DamageContext(
+    var context = DamageContext(
       attacker = flamara,
       target = flamara2,
       attack = attackPoisoning,
     )
-    var damage=DamageCalculator.calculateDamage(
+    var damage = DamageCalculator.calculateDamage(
       context = context,
       mode = ModeOfDamageCalculation.Simple
     )
-    assertThat(damage).isEqualTo(1+(flamara2.getStats().getKp()/16))
+    assertThat(damage).isEqualTo(1 + (flamara2.getStats().getKp() / 16))
     flamara.changeStatus(Status.Sleep)
-    context= DamageContext(
+    context = DamageContext(
       attacker = flamara,
       target = flamara2,
       attack = attackPoisoning,
     )
-    damage=DamageCalculator.calculateDamage(
+    damage = DamageCalculator.calculateDamage(
       context = context,
       mode = ModeOfDamageCalculation.Simple
     )

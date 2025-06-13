@@ -8,12 +8,15 @@ class ComplexDamageStrategy : DamageStrategy {
   override fun damageFunction(
     attacker: BattleStats,
     target: BattleStats,
-    attack: Attack
+    attack: Attack,
   ): Int {
     if (!attacker.isAlive()) {
       throw DeadQuantomixException("The Quantomix which would attack next is already dead!")
     }
     val context = DamageContext(attacker, target, attack)
-    return DamageCalculator.calculateDamage(context, mode = ModeOfDamageCalculation.Complex)
+    return DamageCalculator.calculateDamage(
+      context,
+      mode = ModeOfDamageCalculation.Complex
+    )
   }
 }

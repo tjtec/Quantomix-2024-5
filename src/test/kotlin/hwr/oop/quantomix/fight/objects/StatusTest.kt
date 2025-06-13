@@ -80,15 +80,18 @@ class StatusTest : AnnotationSpec() {
   @Test
   fun `Test Poison`() {
     val statusHelper = Status.Poison.calculateStatusEffect(
-      battleStats = battleStats())
+      battleStats = battleStats()
+    )
     assertThat(statusHelper.summand).isEqualTo(3)
     val statusHelperRound1 =
       Status.Poison.calculateStatusEffect(
-        battleStats = battleStats(), previous = statusHelper)
+        battleStats = battleStats(), previous = statusHelper
+      )
     assertThat(statusHelperRound1.summand).isEqualTo(3)
     val statusHelperRound2 =
       Status.Poison.calculateStatusEffect(
-        battleStats = battleStats(), previous = statusHelperRound1)
+        battleStats = battleStats(), previous = statusHelperRound1
+      )
     assertThat(statusHelperRound2.summand).isEqualTo(3)
   }
 

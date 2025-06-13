@@ -147,9 +147,9 @@ class AttackTest : AnnotationSpec() {
   }
 
   @Test
-  fun `damage not negativ`(){
-    val exception=assertThrows(CannotBeNegativ::class.java) {
-      val attack=Attack(
+  fun `damage not negativ`() {
+    val exception = assertThrows(CannotBeNegativ::class.java) {
+      val attack = Attack(
         attackName = "negativ Damage",
         type = Typ.Gift,
         damage = -50,

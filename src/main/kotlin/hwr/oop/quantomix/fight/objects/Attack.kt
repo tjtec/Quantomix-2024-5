@@ -4,6 +4,7 @@ import hwr.oop.quantomix.Exceptions.CannotBeNegativ
 import hwr.oop.quantomix.objects.Typ
 import kotlinx.serialization.Serializable
 import java.util.*
+
 @Serializable
 data class Attack(
   private val attackName: String,
@@ -23,7 +24,7 @@ data class Attack(
   }
 
   fun getDamage(): Int {
-      return this.damage
+    return this.damage
   }
 
   fun getSpecialAttack(): Boolean {

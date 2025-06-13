@@ -20,8 +20,9 @@ class DamageContextTest : AnnotationSpec() {
       status = Status.Sleep
     )
   }
+
   @BeforeEach
-  fun feuerballWithoutPoison():Attack{
+  fun feuerballWithoutPoison(): Attack {
     return Attack(
       attackName = "Feuerball",
       type = Typ.Feuer,
@@ -30,6 +31,7 @@ class DamageContextTest : AnnotationSpec() {
       specialAttack = true,
     )
   }
+
   @BeforeEach
   fun flamara(): BattleStats {
     return Quantomix(
@@ -93,67 +95,89 @@ class DamageContextTest : AnnotationSpec() {
       target.getStats().getKp() / 16
     )
   }
+
   @Test
   fun `selfHitMultiplier works correctly`() {
-    assertThat(DamageContext(
-      attacker=flamara(),
-      target = flamara2(),
-      attack = feuerball(),
-      selfHitMultiplier = 1
-    ).selfHitMultiplier).isEqualTo(1)
-    assertThat(DamageContext(
-      attacker=flamara(),
-      target = flamara2(),
-      attack = feuerball(),
-      selfHitMultiplier = -1
-    ).selfHitMultiplier).isEqualTo(-1)
-    assertThat(DamageContext(
-      attacker=flamara(),
-      target = flamara2(),
-      attack = feuerball(),
-    ).selfHitMultiplier).isEqualTo(0)
+    assertThat(
+      DamageContext(
+        attacker = flamara(),
+        target = flamara2(),
+        attack = feuerball(),
+        selfHitMultiplier = 1
+      ).selfHitMultiplier
+    ).isEqualTo(1)
+    assertThat(
+      DamageContext(
+        attacker = flamara(),
+        target = flamara2(),
+        attack = feuerball(),
+        selfHitMultiplier = -1
+      ).selfHitMultiplier
+    ).isEqualTo(-1)
+    assertThat(
+      DamageContext(
+        attacker = flamara(),
+        target = flamara2(),
+        attack = feuerball(),
+      ).selfHitMultiplier
+    ).isEqualTo(0)
   }
+
   @Test
   fun `target and attack have no status effect`() {
-    assertThat(DamageContext(
-      attacker = flamara(),
-      target = flamara2(),
-      attack = feuerballWithoutPoison(),
-    ).statusEffect.summand).isEqualTo(0)
-    assertThat(DamageContext(
-      attacker = flamara(),
-      target = flamara2(),
-      attack = feuerballWithoutPoison(),
-    ).statusEffect.multiplicator).isEqualTo(1)
+    assertThat(
+      DamageContext(
+        attacker = flamara(),
+        target = flamara2(),
+        attack = feuerballWithoutPoison(),
+      ).statusEffect.summand
+    ).isEqualTo(0)
+    assertThat(
+      DamageContext(
+        attacker = flamara(),
+        target = flamara2(),
+        attack = feuerballWithoutPoison(),
+      ).statusEffect.multiplicator
+    ).isEqualTo(1)
   }
+
   @Test
   fun `target has status effect`() {
     val flamara = flamara()
     flamara.changeStatus(Status.Combustion)
-    assertThat(DamageContext(
-      attacker = flamara2(),
-      target = flamara,
-      attack = feuerballWithoutPoison(),
-    ).statusEffect.summand).isEqualTo(8)
-    assertThat(DamageContext(
-      attacker = flamara2(),
-      target = flamara,
-      attack = feuerballWithoutPoison(),
-    ).statusEffect.multiplicator).isEqualTo(1)
+    assertThat(
+      DamageContext(
+        attacker = flamara2(),
+        target = flamara,
+        attack = feuerballWithoutPoison(),
+      ).statusEffect.summand
+    ).isEqualTo(8)
+    assertThat(
+      DamageContext(
+        attacker = flamara2(),
+        target = flamara,
+        attack = feuerballWithoutPoison(),
+      ).statusEffect.multiplicator
+    ).isEqualTo(1)
   }
+
   @Test
   fun `attack has status effect`() {
     val flamara = flamara2()
     flamara.changeStatus(Status.Sleep)
-    assertThat(DamageContext(
-      attacker = flamara,
-      target = flamara2(),
-      attack = feuerball(),
-    ).statusEffect.summand).isEqualTo(0)
-    assertThat(DamageContext(
-      attacker = flamara,
-      target = flamara2(),
-      attack = feuerball(),
-    ).statusEffect.multiplicator).isEqualTo(0)
+    assertThat(
+      DamageContext(
+        attacker = flamara,
+        target = flamara2(),
+        attack = feuerball(),
+      ).statusEffect.summand
+    ).isEqualTo(0)
+    assertThat(
+      DamageContext(
+        attacker = flamara,
+        target = flamara2(),
+        attack = feuerball(),
+      ).statusEffect.multiplicator
+    ).isEqualTo(0)
   }
 }

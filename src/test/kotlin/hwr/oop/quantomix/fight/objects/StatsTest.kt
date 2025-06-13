@@ -32,6 +32,7 @@ class StatsTest : AnnotationSpec() {
     assertThat(battleStatsQuantomix1.getQuantomix())
       .isEqualTo(quantomix1)
   }
+
   @Test
   fun `return correct kp after takeDamage`() {
     val statsQuantomix = Stats(100, 100, 100, 100, 100, 100)

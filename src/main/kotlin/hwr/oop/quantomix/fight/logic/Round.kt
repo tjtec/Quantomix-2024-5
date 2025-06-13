@@ -70,8 +70,8 @@ class Rounds(private var trainer1: Coach, private var trainer2: Coach) {
       battleStatsMap.getOrPut(activeQuantomixTrainer2)
       { activeQuantomixTrainer2.newBattleStats() }
     return listOf(stats1, stats2).sortedByDescending {
-        it.getStats().getSpeed()
-      }.map { it.getQuantomix() }
+      it.getStats().getSpeed()
+    }.map { it.getQuantomix() }
   }
 
   private fun getOpponent(quantomix: Quantomix): Quantomix =

@@ -7,10 +7,7 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
-import org.junit.jupiter.api.Assertions.assertDoesNotThrow
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.*
 
 
 class RoundsTest : AnnotationSpec() {
@@ -143,7 +140,7 @@ class RoundsTest : AnnotationSpec() {
     require(coach2.quantomixTeam.isNotEmpty()) { "Coach2 hat keine Quantomixe" }
 
     // Erstelle die Runde
-    val rounds=Rounds(coach1, coach2)
+    val rounds = Rounds(coach1, coach2)
     // Hole die Attacken und prüfe sie
     val attacks = testAttacks()
     require(attacks.isNotEmpty()) { "Keine Attacken verfügbar" }

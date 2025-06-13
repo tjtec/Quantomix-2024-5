@@ -75,14 +75,16 @@ class DamageTest : AnnotationSpec() {
     target.takeDamage(100)
     assertThat(target.isAlive()).isFalse
     val exception = assertThrows(
-      DeadQuantomixException::class.java) {
-      currentDamage+=damage.damageFunction(
+      DeadQuantomixException::class.java
+    ) {
+      currentDamage += damage.damageFunction(
         attacker = target,
         target = attacker,
         attack = attack()
       )
     }
     assertThat(exception.message).isEqualTo(
-      "The Quantomix which would attack next is already dead!")
+      "The Quantomix which would attack next is already dead!"
+    )
   }
 }
