@@ -149,12 +149,15 @@ class RoundsTest : AnnotationSpec() {
     require(coach2.quantomixTeam.isNotEmpty()) { "Coach2 hat keine Quantomixe" }
 
     // Erstelle die Runde
-    Battle(trainer1 = coach1, trainer2 = coach2)
+    val battle=Battle(trainer1 = coach1, trainer2 = coach2)
 
     // Hole die Attacken und prüfe sie
     val attacks = testAttacks()
     require(attacks.isNotEmpty()) { "Keine Attacken verfügbar" }
-
+    assertDoesNotThrow {
+      battle.chooseAttack(coach1, attacks[0], coach2.getFirstQuantomix())
+      battle.chooseAttack(coach2, attacks[1], coach1.getFirstQuantomix())
+    }
   }
 
   @Test

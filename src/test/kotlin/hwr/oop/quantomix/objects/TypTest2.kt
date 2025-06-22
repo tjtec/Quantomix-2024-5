@@ -1,7 +1,9 @@
 package hwr.oop.quantomix.objects
 
+import hwr.oop.quantomix.Exceptions.NotAllowedTyp
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertThrows
 
 class TypTest2 : AnnotationSpec() {
   @Test
@@ -24,19 +26,21 @@ class TypTest2 : AnnotationSpec() {
     assertThat(Typ.getFromString("Geist")).isEqualTo(Typ.Geist)
     assertThat(Typ.getFromString("Psycho")).isEqualTo(Typ.Psycho)
     assertThat(Typ.getFromString("Gestein")).isEqualTo(Typ.Gestein)
-    assertThat(Typ.getFromString("Unbekannt")).isEqualTo(Typ.Normal)
   }
 
   @Test
-  fun `Test getFromString with default type`() {
+  fun `Test getFromString with wrong type`() {
     Typ.entries.forEach { typ ->
       assertThat(Typ.getFromString(typ.name)).isEqualTo(typ)
     }
-    assertThat(Typ.getFromString("feuer")).isEqualTo(Typ.Normal)
-    assertThat(Typ.getFromString("Feuer")).isEqualTo(Typ.Feuer)
-    assertThat(Typ.getFromString("Unbekannt")).isEqualTo(Typ.Normal)
-    assertThat(Typ.getFromString("XYZ")).isEqualTo(Typ.Normal)
-    assertThat(Typ.getFromString("")).isEqualTo(Typ.Normal)
-    assertThat(Typ.getFromString(" ")).isEqualTo(Typ.Normal)
+    val exception = assertThrows(NotAllowedTyp::class.java) {
+      Typ.getFromString("feuer")
+    }
+    assertThat(exception.message).isEqualTo(
+      "feuer is not an allowed type. The following types are possible:" +
+          "Normal; Kampf; Flug; Gift; Stahl; Fee; Wasser; Drache; Unlicht; " +
+          "Feuer; Eis; Boden; Elektro; Kaefer;" +
+          " Pflanze; Geist; Psycho; Gestein "
+    )
   }
 }

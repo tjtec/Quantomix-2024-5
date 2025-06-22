@@ -1,9 +1,11 @@
 package hwr.oop.quantomix.fight.objects
 
+import hwr.oop.quantomix.Exceptions.CannotBeNegativ
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertThrows
 
 class AttackTest : AnnotationSpec() {
   @BeforeEach
@@ -144,4 +146,17 @@ class AttackTest : AnnotationSpec() {
     assertThat(attack.getEffects()).isNotEmpty
   }
 
+  @Test
+  fun `damage not negativ`() {
+    val exception = assertThrows(CannotBeNegativ::class.java) {
+      val attack = Attack(
+        attackName = "negativ Damage",
+        type = Typ.Gift,
+        damage = -50,
+        damageQuote = 50,
+        specialAttack = true,
+      )
+    }
+    assertThat(exception.message).isEqualTo("Damage must be greater than or equal to 0")
+  }
 }

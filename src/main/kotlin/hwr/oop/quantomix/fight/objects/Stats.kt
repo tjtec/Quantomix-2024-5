@@ -1,7 +1,9 @@
 package hwr.oop.quantomix.fight.objects
 
 import hwr.oop.quantomix.Exceptions.NoBuffOrDebuffValue
+import kotlinx.serialization.Serializable
 
+@Serializable
 class Stats(
   private var kp: Int,
   private var attack: Int,
@@ -24,7 +26,7 @@ class Stats(
   fun takeDamage(damage: Int) {
     this.kp = when ((this.kp - damage) <= 0) {
       true -> 0
-      else -> this.kp - damage
+      false -> this.kp - damage
     }
   }
 

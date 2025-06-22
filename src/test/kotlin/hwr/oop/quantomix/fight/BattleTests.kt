@@ -39,7 +39,7 @@ class BattleTests : AnnotationSpec() {
     val pfluecker = Attack(
       attackName = "Pflücker",
       type = Typ.Flug,
-      damage = 20,
+      damage = 10,
       damageQuote = 100,
       specialAttack = true,
       effects = mutableListOf(),
@@ -205,7 +205,7 @@ class BattleTests : AnnotationSpec() {
       schillokBattleStats.getStats().getKp()
     ).isLessThan(schillok().getStats().getKp())
     assertThat(schillok.getStats().getKp()).isEqualTo(59)
-    assertThat(schillokBattleStats.getStats().getKp()).isEqualTo(38)
+    assertThat(schillokBattleStats.getStats().getKp()).isEqualTo(44)
   }
 
   @Test
@@ -256,7 +256,7 @@ class BattleTests : AnnotationSpec() {
       oweiBattleStats.getStats().getKp()
     ).isLessThan(schillok().getStats().getKp())
     assertThat(owei.getStats().getKp()).isEqualTo(60)
-    assertThat(oweiBattleStats.getStats().getKp()).isEqualTo(17)
+    assertThat(oweiBattleStats.getStats().getKp()).isEqualTo(29)
     val solution2 = battle.startAttack(
       aktiveQuantomixBattleStats = oweiBattleStats,
       attack = pfluecker(),
@@ -267,11 +267,11 @@ class BattleTests : AnnotationSpec() {
     assertThat(
       glurakBattleStats.getStats().getKp()
     ).isLessThan(glurak.getStats().getKp())
-    assertThat(glurakBattleStats.getStats().getKp()).isEqualTo(62)
+    assertThat(glurakBattleStats.getStats().getKp()).isEqualTo(70)
     assertThat(
       oweiBattleStats.getStats().getKp()
     ).isLessThan(schillok().getStats().getKp())
-    assertThat(oweiBattleStats.getStats().getKp()).isEqualTo(17)
+    assertThat(oweiBattleStats.getStats().getKp()).isEqualTo(29)
   }
 
   @Test

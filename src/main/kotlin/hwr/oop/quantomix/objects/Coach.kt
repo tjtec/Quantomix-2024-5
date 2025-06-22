@@ -1,7 +1,9 @@
 package hwr.oop.quantomix.objects
 
 import hwr.oop.quantomix.monster.Quantomix
+import kotlinx.serialization.Serializable
 
+@Serializable
 class Coach(
   val coachName: String,
   val quantomixTeam: List<Quantomix>,

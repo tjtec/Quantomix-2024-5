@@ -4,7 +4,9 @@ import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.fight.objects.Stats
 import hwr.oop.quantomix.objects.Typ
+import kotlinx.serialization.Serializable
 
+@Serializable
 class Quantomix(
   private val quantomixName: String,
   private val typ1: Typ,
