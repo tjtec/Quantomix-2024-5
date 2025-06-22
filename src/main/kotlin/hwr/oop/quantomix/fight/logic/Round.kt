@@ -5,120 +5,93 @@ import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 
-//ToDo: mehr als ein Quantomix implementieren^Doppelkampf/Dreifachkampf
-//ToDo: Exeption schreiben Attacke ist nicht in der Liste möglicher auswählbarer Attacken (vielleicht auch erst ins CLI)
+class Battle(
+  private val trainer1: Coach,
+  trainer2: Coach,
+  numberOfQuantomixInRound: Int = 1,
+  damageStrategy: DamageStrategy = StandardDamageStrategy()
 
-interface Rounds {
-  fun choseAttack(
-    attackingTrainer: Quantomix,
-    attack: Attack,
-  )
-}
+) {
+  private data class ChosenAction(val attack: Attack, val target: Quantomix)
+  private val chosenActionsMap = mutableMapOf<Quantomix, ChosenAction>()
 
-class RoundsWithOneQuantomix(private var trainer1: Coach, private var trainer2: Coach): Rounds {
-  private val chosenAttacksMap = mutableMapOf<Quantomix, Attack>()
-  private val damageFunction: DamageStrategy = StandardDamageStrategy()
-  private val battle = SimpleBattle()
-  //private val saveMethode: Save = CSVSave()
-  //private val loadMethode: Load = CSVLoad()
+  private val damageFunction: DamageStrategy = damageStrategy
+  private val battle = Round()
+  private val quantomixAndBattleStatsMap = mutableMapOf<Quantomix, BattleStats>()
 
-  private var quantomixAndBattleStatsMap =
-    mutableMapOf<Quantomix, BattleStats>()
+  private val activeQuantomixesTrainer1: List<Quantomix> = trainer1.getActiveQuantomixes(numberOfQuantomixInRound)
+  private val activeQuantomixesTrainer2: List<Quantomix> = trainer2.getActiveQuantomixes(numberOfQuantomixInRound)
 
+  /**
+   * Diese Methode wird vom CLI aufgerufen, wenn ein Trainer seinen Angriff sowie das Ziel auswählt.
+   * Dabei wird intern zunächst der angreifende Quantomix (der noch keine Aktion gewählt hat und am Leben ist)
+   * ermittelt, und anschließend wird geprüft, ob der gewählte Angriff vorhanden ist und das Ziel
+   * (vom Gegnerteam) gültig ist.
+   */
+  fun chooseAttack(attackingTrainer: Coach, attack: Attack, target: Quantomix) {
+    // Bestimme den nächsten verfügbaren Quantomix, der angreifen kann.
+    val attacker = getNextAttackingQuantomix(attackingTrainer)
 
-  private val activeQuantomixTrainer1 = trainer1.getFirstQuantomix()
-  private val activeQuantomixTrainer2 = trainer2.getFirstQuantomix()
-
-  override fun choseAttack(
-    attackingTrainer: Quantomix,
-    attack: Attack,
-  ) {
-    val attackingQuantomix = attackingQuantomix(attackingTrainer)
-    require(chosenAttacksMap[attackingQuantomix] == null) {
-      "Attacking trainer has already chosen an attack"
-    }
-    require(attackingQuantomix.hasAttack(attack)) {
+    require(attacker.hasAttack(attack)) {
       "Attacking Quantomix does not have the attack"
     }
-    chosenAttacksMap[attackingQuantomix] = attack
-    if (chosenAttacksMap.size == 2) {
+    // Stelle sicher, dass das Ziel zu den aktiven Einheiten des gegnerischen Trainers gehört.
+    val enemyTeam = if (attackingTrainer == trainer1) activeQuantomixesTrainer2 else activeQuantomixesTrainer1
+    require(enemyTeam.contains(target)) {
+      "Das gewählte Ziel gehört nicht zum gegnerischen Team."
+    }
+    // Speichere die gewählte Aktion für den Angreifer.
+    chosenActionsMap[attacker] = ChosenAction(attack, target)
+
+    // Sobald alle aktiven Quantomix (beider Teams) ihren Zug gewählt haben, wird der Kampf simuliert.
+    if (chosenActionsMap.size == (activeQuantomixesTrainer1.size + activeQuantomixesTrainer2.size)) {
       simulateBattle()
     }
   }
 
+  // Ermittelt den nächsten aktiven Quantomix des Trainers, der noch keinen Angriff gewählt hat.
+  // Voraussetzung: Dieser muss noch am Leben sein.
+  private fun getNextAttackingQuantomix(trainer: Coach): Quantomix {
+    val activeList = if (trainer == trainer1) activeQuantomixesTrainer1 else activeQuantomixesTrainer2
+    return activeList.firstOrNull { quantomix ->
+      chosenActionsMap[quantomix] == null && getBattleStats(quantomix).isAlive()
+    } ?: throw IllegalStateException("Attacking trainer has already chosen an attack")
+  }
 
-  private fun attackingQuantomix(attackingTrainer: Coach) =
-    if (attackingTrainer == trainer1) activeQuantomixTrainer1 else activeQuantomixTrainer2
+  // Liest für einen Quantomix (falls noch nicht vorhanden) dessen Kampfdaten.
+  private fun getBattleStats(quantomix: Quantomix): BattleStats =
+    quantomixAndBattleStatsMap.getOrPut(quantomix) { quantomix.newBattleStats() }
 
-
+  // Führt den Kampf aus, nachdem beide Teams ihre Aktionen gewählt haben.
+  // Die Aktionen werden in Reihenfolge der Geschwindigkeit (höchste zuerst) abgearbeitet.
   private fun simulateBattle() {
-    val battleStatsInOrderOfAttack = quantomixBySpeed()
-    val quantomixInOrderOfAttack = mutableListOf<Quantomix>()
-    for (quantomix in battleStatsInOrderOfAttack.keys) {
-      quantomixInOrderOfAttack.add(quantomix)
+    val allQuantomixes = activeQuantomixesTrainer1 + activeQuantomixesTrainer2
+
+    // Sorge dafür, dass für alle Quantomix Kampfdaten vorhanden sind.
+    allQuantomixes.forEach { getBattleStats(it) }
+
+    // Sortiere die Quantomix nach absteigender Geschwindigkeit.
+    val quantomixesInOrder = allQuantomixes.sortedByDescending {
+      getBattleStats(it).getStats().getSpeed()
     }
-    for (attacker in quantomixInOrderOfAttack) {
-      val defender = otherQuantomix(attacker)
 
-      val battleStats = getBattleStatsForCombatants(attacker, defender)
-      if (battleStats.first.isAlive()) {
-        battle.simpleBattle(
-          aktiveQuantomixBattleStats = battleStats.first,
-          attack = chosenAttacksMap.getValue(attacker),
-          target = battleStats.second,
-          attackStrategy = damageFunction
-        )
-        //saveMethode.save(trainer1, trainer2, quantomixAndBattleStatsMap)
-      }
-    }
-    chosenAttacksMap.clear()
-  }
+    // Abarbeiten der Züge: Für jeden Angreifer wird der vorher über CLI bestimmte Angriff auf das
+    // vom Trainer ausgewählte Ziel ausgeführt.
+    for (attacker in quantomixesInOrder) {
+      val attackerStats = getBattleStats(attacker)
+      if (!attackerStats.isAlive()) continue  // Überspringe, falls der Angreifer besiegt wurde.
 
-  private fun getBattleStatsForCombatants(
-    attacker: Quantomix,
-    defender: Quantomix,
-  ): Pair<BattleStats, BattleStats> {
-    val attackerStats =
-      quantomixAndBattleStatsMap.getOrPut(attacker) { attacker.newBattleStats() }
-    val defenderStats =
-      quantomixAndBattleStatsMap.getOrPut(defender) { defender.newBattleStats() }
+      val chosenAction = chosenActionsMap[attacker] ?: continue
+      val targetStats = getBattleStats(chosenAction.target)
 
-    return Pair(attackerStats, defenderStats)
-  }
-
-  private fun quantomixBySpeed(): Map<Quantomix, BattleStats> {
-    val activeQuantomix1 =
-      quantomixAndBattleStatsMap.getOrPut(activeQuantomixTrainer1) {
-        activeQuantomixTrainer1.newBattleStats()
-      }
-    val activeQuantomix2 =
-      quantomixAndBattleStatsMap.getOrPut(activeQuantomixTrainer2) {
-        activeQuantomixTrainer2.newBattleStats()
-      }
-    val listOfBattleStats =
-      listOf(
-        activeQuantomix1, activeQuantomix2
-      ).sortedByDescending { it.getStats().getSpeed() }
-    val mapQuantomixAndBattleStats = mutableMapOf<Quantomix, BattleStats>()
-    var indexCurrentQuantomix = 0
-    while (listOfBattleStats.size != mapQuantomixAndBattleStats.size) {
-      mapQuantomixAndBattleStats.put(
-        listOfBattleStats[indexCurrentQuantomix].getQuantomix(),
-        listOfBattleStats[indexCurrentQuantomix]
+      battle.startAttack(
+        aktiveQuantomixBattleStats = attackerStats,
+        attack = chosenAction.attack,
+        target = targetStats,
+        attackStrategy = damageFunction
       )
-      indexCurrentQuantomix++
     }
-    return mapQuantomixAndBattleStats.toMap()
+    // Nach Abschluss der Runde werden die Aktionen zurückgesetzt.
+    chosenActionsMap.clear()
   }
-
-  private fun otherQuantomix(quantomix: Quantomix) =
-    if (quantomix == activeQuantomixTrainer1) activeQuantomixTrainer2 else activeQuantomixTrainer1
-
-  /*private fun loadRound() {
-    val loadHelper = loadMethode.getHelper()
-    quantomixAndBattleStatsMap = loadHelper.quantomixAndBattleStatsMap
-    trainer1 = loadHelper.trainer1
-    trainer2 = loadHelper.trainer2
-  }
-   */
 }

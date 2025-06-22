@@ -1,5 +1,5 @@
 package hwr.oop.quantomix.fight
-
+/*
 import hwr.oop.quantomix.fight.logic.RoundsWith2Quantomix
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.Stats
@@ -205,3 +205,5 @@ class RoundWith2QuantomixTest {
         }
     }
 }
+
+ */

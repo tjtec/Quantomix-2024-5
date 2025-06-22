@@ -2,7 +2,7 @@ package hwr.oop.quantomix.fight
 
 import hwr.oop.quantomix.Exceptions.DeadQuantomixException
 import hwr.oop.quantomix.fight.logic.DamageStrategy
-import hwr.oop.quantomix.fight.logic.SimpleBattle
+import hwr.oop.quantomix.fight.logic.Round
 import hwr.oop.quantomix.fight.logic.StandardDamageStrategy
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.Effects
@@ -146,8 +146,8 @@ class BattelTests2 : AnnotationSpec() {
     val quantomix2 = quantomix2()
     val quantomix1BattleStats = quantomix1.newBattleStats()
     val quantomix2BattleStats = quantomix2.newBattleStats()
-    val battle = SimpleBattle()
-    val solution = battle.simpleBattle(
+    val battle = Round()
+    val solution = battle.startAttack(
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = math(),
       target = quantomix2BattleStats,
@@ -199,8 +199,8 @@ class BattelTests2 : AnnotationSpec() {
     val quantomix2 = quantomix2()
     val quantomix1BattleStats = quantomix1.newBattleStats()
     val quantomix2BattleStats = quantomix2.newBattleStats()
-    val battle = SimpleBattle()
-    battle.simpleBattle(
+    val battle = Round()
+    battle.startAttack(
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = attack1,
       target = quantomix2BattleStats,
@@ -226,8 +226,8 @@ class BattelTests2 : AnnotationSpec() {
     val quantomix2 = quantomix2()
     val quantomix1BattleStats = quantomix1.newBattleStats()
     val quantomix2BattleStats = quantomix2.newBattleStats()
-    val battle = SimpleBattle()
-    battle.simpleBattle(
+    val battle = Round()
+    battle.startAttack(
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = attack1,
       target = quantomix2BattleStats,
@@ -275,8 +275,8 @@ class BattelTests2 : AnnotationSpec() {
       ),
       status = null
     )
-    val battle = SimpleBattle()
-    battle.simpleBattle(
+    val battle = Round()
+    battle.startAttack(
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = attackDeadly,
       target = quantomix2BattleStats,
@@ -285,7 +285,7 @@ class BattelTests2 : AnnotationSpec() {
     assertThat(quantomix1BattleStats.getStats().getKp()).isEqualTo(100)
     assertThat(quantomix2BattleStats.getStats().getKp()).isEqualTo(0)
     val exception = assertThrows(DeadQuantomixException::class.java) {
-      battle.simpleBattle(
+      battle.startAttack(
         aktiveQuantomixBattleStats = quantomix2BattleStats,
         attack = attackDeadly,
         target = quantomix1BattleStats,
@@ -340,8 +340,8 @@ class BattelTests2 : AnnotationSpec() {
       status = Status.NoDamage
     )
 
-    val battle = SimpleBattle()
-    battle.simpleBattle(
+    val battle = Round()
+    battle.startAttack(
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = attackComplex,
       target = quantomix2BattleStats,
@@ -402,8 +402,8 @@ class BattelTests2 : AnnotationSpec() {
       status = Status.NoDamage
     )
 
-    val battle = SimpleBattle()
-    battle.simpleBattle(
+    val battle = Round()
+    battle.startAttack(
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = attackComplex,
       target = quantomix2BattleStats,
@@ -428,8 +428,8 @@ class BattelTests2 : AnnotationSpec() {
     val quantomix2 = quantomix2()
     val quantomix1BattleStats = quantomix1.newBattleStats()
     val quantomix2BattleStats = quantomix2.newBattleStats()
-    val battle = SimpleBattle()
-    val solution = battle.simpleBattle(
+    val battle = Round()
+    val solution = battle.startAttack(
       aktiveQuantomixBattleStats = quantomix1BattleStats,
       attack = oop(),
       target = quantomix2BattleStats,
