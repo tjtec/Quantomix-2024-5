@@ -1,7 +1,7 @@
 package hwr.oop.quantomix.fight.objects
 
 import hwr.oop.quantomix.fight.logic.DamageContext
-import hwr.oop.quantomix.fight.logic.SimpleBattle
+import hwr.oop.quantomix.fight.logic.Round
 import hwr.oop.quantomix.fight.logic.StandardDamageStrategy
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Typ
@@ -80,7 +80,7 @@ class DamageContextTest : AnnotationSpec() {
     assertThat(damageContext.statusEffect.summand).isEqualTo(
       0
     )
-    SimpleBattle().simpleBattle(
+    Round().startAttack(
       target = target,
       attack = feuerball(),
       aktiveQuantomixBattleStats = attacker,

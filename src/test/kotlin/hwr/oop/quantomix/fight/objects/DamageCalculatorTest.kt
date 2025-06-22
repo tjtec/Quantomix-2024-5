@@ -195,7 +195,7 @@ class DamageCalculatorTest : AnnotationSpec() {
     )
     val flamara = flamara()
     val flamara2 = flamara2()
-    SimpleBattle().simpleBattle(
+    Round().startAttack(
       aktiveQuantomixBattleStats = flamara,
       attack = attackPoisoning,
       target = flamara2,
