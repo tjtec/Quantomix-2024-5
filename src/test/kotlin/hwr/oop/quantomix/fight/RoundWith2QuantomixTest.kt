@@ -1,19 +1,17 @@
 package hwr.oop.quantomix.fight
-/*
-import hwr.oop.quantomix.fight.logic.RoundsWith2Quantomix
+
+import hwr.oop.quantomix.fight.logic.Battle
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.Stats
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 import hwr.oop.quantomix.objects.Typ
-import io.kotest.core.spec.style.AnnotationSpec.BeforeEach
-import io.kotest.core.spec.style.AnnotationSpec.Test
 import io.kotest.core.spec.style.AnnotationSpec
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 
-class RoundWith2QuantomixTest {
+class RoundWith2QuantomixTest: AnnotationSpec() {
     @BeforeEach
     fun testAttacks(): List<Attack> {
         val fluch = Attack(
@@ -101,23 +99,34 @@ class RoundWith2QuantomixTest {
         return testCoach2
     }
 
-    private fun performRound(
-        rounds: RoundsWith2Quantomix, coach1: Coach, coach2: Coach, attackingIndexCoach1: Int, attackingIndexCoach2: Int
+    fun performRound(
+        battle: Battle,
+        coach1: Coach,
+        coach2: Coach,
+        attackIndexCoach1: Int,
+        attackIndexCoach2: Int
     ) {
         val attacks = testAttacks()
-        val activeTeamCoach1 = coach1.getActiveQuantomix(numberOfQuantomixInRound = 2)
-        val activeTeamCoach2 = coach2.getActiveQuantomix(numberOfQuantomixInRound = 2)
 
-        rounds.choseAttack(activeTeamCoach1[0], attacks[attackingIndexCoach1])
-        rounds.choseAttack(activeTeamCoach1[1], attacks[(attackingIndexCoach1 + 1) % attacks.size])
-        rounds.choseAttack(activeTeamCoach2[0], attacks[attackingIndexCoach2])
-        rounds.choseAttack(activeTeamCoach2[1], attacks[(attackingIndexCoach2 + 1) % attacks.size])
+        // Erhalte die aktiven Gegner als Ziel: Hier gehen wir davon aus, dass pro Trainer 2 Quantomix aktiv sein sollen.
+        val activeTeamCoach2 = coach2.getActiveQuantomixes(numberOfQuantomixInRound = 2, battle.quantomixAndBattleStatsMap)
+        val activeTeamCoach1 = coach1.getActiveQuantomixes(numberOfQuantomixInRound = 2, battle.quantomixAndBattleStatsMap)
 
-        rounds.chooseTarget(activeTeamCoach1[0], activeTeamCoach2[0])
-        rounds.chooseTarget(activeTeamCoach1[1], activeTeamCoach2[1])
-        rounds.chooseTarget(activeTeamCoach2[0], activeTeamCoach1[0])
-        rounds.chooseTarget(activeTeamCoach2[1], activeTeamCoach1[1])
+        // Coach1 wählt beide seiner Angriffe:
+        val movesCoach1 = listOf(
+            Pair(attacks[attackIndexCoach1], activeTeamCoach2[0]),
+            Pair(attacks[(attackIndexCoach1 + 1) % attacks.size], activeTeamCoach2[1])
+        )
+        battle.chooseAttacks(coach1, movesCoach1)
+
+        // Danach wählt Coach2 beide seiner Angriffe:
+        val movesCoach2 = listOf(
+            Pair(attacks[attackIndexCoach2], activeTeamCoach1[0]),
+            Pair(attacks[(attackIndexCoach2 + 1) % attacks.size], activeTeamCoach1[1])
+        )
+        battle.chooseAttacks(coach2, movesCoach2)
     }
+
 
     @Test
     fun `RoundsWith2Quantomix with two trainers are created successfully`() {
@@ -129,7 +138,7 @@ class RoundWith2QuantomixTest {
         require(coach2.quantomixTeam.isNotEmpty()) { "Coach2 hat keine Quantomixe" }
 
         // Erstelle die Runde – es sollte keine Exception entstehen.
-        val rounds = RoundsWith2Quantomix(coach1, coach2)
+        val rounds = Battle(coach1, coach2, numberOfQuantomixInRound = 2)
         assertNotNull(rounds)
 
         // Attacken müssen vorhanden sein
@@ -141,53 +150,38 @@ class RoundWith2QuantomixTest {
     fun `choosing attack twice for same Quantomix throws exception`() {
         val coach1 = testCoach1()
         val coach2 = testCoach2()
-        val rounds = RoundsWith2Quantomix(coach1, coach2)
+        val rounds = Battle(coach1, coach2, numberOfQuantomixInRound = 2)
         val attacks = testAttacks()
 
         // Wähle einen aktiven Quantomix aus Coach1
-        val activeTeamCoach1 = coach1.getActiveQuantomix(2)
-        rounds.choseAttack(activeTeamCoach1[0], attacks[0])
-        val exception = assertThrows(IllegalArgumentException::class.java) {
-            rounds.choseAttack(activeTeamCoach1[0], attacks[1])
+        val activeTeamCoach1 = coach1.getActiveQuantomixes(2)
+        rounds.chooseAttack(coach2, attacks[0], activeTeamCoach1[0])
+        rounds.chooseAttack(coach2, attacks[0], activeTeamCoach1[0])
+        val exception = assertThrows(IllegalStateException::class.java) {
+            rounds.chooseAttack(coach2, attacks[1], activeTeamCoach1[1])
         }
         assertEquals("Attacking trainer has already chosen an attack", exception.message)
-    }
-
-    @Test
-    fun `choosing target twice for same Quantomix throws exception`() {
-        val coach1 = testCoach1()
-        val coach2 = testCoach2()
-        val rounds = RoundsWith2Quantomix(coach1, coach2)
-
-        // Wähle zunächst ein Ziel für einen aktiven Quantomix
-        val activeTeamCoach1 = coach1.getActiveQuantomix(2)
-        val activeTeamCoach2 = coach2.getActiveQuantomix(2)
-        rounds.chooseTarget(activeTeamCoach1[0], activeTeamCoach2[0])
-        val exception = assertThrows(IllegalArgumentException::class.java) {
-            rounds.chooseTarget(activeTeamCoach1[0], activeTeamCoach2[1])
-        }
-        assertEquals("Für diesen Quantomix wurde bereits ein Ziel ausgewählt.", exception.message)
     }
 
     @Test
     fun `choosing a target from same team throws exception`() {
         val coach1 = testCoach1()
         val coach2 = testCoach2()
-        val rounds = RoundsWith2Quantomix(coach1, coach2)
+        val rounds = Battle(coach1, coach2, numberOfQuantomixInRound = 2)
 
         // Versuche, einem aktiven Quantomix ein Ziel aus dem eigenen Team zuzuweisen.
-        val activeTeamCoach1 = coach1.getActiveQuantomix(2)
+        val activeTeamCoach1 = coach1.getActiveQuantomixes(2)
         val exception = assertThrows(IllegalArgumentException::class.java) {
-            rounds.chooseTarget(activeTeamCoach1[0], activeTeamCoach1[1])
+            rounds.chooseAttack(coach1, testAttacks()[0], activeTeamCoach1[0])
         }
-        assertEquals("Das gewählte Ziel gehört nicht zur gegnerischen Mannschaft.", exception.message)
+        assertEquals("The chosen target does not belong to the other trainer.", exception.message)
     }
 
     @Test
     fun `simulate multiple rounds without exceptions`() {
         val coach1 = testCoach1()
         val coach2 = testCoach2()
-        val rounds = RoundsWith2Quantomix(coach1, coach2)
+        val rounds = Battle(coach1, coach2, numberOfQuantomixInRound = 2)
         val attacks = testAttacks()
         require(attacks.isNotEmpty()) { "Attackenliste darf nicht leer sein" }
 
@@ -200,10 +194,9 @@ class RoundWith2QuantomixTest {
             performRound(rounds, coach1, coach2, attackIndexCoach1, attackIndexCoach2)
 
             // Nach einer Round sollten die aktiven Quantomixe weiterhin verfügbar sein (das heißt, sie wurden nicht "ausgeschaltet")
-            assertNotNull(coach1.getActiveQuantomix(2).first())
-            assertNotNull(coach2.getActiveQuantomix(2).first())
+            assertNotNull(coach1.getActiveQuantomixes(2).first())
+            assertNotNull(coach2.getActiveQuantomixes(2).first())
         }
     }
 }
 
- */

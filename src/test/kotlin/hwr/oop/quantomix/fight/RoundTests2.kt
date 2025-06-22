@@ -14,7 +14,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 
-class BattelTests2 : AnnotationSpec() {
+class RoundTests2 : AnnotationSpec() {
   @BeforeEach
   fun quantomix1(): Quantomix {
     val quantomix1 = Quantomix(

@@ -12,7 +12,7 @@ import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 
-class BattleTests : AnnotationSpec() {
+class RoundTests : AnnotationSpec() {
   @BeforeEach
   fun glurak(): Quantomix {
     val glurak = Quantomix(

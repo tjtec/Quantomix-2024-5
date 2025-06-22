@@ -10,7 +10,7 @@ import io.kotest.core.spec.style.AnnotationSpec
 import org.junit.jupiter.api.Assertions.*
 
 
-class RoundsTest : AnnotationSpec() {
+class BattleTest : AnnotationSpec() {
   @BeforeEach
   fun testAttacks(): List<Attack> {
     val fluch = Attack(
