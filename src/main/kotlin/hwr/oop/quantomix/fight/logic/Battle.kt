@@ -8,31 +8,28 @@ import hwr.oop.quantomix.objects.Coach
 class Battle(
   private val trainer1: Coach,
   private val trainer2: Coach,
-  private val numberOfQuantomixInRound: Int = 1,
-  damageStrategy: DamageStrategy = StandardDamageStrategy(),
-) {
+  ) {
   private data class ChosenAction(val attack: Attack, val target: Quantomix)
 
   private val chosenActionsMap = mutableMapOf<Quantomix, ChosenAction>()
-  private val damageFunction: DamageStrategy = damageStrategy
   private val round = Round()
   val quantomixAndBattleStatsMap = mutableMapOf<Quantomix, BattleStats>()
 
   private fun getActiveQuantomixesForTrainer(trainer: Coach): List<Quantomix> =
     trainer.getActiveQuantomixes(
-      numberOfQuantomixInRound,
+      BattleFundamentals.numberOfQuantomixInRound,
       battleStatsMap = quantomixAndBattleStatsMap
     )
 
   private fun getEnemyTeam(attackingTrainer: Coach): List<Quantomix> =
     if (attackingTrainer == trainer1)
       trainer2.getActiveQuantomixes(
-        numberOfQuantomixInRound,
+        BattleFundamentals.numberOfQuantomixInRound,
         battleStatsMap = quantomixAndBattleStatsMap
       )
     else
       trainer1.getActiveQuantomixes(
-        numberOfQuantomixInRound,
+        BattleFundamentals.numberOfQuantomixInRound,
         battleStatsMap = quantomixAndBattleStatsMap
       )
 
@@ -62,11 +59,11 @@ class Battle(
       chosenActionsMap[attacker] = ChosenAction(attack, target)
     }
     val totalActiveTrainer1 = trainer1.getActiveQuantomixes(
-      numberOfQuantomixInRound,
+      BattleFundamentals.numberOfQuantomixInRound,
       battleStatsMap = quantomixAndBattleStatsMap
     ).size
     val totalActiveTrainer2 = trainer2.getActiveQuantomixes(
-      numberOfQuantomixInRound,
+      BattleFundamentals.numberOfQuantomixInRound,
       battleStatsMap = quantomixAndBattleStatsMap
     ).size
     if (chosenActionsMap.size == (totalActiveTrainer1 + totalActiveTrainer2)) {
@@ -107,7 +104,7 @@ class Battle(
         aktiveQuantomixBattleStats = attackerStats,
         attack = chosenAction.attack,
         target = targetStats,
-        attackStrategy = damageFunction
+        attackStrategy = BattleFundamentals.damageStrategy
       )
     }
     chosenActionsMap.clear()

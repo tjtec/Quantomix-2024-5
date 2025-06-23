@@ -1,6 +1,7 @@
 package hwr.oop.quantomix.fight
 
 import hwr.oop.quantomix.fight.logic.Battle
+import hwr.oop.quantomix.fight.logic.BattleFundamentals
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.Stats
 import hwr.oop.quantomix.monster.Quantomix
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 
-class RoundWith2QuantomixTest: AnnotationSpec() {
+class BattleWith2QuantomixTest: AnnotationSpec() {
     @BeforeEach
     fun testAttacks(): List<Attack> {
         val fluch = Attack(
@@ -133,15 +134,14 @@ class RoundWith2QuantomixTest: AnnotationSpec() {
         val coach1 = testCoach1()
         val coach2 = testCoach2()
 
-        // Voraussetzungen prüfen
         require(coach1.quantomixTeam.isNotEmpty()) { "Coach1 hat keine Quantomixe" }
         require(coach2.quantomixTeam.isNotEmpty()) { "Coach2 hat keine Quantomixe" }
 
-        // Erstelle die Runde – es sollte keine Exception entstehen.
-        val rounds = Battle(coach1, coach2, numberOfQuantomixInRound = 2)
+        BattleFundamentals.
+        numberOfQuantomixInRound=2
+        val rounds = Battle(coach1, coach2)
         assertNotNull(rounds)
 
-        // Attacken müssen vorhanden sein
         val attacks = testAttacks()
         require(attacks.isNotEmpty()) { "Keine Attacken verfügbar" }
     }
@@ -150,10 +150,10 @@ class RoundWith2QuantomixTest: AnnotationSpec() {
     fun `choosing attack twice for same Quantomix throws exception`() {
         val coach1 = testCoach1()
         val coach2 = testCoach2()
-        val rounds = Battle(coach1, coach2, numberOfQuantomixInRound = 2)
+        BattleFundamentals.numberOfQuantomixInRound=2
+        val rounds = Battle(coach1, coach2)
         val attacks = testAttacks()
 
-        // Wähle einen aktiven Quantomix aus Coach1
         val activeTeamCoach1 = coach1.getActiveQuantomixes(2)
         rounds.chooseAttack(coach2, attacks[0], activeTeamCoach1[0])
         rounds.chooseAttack(coach2, attacks[0], activeTeamCoach1[0])
@@ -167,9 +167,9 @@ class RoundWith2QuantomixTest: AnnotationSpec() {
     fun `choosing a target from same team throws exception`() {
         val coach1 = testCoach1()
         val coach2 = testCoach2()
-        val rounds = Battle(coach1, coach2, numberOfQuantomixInRound = 2)
+        BattleFundamentals.numberOfQuantomixInRound=2
+        val rounds = Battle(coach1, coach2)
 
-        // Versuche, einem aktiven Quantomix ein Ziel aus dem eigenen Team zuzuweisen.
         val activeTeamCoach1 = coach1.getActiveQuantomixes(2)
         val exception = assertThrows(IllegalArgumentException::class.java) {
             rounds.chooseAttack(coach1, testAttacks()[0], activeTeamCoach1[0])
@@ -181,19 +181,17 @@ class RoundWith2QuantomixTest: AnnotationSpec() {
     fun `simulate multiple rounds without exceptions`() {
         val coach1 = testCoach1()
         val coach2 = testCoach2()
-        val rounds = Battle(coach1, coach2, numberOfQuantomixInRound = 2)
+        BattleFundamentals.numberOfQuantomixInRound=2
+        val rounds = Battle(coach1, coach2)
         val attacks = testAttacks()
         require(attacks.isNotEmpty()) { "Attackenliste darf nicht leer sein" }
 
-        // Führe drei Runden durch
+
         for (round in 0 until 3) {
-            // Wähle jeweils andere Indizes, sodass sich die ausgesuchten Attacken rotieren
             val attackIndexCoach1 = round % attacks.size
             val attackIndexCoach2 = (round + 1) % attacks.size
 
             performRound(rounds, coach1, coach2, attackIndexCoach1, attackIndexCoach2)
-
-            // Nach einer Round sollten die aktiven Quantomixe weiterhin verfügbar sein (das heißt, sie wurden nicht "ausgeschaltet")
             assertNotNull(coach1.getActiveQuantomixes(2).first())
             assertNotNull(coach2.getActiveQuantomixes(2).first())
         }
