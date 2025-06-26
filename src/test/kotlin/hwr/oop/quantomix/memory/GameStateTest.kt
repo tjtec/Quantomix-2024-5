@@ -89,4 +89,5 @@ class GameStateTest : AnnotationSpec() {
     assertThat(loadedBattleStatsMap?.size).isEqualTo(2)
     assertThat(loadedBattleFundamentals.size).isEqualTo(1)
   }
+
 }
