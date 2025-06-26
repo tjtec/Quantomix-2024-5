@@ -2,7 +2,7 @@ package hwr.oop.quantomix.fight
 
 import hwr.oop.quantomix.Exceptions.DeadQuantomixException
 import hwr.oop.quantomix.fight.logic.DamageStrategy
-import hwr.oop.quantomix.fight.logic.SimpleBattle
+import hwr.oop.quantomix.fight.logic.Round
 import hwr.oop.quantomix.fight.logic.StandardDamageStrategy
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.Stats
@@ -12,7 +12,7 @@ import io.kotest.core.spec.style.AnnotationSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 
-class BattleTests : AnnotationSpec() {
+class RoundTests : AnnotationSpec() {
   @BeforeEach
   fun glurak(): Quantomix {
     val glurak = Quantomix(
@@ -172,8 +172,8 @@ class BattleTests : AnnotationSpec() {
     val glurak = glurak()
     val glurakBattleStats = glurak.newBattleStats()
     val schillokBattleStats = schillok().newBattleStats()
-    val battle = SimpleBattle()
-    val solution = battle.simpleBattle(
+    val battle = Round()
+    val solution = battle.startAttack(
       aktiveQuantomixBattleStats = glurakBattleStats,
       attack = tackle(),
       target = schillokBattleStats,
@@ -193,8 +193,8 @@ class BattleTests : AnnotationSpec() {
     val glurakBattleStats = glurak.newBattleStats()
     val schillok = schillok()
     val schillokBattleStats = schillok.newBattleStats()
-    val battle = SimpleBattle()
-    val solution = battle.simpleBattle(
+    val battle = Round()
+    val solution = battle.startAttack(
       aktiveQuantomixBattleStats = glurakBattleStats,
       attack = pfluecker(),
       target = schillokBattleStats,
@@ -214,7 +214,7 @@ class BattleTests : AnnotationSpec() {
     val glurakBattleStats = glurak.newBattleStats()
     val owei = owei()
     val oweiBattleStats = owei.newBattleStats()
-    val battle = SimpleBattle()
+    val battle = Round()
     assertThat(glurakBattleStats.getStats().getKp()).isEqualTo(
       glurak.getStats().getKp()
     )
@@ -245,7 +245,7 @@ class BattleTests : AnnotationSpec() {
     assertThat(
       oweiBattleStats.getStats().getSpecialDefense()
     ).isEqualTo(owei.getStats().getSpecialDefense())
-    val solution = battle.simpleBattle(
+    val solution = battle.startAttack(
       aktiveQuantomixBattleStats = glurakBattleStats,
       attack = pfluecker(),
       target = oweiBattleStats,
@@ -257,7 +257,7 @@ class BattleTests : AnnotationSpec() {
     ).isLessThan(schillok().getStats().getKp())
     assertThat(owei.getStats().getKp()).isEqualTo(60)
     assertThat(oweiBattleStats.getStats().getKp()).isEqualTo(29)
-    val solution2 = battle.simpleBattle(
+    val solution2 = battle.startAttack(
       aktiveQuantomixBattleStats = oweiBattleStats,
       attack = pfluecker(),
       target = glurakBattleStats,
@@ -280,8 +280,8 @@ class BattleTests : AnnotationSpec() {
     val rattzfatzBattleStats = rattzfatz.newBattleStats()
     val glurak = glurak()
     val glurakBattleStats = glurak.newBattleStats()
-    val battle = SimpleBattle()
-    val solution = battle.simpleBattle(
+    val battle = Round()
+    val solution = battle.startAttack(
       aktiveQuantomixBattleStats = glurakBattleStats,
       attack = spukball(),
       target = rattzfatzBattleStats,
@@ -302,8 +302,8 @@ class BattleTests : AnnotationSpec() {
     val owei = owei()
     val oweiBattleStats = owei.newBattleStats()
     val glurakBattleStats = glurak.newBattleStats()
-    val battle = SimpleBattle()
-    val solution = battle.simpleBattle(
+    val battle = Round()
+    val solution = battle.startAttack(
       aktiveQuantomixBattleStats = glurakBattleStats,
       attack = feuerball(),
       target = oweiBattleStats,
@@ -322,15 +322,15 @@ class BattleTests : AnnotationSpec() {
     val owei = owei()
     val oweiBattleStats = owei.newBattleStats()
     val glurakBattleStats = glurak.newBattleStats()
-    val battle = SimpleBattle()
-    battle.simpleBattle(
+    val battle = Round()
+    battle.startAttack(
       aktiveQuantomixBattleStats = glurakBattleStats,
       attack = glut(),
       target = oweiBattleStats,
       attackStrategy = damageStrategy()
     )
     try {
-      battle.simpleBattle(
+      battle.startAttack(
         aktiveQuantomixBattleStats = glurakBattleStats,
         attack = glut(),
         target = oweiBattleStats,

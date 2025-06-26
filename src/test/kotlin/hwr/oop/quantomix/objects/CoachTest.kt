@@ -40,7 +40,7 @@ class CoachTest : AnnotationSpec() {
       coachName = "Anastasia",
       listOf(quantomix)
     )
-    assertThat(coach.getFirstQuantomix()).isEqualTo(quantomix)
+    assertThat(coach.quantomixTeam[0]).isEqualTo(quantomix)
     assertThat(coach.coachName).isEqualTo("Anastasia")
     assertThat(coach.quantomixTeam).isEqualTo(mutableListOf(quantomix))
   }

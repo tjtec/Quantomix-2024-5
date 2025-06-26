@@ -1,5 +1,7 @@
 package hwr.oop.quantomix.memory
 
+import hwr.oop.quantomix.fight.logic.BattleFundamentals
+import hwr.oop.quantomix.fight.logic.ComplexDamageStrategy
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.fight.objects.Stats
@@ -7,7 +9,7 @@ import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
 import hwr.oop.quantomix.objects.Typ
 import io.kotest.core.spec.style.AnnotationSpec
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.*
 
 class GameStateTest : AnnotationSpec() {
 
@@ -70,19 +72,21 @@ class GameStateTest : AnnotationSpec() {
       coachName = "${(0..99999999999999).random()}",
       quantomixTeam = listOf(rattzfatz, owei)
     )
+    BattleFundamentals.damageStrategy= ComplexDamageStrategy()
 
-    Save(trainer1, trainer2, battleStatsMap)
-    val (loadedTrainer1, loadedTrainer2, loadedBattleStatsMap) = Load()
+    Save(trainer1, trainer2, battleStatsMap, BattleFundamentals)
+    val (loadedTrainer1, loadedTrainer2, loadedBattleStatsMap, loadedBattleFundamentals) = Load()
 
-    Assertions.assertThat(loadedTrainer1?.coachName)
+    assertThat(loadedTrainer1?.coachName)
       .isEqualTo(trainer1.coachName)
-    Assertions.assertThat(loadedTrainer2?.coachName)
+    assertThat(loadedTrainer2?.coachName)
       .isEqualTo(trainer2.coachName)
-    Assertions.assertThat(loadedTrainer1?.quantomixTeam?.get(1)?.getType1())
+    assertThat(loadedTrainer1?.quantomixTeam?.get(1)?.getType1())
       .isEqualTo(trainer1.quantomixTeam.get(1).getType1())
-    Assertions.assertThat(filePath).isEqualTo("game_state.json")
-    Assertions.assertThat(loadedBattleStatsMap?.size)
+    assertThat(filePath).isEqualTo("game_state.json")
+    assertThat(loadedBattleStatsMap?.size)
       .isEqualTo(battleStatsMap.size)
-    Assertions.assertThat(loadedBattleStatsMap?.size).isEqualTo(2)
+    assertThat(loadedBattleStatsMap?.size).isEqualTo(2)
+    assertThat(loadedBattleFundamentals.size).isEqualTo(1)
   }
 }
