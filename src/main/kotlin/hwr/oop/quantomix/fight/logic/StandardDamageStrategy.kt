@@ -3,7 +3,9 @@ package hwr.oop.quantomix.fight.logic
 import hwr.oop.quantomix.Exceptions.DeadQuantomixException
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
+import kotlinx.serialization.Serializable
 
+@Serializable
 class StandardDamageStrategy : DamageStrategy {
   override fun damageFunction(
     attacker: BattleStats,

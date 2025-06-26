@@ -1,5 +1,7 @@
 package hwr.oop.quantomix.memory
 
+import hwr.oop.quantomix.fight.logic.BattleFundamentals
+import hwr.oop.quantomix.fight.logic.ModeOfDamageCalculation
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.monster.Quantomix
 import hwr.oop.quantomix.objects.Coach
@@ -18,8 +20,12 @@ public var filePath = "game_state.json"
 @JsonClassDiscriminator("type")
 sealed interface GameStateComponent
 
+
 @Serializable
 data class TrainerData(val trainer: Coach) : GameStateComponent
+
+@Serializable
+data class BattleFundamentalsData(val value: BattleFundamentalsDTO) : GameStateComponent
 
 @Serializable
 data class BattleMapData(
@@ -32,7 +38,6 @@ data class BattleStatsEntry(
   val battleStats: BattleStats,
 )
 
-// --- Serializer Module und JSON Konfiguration ---
 
 val gameModule = SerializersModule {
   polymorphic(GameStateComponent::class) {
@@ -52,7 +57,10 @@ fun Save(
   trainer1: Coach,
   trainer2: Coach,
   battleStats: MutableMap<Quantomix, BattleStats>,
+
 ) {
+  val battleFundamentalsDTO=BattleFundamentalsDTO(numberOfQuantomixInRound = BattleFundamentals.numberOfQuantomixInRound,
+    damageStrategy = BattleFundamentals.damageStrategy)
   val battleStatsEntries = battleStats.map { (quantomix, stats) ->
     BattleStatsEntry(quantomix, stats)
   }
@@ -60,7 +68,8 @@ fun Save(
   val gameStateComponents: List<GameStateComponent> = listOf(
     TrainerData(trainer1),
     TrainerData(trainer2),
-    BattleMapData(battleStatsEntries)
+    BattleMapData(battleStatsEntries),
+    BattleFundamentalsData(battleFundamentalsDTO)
   )
 
   val jsonString = gameJson.encodeToString(gameStateComponents)
@@ -71,6 +80,17 @@ fun Load(): Triple<Coach?, Coach?, MutableMap<Quantomix, BattleStats>?> {
   var loadedTrainer1: Coach? = null
   var loadedTrainer2: Coach? = null
   var loadedBattleStatsMap: MutableMap<Quantomix, BattleStats>? = null
+  var tempBattleFundamentalsDTO = BattleFundamentalsDTO()
+
+  if (!File(filePath).exists()) {
+    println("Game state file not found. Returning nulls.")
+    return Triple(null, null, null)
+  }
+  /* val json
+  val dto = Json.decodeFromString<BattleFundamentalsDTO>(json)
+  BattleFundamentals.numberOfQuantomixInRound = dto.numberOfQuantomixInRound
+  BattleFundamentals.damageStrategy = dto.damageStrategy
+*/
 
   val jsonString = File(filePath).readText()
   val deserializedComponents =
@@ -88,7 +108,12 @@ fun Load(): Triple<Coach?, Coach?, MutableMap<Quantomix, BattleStats>?> {
           component.battleStatsList.associateBy { it.quantomix }
             .mapValues { it.value.battleStats }.toMutableMap()
       }
+      is BattleFundamentalsData -> {
+        tempBattleFundamentalsDTO = component.value
+      }
     }
   }
+  BattleFundamentals.damageStrategy= tempBattleFundamentalsDTO.damageStrategy
+  BattleFundamentals.numberOfQuantomixInRound=tempBattleFundamentalsDTO.numberOfQuantomixInRound
   return Triple(loadedTrainer1, loadedTrainer2, loadedBattleStatsMap)
 }

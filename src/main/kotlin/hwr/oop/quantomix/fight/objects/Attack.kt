@@ -60,10 +60,7 @@ data class Attack(
   }
 
   fun hits(randomValue: Int = Random().nextInt(1, 100)): Boolean {
-    return when (randomValue <= this.getDamageQuote()) {
-      true -> true
-      else -> false
-    }
+    return randomValue <= this.getDamageQuote()
   }
 
   fun hasStatus(): Boolean {

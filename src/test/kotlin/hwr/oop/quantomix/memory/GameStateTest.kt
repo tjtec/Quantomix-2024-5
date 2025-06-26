@@ -1,7 +1,6 @@
 package hwr.oop.quantomix.memory
 
 import hwr.oop.quantomix.fight.logic.BattleFundamentals
-import hwr.oop.quantomix.fight.logic.ComplexDamageStrategy
 import hwr.oop.quantomix.fight.logic.ModeOfDamageCalculation
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
@@ -73,10 +72,13 @@ class GameStateTest : AnnotationSpec() {
       coachName = "${(0..99999999999999).random()}",
       quantomixTeam = listOf(rattzfatz, owei)
     )
-    BattleFundamentals.damageStrategy= ModeOfDamageCalculation.Complex
+    BattleFundamentals.numberOfQuantomixInRound = 4
+    BattleFundamentals.damageStrategy = ModeOfDamageCalculation.Complex
 
-    Save(trainer1, trainer2, battleStatsMap, BattleFundamentals)
-    val (loadedTrainer1, loadedTrainer2, loadedBattleStatsMap, loadedBattleFundamentals) = Load()
+    Save(trainer1, trainer2, battleStatsMap)
+    BattleFundamentals.numberOfQuantomixInRound = 0
+    BattleFundamentals.damageStrategy = ModeOfDamageCalculation.Simple
+    val (loadedTrainer1, loadedTrainer2, loadedBattleStatsMap) = Load()
 
     assertThat(loadedTrainer1?.coachName)
       .isEqualTo(trainer1.coachName)
@@ -88,7 +90,10 @@ class GameStateTest : AnnotationSpec() {
     assertThat(loadedBattleStatsMap?.size)
       .isEqualTo(battleStatsMap.size)
     assertThat(loadedBattleStatsMap?.size).isEqualTo(2)
-    assertThat(loadedBattleFundamentals.size).isEqualTo(1)
+    assertThat(BattleFundamentals.numberOfQuantomixInRound).isEqualTo(
+      4)
+    assertThat(BattleFundamentals.damageStrategy).isEqualTo(
+      ModeOfDamageCalculation.Complex)
   }
 
 }
