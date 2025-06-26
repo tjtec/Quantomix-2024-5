@@ -2,6 +2,7 @@ package hwr.oop.quantomix.memory
 
 import hwr.oop.quantomix.fight.logic.BattleFundamentals
 import hwr.oop.quantomix.fight.logic.ComplexDamageStrategy
+import hwr.oop.quantomix.fight.logic.ModeOfDamageCalculation
 import hwr.oop.quantomix.fight.objects.Attack
 import hwr.oop.quantomix.fight.objects.BattleStats
 import hwr.oop.quantomix.fight.objects.Stats
@@ -72,7 +73,7 @@ class GameStateTest : AnnotationSpec() {
       coachName = "${(0..99999999999999).random()}",
       quantomixTeam = listOf(rattzfatz, owei)
     )
-    BattleFundamentals.damageStrategy= ComplexDamageStrategy()
+    BattleFundamentals.damageStrategy= ModeOfDamageCalculation.Complex
 
     Save(trainer1, trainer2, battleStatsMap, BattleFundamentals)
     val (loadedTrainer1, loadedTrainer2, loadedBattleStatsMap, loadedBattleFundamentals) = Load()

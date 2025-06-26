@@ -104,7 +104,7 @@ class Battle(
         aktiveQuantomixBattleStats = attackerStats,
         attack = chosenAction.attack,
         target = targetStats,
-        attackStrategy = BattleFundamentals.damageStrategy
+        attackStrategy = BattleFundamentals.correctDamageStrategy()
       )
     }
     chosenActionsMap.clear()
